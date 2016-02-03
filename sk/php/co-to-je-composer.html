@@ -1,0 +1,169 @@
+<p class="text-left">Ak sa učíš <strong>PHP</strong> alebo si skúsený programátor istotne poznáš slovo <strong>Composer</strong>. Ale...čo to je? Aký je jeho účel a prečo by si ho mal používať?</p>
+<p class="text-left">Tu by som o ňom rád napísal pár vecí a ukázal ako sa používa. <strong>PHPUnit</strong> testovací framework by mohol byť vhodným a aj užitočným príkladom.</p>
+<h2 class="theme-subheading" id="composer">Composer</h2>
+<p class="text-left">Určite si už napísal niekoľko tried, ktoré riešia bežné úlohy ako napríklad obsluha dát, logovanie chýb, atď. Potom si vytvoril úplne nový projekt, kde si ich chcel použiť, ale! Musel si ich buď znova písať alebo ich hľadať a kopírovat spolu s ostatnými súbormi, ktoré boli potrebné. A to boli všetko triedy, ktoré si robil ty, takže vieš, čo všetko potrebujú. Ale čo ak by si chcel využiť triedy niekoho iného? Prípadne nejaký kamarát / kolega by chcel použiť tvoje, čo by asi bez tvojej pomoci bol dosť problém. Toto je situácia, kedy prichádza na rad Composer.</p>
+<h4 class="theme-subheading" id="vyuzitie">Využitie</h4>
+<p class="text-left">Takže znova, chceš vytvoriť nový projekt. Spíšeš si všetky závislosti ( potrebné balíčky / triedy ), spustíš Composer a ten stiahne všetko za teba. Každá z týchto závislostí môže mať svoje vlastné závislosti, ale to už viac nie je tvoja starosť. Composer dotiahne všetky požadované knižnice.</p>
+<p class="text-left">Composer je teda správca balíčkov pre jazyk PHP. Je inšpirovaný nástrojom NPM od Node.js a nástrojom Bundler pre Ruby. Je to niečo podobné ako Maven v Jave.</p>
+<h4 class="theme-subheading" id="composer-json">composer.json</h4>
+<p class="text-left">This is a json file where you set the dependencies and / or other metadata. The main part of this file is the <code>require</code> key. You're simply telling Composer which packages your project depends on. The <code>require</code> key takes an object that maps package names to version constraints.</p>
+
+<p class="text-left">Súbor vo formáte json, kde sú definované závislosti a ďalšie metadáta. Hlavnú časť tvorí kľúč <code>require</code>, v ktorom povieš Composer-u, na ktorých balíčkoch je tvoj projekt zavislý.</p>
+
+<p class="text-left">Príklad composer.json súbora z php frameworku Symfony :</p>
+<pre class="prettyprint">
+{
+    "name": "symfony/symfony",
+    "type": "library",
+    "description": "The Symfony PHP framework",
+    "keywords": ["framework"],
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "doctrine/common": "~2.4",
+        "twig/twig": "~1.23|~2.0",
+        "psr/cache": "~1.0",
+        "psr/log": "~1.0",
+        "symfony/polyfill-apcu": "~1.0,>=1.0.2",
+        "symfony/polyfill-intl-icu": "~1.0",
+        "symfony/polyfill-mbstring": "~1.0",
+        "symfony/polyfill-php56": "~1.0",
+        "symfony/polyfill-php70": "~1.0",
+        "symfony/polyfill-util": "~1.0"
+    },
+    ...
+}
+</pre>
+<p class="text-left"><strong>Názov balíčka</strong> pozostáva z mena autora a názvu projektu. Meno autora existuje len aby sa zamedzilo konfliktom pri názvoch. Dovoluje to dvom odlišným ľuďom vytvoriť knižnicu s tým istým názvom len s odlišným menom autora ako napríklad <code>igorw/json</code> a <code>saldaek/json</code>.</p>
+<p class="text-left"><strong>Verzia balíčka</strong> je typ obmedzenia pre Composer, takže stiahne iba konkrétne verzie alebo verzie zodpovedajúce obmedzeniu. ( Viac si o tom môžeš prečítať v <a href="https://getcomposer.org/doc/articles/versions.md">dokumentácii k Composer verziám</a>, ale to už samozrejme v angličtine )</p>
+<h4 class="theme-subheading" id="composer-lock">composer.lock</h4>
+<p class="text-left">Keď spustíš príkaz <kbd>composer install</kbd>, tak nájde verzie požadovaných balíčkov, ktoré vyhovujú daným podmienkam a stiahne ich do adresára <i>vendor</i>.</p>
+<p class="text-left">Po nainštalovaní závislostí Composer zapíše zoznam balíčkov a ich konkrétnych verzií do <i>composer.lock</i> súbora. Tento súbor by si mal commit-núť do repozitára aby si zabránil budúcemu stiahnutiu iných verzií. Dôvodom je príkaz <code>install</code>, ktorý skontroluje, či existuje lock súbor a ak áno, stiahne verzie balíčkov v ňom definované. To znamená, že server, ďalší programátori a všetci ostatní budú spúšťať aplikáciu s presne tými istými balíčkami.</p>
+<div class="alert alert-info" role="alert">Ak používaš <i>GIT</i> na verziovanie svojho kódu, tak adresár <i>vendor</i> môžeš pridať do <i>.gitignore</i>. Nepotrebuješ ukladať kód všetkých balíčkov vo svojom repozitári.</div>
+<h4 class="theme-subheading" id="autoload-php">autoload.php</h4>
+<p class="text-left">Pre balíčky, ktoré maju definovanú informáciu o autoloade Composer vygeneruje <i>vendor/autoload.php</i> súbor. Tento súbor stačí includ-nuť a automatické loadovanie tried máš ako bonus. Toto robí používanie balíčkov veľmi jednoduchým.</p>
+<p class="text-left">Informáciu o autoloade môžeš pridať aj pre svoj vlastný kód vložením kľúča <code>autoload</code> do <i>composer.json</i>. S touto funkciou určuješ mapovanie mennýc priestorov do adresárov.</p>
+<h4 class="theme-subheading" id="instalacia">Inštalácia</h4>
+<p class="text-left"></p>
+<h2 class="theme-subheading" id="ukazka-projektu">Ukážka projektu <small>s využitím PHPUnit</small></h2>
+<p class="text-left">Vytvorte triedu na kontrolu či zadaný reťazec je <a href="https://sk.wikipedia.org/wiki/Palindr%C3%B3m">palindróm</a> - postupnosť znakov, ktoré možno čítať v ľubovolnom smere.</p>
+<p class="text-left">Adresárová štruktúra :</p>
+<ul>
+    <li>ComposerExample
+        <ul>
+            <li>src</li>
+            <li>tests
+                <ul>
+                    <li>PalindromeTest.php</li>
+                </ul>
+            </li>
+            <li>composer.json</li>
+        </ul>
+    </li>
+</ul>
+<h4 class="theme-subheading" id="phpunit">PHPUnit</h4>
+<p class="text-left">Podľa testami riadeného vývoja začneme vytvorením príslušných testov. Čo na to potrebujeme... Istotne nejaký framework určený na testovanie. Na toto využijem známy PHPUnit. Takže ho vložím do <i>composer.json</i> :</p>
+<pre class="prettyprint">
+{
+    "require": {
+        "phpunit/phpunit": "^4.6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "src\\" : "src"
+        }
+    }
+}
+</pre>
+<p class="text-left">A spustím príkaz <kbd>composer install</kbd>. Na výstupe je zoznam balíčkov a ich verzia, ktorá bola stiahnutá. Možeš ich nájsť v adresári <i>vendor</i> spolu s <i>autoload.php</i> súborom.</p>
+<h4 class="theme-subheading" id="testy">Testy</h4>
+<p class="text-left">Popri tom ako vytváraš testy by si mal uvažovať o riešenom probléme a rovno navrhovať ako by to malo vo finále vyzerať. Táto časť ti pomôže lepšie pochopiť problém a odhalí rôzne scenáre, ktoré môžu nastať.<br /> Týka sa zadanie len reťazcov? Smie niekto skúsiť zistiť, či číslo nie je palindróm? Možno v PHPčku typ premennej nehrá nejakú velkú rolu, ale pre iné jazyky to nemusí platiť.</p>
+<p class="text-left">Riešenie zahŕňa triedu, ktorá obsahuje funkcionalitu a metódu na určenie či zadaný reťazec je palindróm alebo nie. Názov triedy môže byť <code>Palindrome</code> a metóda <code>check()</code>. Je potrebné testovať oba prípady. Prípad, že reťazec je palindróm a prípad, že nie je. Testý teda môžu vyzerať takto :</p>
+<pre class="prettyprint">
+class PalindromeTest extends PHPUnit_Framework_TestCase {
+
+    private $palindrome;
+    
+    public function setUp() {
+        $this->palindrome = new src\Palindrome();
+    }
+
+    public function testSuitableString() {
+        $this->assertTrue($this->palindrome->check('racecar'));
+        $this->assertTrue($this->palindrome->check('was it a car or a cat i saw'));
+    }
+
+    public function testNotSuitableString() {
+        $this->assertFalse($this->palindrome->check('some meaningless text'));
+    }
+}
+</pre>
+<p class="text-left">Teraz, keď je test pripravený, spusti príkaz <kbd>phpunit --bootstrap ./vendor/autoload.php ./tests/PalindromeTest.php</kbd>.</p>
+<p class="text-left">Prvým argumentom je <code>--bootstrap</code> a jeho hodnota je cesta k súboru, ktorý je zodpovedný za autoload - načítanie potrebných tried. Druhým argumentom je cesta k testovaciemu súboru alebo k celému adresáru. PHPUnit bude hladať všetky súbory končiace "*test.php" alebo akýmkoľvek iným definovaným reťazcom ( viac o tomto na ich oficialnej stránke ).</p>
+<p class="text-left">Trieda zatiaľ neexistuje a teda test skončí chybou <i>Class 'src\Palindrome' not found</i>.</p>
+<h4 class="theme-subheading" id="writing-the-code">Writing the code</h4>
+<p class="text-left">Text by mal byť rovnaký pri čítaní zľava ako zprava. Na toto sa dá použiť PHP funkcia <code>strrev</code> a porovnať pôvodný reťazec s tým obráteným. Vytvor nový php súbor v adresári <i>src</i> s názvom Palindrome.php.</p>
+<pre class="prettyprint">
+&lt;?php
+
+namespace src;
+
+class Palindrome {
+    /**
+     * Check if a string is palindrome
+     * @param string $str
+     * @return bool
+     */
+    public function check( $str ) {
+        return $str == strrev($str);
+    }
+}
+</pre>
+<p class="text-left">Keď sa teraz spustia testy, tak už to neskončí chybou a na výstupe bude niečo takéto :</p>
+<div class="well">
+$ phpunit --bootstrap vendor/autoload.php tests/PalindromeTest.php<br />
+PHPUnit 4.8.21 by Sebastian Bergmann and contributors.<br />
+<br />
+F.<br />
+<br />
+Time: 263 ms, Memory: 4.00Mb<br />
+<br />
+There was 1 failure:<br />
+<br />
+1) PalindromeTest::testSuitableString<br />
+Failed asserting that false is true.<br />
+<br />
+*/ComposerExample/tests/PalindromeTest.php:15<br />
+<br />
+FAILURES!<br />
+Tests: 2, Assertions: 3, Failures: 1.
+</div>
+<p class="text-left">Test skončil s informáciou o zlyhaní ( <i>FAILURES! )</i>. Jeden test neprešiel a môžeš ho nájsť na riadku 15. Keď sa na ten riadok pozrieš, hneď je jasné, prečo to z opačnej strany nie je ten istý reťazec. Medzi slovami sú medzery, o ktoré je treba sa postarať, inak sa reťazce nebudú rovnať. Kód po úprave :</p>
+<pre class="prettyprint">
+public function check( $str ) {
+    $sanitizedString = \str_replace(' ', '', $str);
+    return $sanitizedString == strrev($sanitizedString);
+}
+</pre>
+<p class="text-left">Spusti test znova a už by mal skončiť úspešne pre každý test.</p>
+<div class="well">
+OK (2 tests, 4 assertions)
+</div>
+<p class="text-left">Samozrejme, toto by nemal byť koniec. Stále je niekoľko reťazcov, ktoré by mali prejsť, ale neprešli by. Napríklad ak by sa v texte vyskytlo veľké písmeno, alebo nejaký znak ako bodka alebo otáznik. Ak by si strávil viac času premýšlaním o probléme a jeho riešení a spomenutými scenármi pri písaní testov, tak takýmto a ďalším problémom sa vyhneš.</p>
+<h2 class="theme-subheading" id="zaver">Záver</h2>
+<p class="text-left">Toto je koniec krátkeho intra do Composera. Dúfam, že bolo spomenuté všetko dôležité a v pripade ak niečomu nerozumieš, kľudne mi napíš.<br />Je ešte veľa vecí, ktoré som nespomenul. Napríklad môžeš definovať extra závislosti pre dev prostredie, alebo vytvárať vlastné ( súkromné ) balíčky. Tak isto aj PHPUnit má kopec ďalších možností. Viac k tejto téme ale až v niektorom z neskorších postov.</p>
+<h4 class="theme-subheading" id="odkazy">Odkazy</h4>
+<p class="text-left">Oficiálna <a href="https://getcomposer.org/">Composer</a>stránka, kde nájdeš úvodný tutoriál ( <i>Getting Started</i> ), dokumentáciu, balíčky a ďalšie informácie.</p>
+<p class="text-left">Stránka <a href="https://phpunit.de/">PHPUnit frameworku na testovanie</a> s výbornou dokumentáciou.</p>
+<p class="text-left"><a href="https://github.com/symfony/symfony">Symfony framework</a> na GitHub-e, kde si môžeš pozrieť celý <i>composer.json</i> súbor.</p>

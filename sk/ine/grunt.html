@@ -1,0 +1,172 @@
+<p class="text-left">Určite si robil na nejakom projekte, kde si si rozložil CSS a JavaScript veci do viacerých súborov, aby si v tom mal nejaký poriadok a prehľad. Potom ale vznikne problém, že keď je treba jednotlivé scripty použit, treba ich po jednom pridávať do html hlavičky. Tá potom vyzerá asi takto :</p>
+<pre class="prettyprint">
+&lt;head&gt;
+    ...
+    &lt;link href="subor1.css" rel="stylesheet"&gt;
+    &lt;link href="subor2.css" rel="stylesheet"&gt;
+    &lt;link href="subor3.css" rel="stylesheet"&gt;
+    
+    &lt;script src="subor1.js"&gt;&lt;/script&gt;
+    &lt;script src="subor2.js"&gt;&lt;/script&gt;
+    ...
+&lt;/head&gt;
+</pre>
+<p class="text-left">Jednoduchým riešením môže byť ručne a pracne spájať jednotlivé súbory, čo časom isto omrzí, keďže po akejkolvek zmene je treba súbory nanovo pospájať. Riešením môže byť použitie nejakého <strong>task managera</strong>, ktorý by sa o všetko postaral. Takýchto task managerov je samozrejme viac. Medzi najznámejšie istotne patria <strong>Grunt</strong> a <strong>Gulp</strong>.</p>
+<h4 class="theme-subheading" id="co-to-dokaze">Čo to dokáže?</h4>
+<p class="text-left">Dá sa povedať, že čokolvek, čo je treba. Od spájania súborov, minimalizovanie, presúvanie po testovanie funkčnosti a sledovanie zmien v súboroch. Takýchto modulov je dostupných strašne veľa a v prípade, že by neexistoval presne taký, aký je treba, nie je tažké vytvoriť si vlastný.</p>
+<h4 class="theme-subheading" id="instalacia">Inštalácia</h4>
+<p class="text-left">Grunt a jeho pluginy sa inštalujú pomocou <strong><a href="https://www.npmjs.com/">NPM</a></strong> správcu balíčkov pre <strong><a href="https://nodejs.org/" target="_blank">Node.js</a></strong>.</p>
+<pre>
+npm install -g grunt-cli
+</pre>
+<p class="text-left">Parameter <code>-g</code> inštaluje balíček <code>grunt-cli</code> globálne a bude nutné použiť príkaz <kbd>sudo</kbd> aby inštalácia prebehla úspešne, alebo vo Windowse spustiť príkazový riadok ako Administrátor.</p>
+<p class="text-left"><b>Pozor!</b> Toto je len akýsi spúšťač samotného Grunt-u. Ten sa nachádza v projektovom adresári hneď vedľa konfiguračného súbora <i>Gruntfile</i> spolu s ďaľšími závislosťami - modulmi.</p>
+<h2 class="theme-subheading" id="projekt-grunttest-ako-priklad">Projekt <small>GruntTest</small> ako príklad</h2>
+<p class="text-left">Najlahšie a najlepšie bude si to ukázať na nejakom modelovom príklade. Na začiatok netreba nič zložité a veľké. Majme teda projekt, ktorý bude mat dva hlavné JavaScript súbory. Jeden <code>matematika.js</code>, kde budú funkcie <code>scitaj</code>, <code>odcitaj</code> a druhý <code>text.js</code> s funkciami <code>zmenNaVelkePismena</code> a <code>zmenNaMalePisemena</code>. Na stránke to má byť všetko iba v jednom súbore, bez nejakých zbytočných znakov a komentárov. Samozrejme, aby bolo jasne vidieť, ktoré súbory sú určené pre vývoj a ktoré pre produkciu, tak bude stromová štruktúra vyzerať nasledovne :</p>
+<div class="well">
+<ul>
+    <li>src ( <i>source code</i> )
+        <ul>
+            <li>matematika.js</li>
+            <li>text.js</li>
+        </ul>
+    </li>
+    <li>www ( <i>cisty kod urceny pre produkciu</i> )
+        <ul>
+            <li>index.html</li>
+            <li>js
+                <ul>
+                    <li>grunttest.min.js ( <i>vysledny javascript</i> )</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+<h4 class="theme-subheading" id="subor-pakcage-json">Súbor <small>package.json</small>, informácie o projekte a určenie závislostí</h4>
+<p class="text-left">Súbor <i>package.json</i> patrí do koreňového adresára projektu a sú v ňom uložené projektové metadáta a závislosti - moduly, ktoré sa využívajú. Na jeho vytvorenie je možné použiť aj samotný NPM - príkazom <kbd>npm init</kbd>. Ten si vypýta názov projektu, verziu, autora, atd. a podla toho vygeneruje základný <i>package.json</i> súbor.</p>
+<pre class="prettyprint">
+{
+  "name": "GruntTest",
+  "version": "1.0.0",
+  "description": "Testovaci projekt",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matej 'juffalow' Jellus",
+  "license": "ISC"
+}
+</pre>
+<p class="text-left">To by bol základny súbor bez akýchkoľvek zavislostí. V zadaní však je, že vo výsledku má byť iba jeden, minimalizovaný súbor. T.j. treba nájsť taký plugin, ktorý zjednotí súbory do jedného a ďalší, ktorý vymaže všetko nadbytočné. Zoznam takýchto pluginov je na oficialnej stránke <a href="http://gruntjs.com/plugins" target="_blank">Grunt Plugins</a>.</p>
+<p class="text-left">Po krátkom prezretí základnej ponuky pluginov je zrejemé, že vyhovuje <i>contrib-concat</i> s popisom "spájanie suborov" a <i>contrib-uglify</i> s popisom "minimalizovanie súborov". Tieto dva pluginy teda pridať ako závislosť do <i>package.json</i>. Vysledný súbor teda vyzerá takto :</p>
+<pre class="prettyprint">
+{
+  "name": "GruntTest",
+  "version": "1.0.0",
+  "description": "Testovaci projekt",
+  "author": "Matej 'juffalow' Jellus",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-concat": "~0.5.1 ",
+    "grunt-contrib-uglify": "~0.5.0"
+  }
+}
+</pre>
+<h4 class="theme-subheading" id="instalacia-gruntu-a-pluginov">Inčtalácia Gruntu a pluginov</h4>
+<p class="text-left">Každý projekt môže využívať inú verziu Gruntu a iné pluginy. Ak chceš nainštalovať všetky závislosti naraz, stačí spustiť príkaz :</p>
+<pre>
+npm install
+</pre>
+<p class="text-left">Ten stiahne všetky potrebné balíčky a uloží ich do podadresára <i>node_modules</i> v projektovom adresári. Medzi nimi sa nachádza aj samotný Grunt, ktorý je spúšťaný z konzoly pomocou príkazu <kbd>grunt</kbd>.</p>
+<h4 class="theme-subheading" id="subor-gruntfile-js-a-tvorba-taskov">Súbor <small>Gruntfile.js</small> a tvorba taskov</h4>
+<p class="text-left">Tento súbor tiež patrí do koreňového adresára projektu. Sú v ňom definované a nakonfigurované úlohy, ktoré má Grunt spúšťať. Skladá sa z 4roch hlavných častí :</p>
+<ul>
+    <li>hlavná funkcia - ktorá obaluje celú funkcionalitu, t.j. celý kód Gruntu musí byť definovaný v nej</li>
+    <li>konfigurácia - vačšina pluginov vyžaduje aspoň základné nastavenia, napríklad ak sa majú spájať súbory, tak musí byť definovaný adresár, v ktorom sa súbory nachádzajú a cesta k súboru, do ktorého má byť uložený výstup</li>
+    <li>načítanie pluginov - pluginy, ktoré sa využívajú musia byť reálne najskôr načítané ( niečo ako <i>include</i> )</li>
+    <li>vlastné úlohy - nadefinované názvy úloh a ku nim pluginy, ktoré majú byť spustené</li>
+</ul>
+<p class="text-left"><i>Gruntfile.js</i>, ktorý bude riešit zadaný problém by mohol byť zapísany nasledovne :</p>
+<pre class="prettyprint">
+// hlavna funkcia
+module.exports = function(grunt) {
+
+  // konfiguracia
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    concat: { // plugin, ktory spaja subory
+      options: {
+        separator: ';'
+      },
+      dist: {
+        src: ['src/*.js'], // vstupom budu vsetky .js subory v adresari src
+        dest: 'src/temp/<%= pkg.name %>.js' // vystupom bude jeden subor pomenovany ako nas projekt ( definovane v subore package.json -> name )
+      }
+    },
+    uglify: { // plugin, ktory minimalizuje subory
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
+      build: {
+        src: '<%= concat.dist.dest %>', // vstupom je vystupny subor zo spajaceho pluginu
+        dest: 'www/js/<%= pkg.name %>.min.js' // vystupom je minimalizovany subor v produkcnom adresari
+      }
+    }
+  });
+
+  // nacitanie pluginov
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+
+  // defaultna uloha
+  // pluginy su vykonavane v poradi v akom su tu nadefinovane
+  grunt.registerTask('default', ['concat', 'uglify']);
+
+};
+</pre>
+<p class="text-left">Keď je všetko takto pekne nadefinované a pripravené, stačí už len spustiť príkaz <kbd>grunt</kbd>, ktorý ak je zadaný bez parametra, tak vykoná defaultný task - v tomto prípade najskor pospája všetky <i>.js</i> súbory z adresára <i>src</i> do jedného súbora <i>GruntTest.js</i> v adresári <i>/src/temp/</i>. Potom spustí plugin na minimalizovanie, ktorý ako vstup dostane výstupný súbor zo spájania ( <b>pozor!</b> keďže je to takto definované, plugin na spájanie musí byť vykonaný pred minimalizovaním! ). Ten vymaže všetky nadbytočné biele znaky + komentáre a vytvorí tak jednoriadkový "škaredý" / tažko čitatelný kód. Tento výstup je potom uložený do adresára <i>www/js/</i>.</p>
+<h2 class="theme-subheading" id="vycistenie-projektu">Vyčistenie projektu</h2>
+<p class="text-left">Pri spájaní javascriptov vznikol súbor, ktorý je v projekte teraz naviac. Takýchto súborov sa môže časom vyskytnúť viac, prípadne sa môžu tvoriť iné, ktoré bude treba priebežne mazať. Na to môže byť vytvorená dalšia úloha a tá bude len mazať prebytočné veci.</p>
+<h4 class="theme-subheading" id="pridanie-noveho-pluginu">Pridanie nového pluginu</h4>
+<p class="text-left">Jedna z možností ako pridať nový plugin je dopísať ho do <i>package.json</i> ako ďalšiu závislosť a spustiť príkaz <kbd>npm install</kbd>. Prípadne jednoduchší spôsob je spustiť príkaz na inštalovanie konkrétneho pluginu s parametrom <code>--save-dev</code>, ktorý stiahne plugin a dopíše ho do <i>package.json</i> sám.</p>
+<pre>
+    npm install &lt;module&gt; --save-dev
+</pre>
+<p class="text-left">Takže znova na stránku <a href="http://gruntjs.com/plugins" target="_blank">grunt pluginov</a>, kde treba nájsť niečo, čo maže súbory / adresáre. Myslím, že <i>contrib-clean</i> s popisom "čisté súbory a priečinky" by to mal zvládnuť.</p>
+<pre>
+    npm install grunt-contrib-clean --save-dev
+</pre>
+<h4 class="theme-subheading" id="vytvorenie-novej-ulohy">Vytvorenie novej úlohy</h4>
+<p class="text-left">Plugin pridaný, zapísaný do závislostí, zostáva už len konfigurácia a vytvorenie úlohy v <i>Gruntfile.js</i>. To už nie je nič zložité, v podstate tri riadky naviac :</p>
+<pre>
+  // konfiguracia
+  ...
+  clean: ["src/temp/"]
+  ...
+</pre>
+<pre>
+  // nacitanie pluginu
+  ...
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  ...
+</pre>
+<pre>
+  // nova uloha
+  ...
+  grunt.registerTask('vycisti', ['clean']);
+  ...
+</pre>
+<h4 class="theme-subheading" id="spustanie-vlastnych-uloh">Spúšťanie vlastných úloh</h4>
+<p class="text-left">Funkčnosť je možné vyskúšať spustením príkazu <kbd>grunt vycisti</kbd>. Parametrom je názov tasku, ktorý bol vytvorený. Ak je Grunt spustený bez parametra, vykoná len defaultný task.</p>
+<h2 class="theme-subheading" id="zaver">Záver</h2>
+<p class="text-left">To by malo byť asi všetko. Istotne môžem odporučiť pozrieť zoznam dalších pluginov. Ja aktuálne využívam <i>grunt-remove-logging</i>, ktorý vymaže všetky <code>console.log()</code>, <i>grunt-contrib-jshint</i> na validáciu JavaScriptov ( vid. <a href="http://jshint.com/">jshint.com</a> ). Plánujem spraviť aj testy, ale to až niekedy keď bude čas ;-). Grunt je ale možné použiť aj na CSS súbory, kompilovanie SASS súborov a veľa dalšieho.</p>
+<p class="text-left">Celý projekt si môžeš pozrieť alebo stiahnuť z <a href="https://github.com/juffalow/GruntTest">GitHubu</a> alebo vyklonovať pomocou<br /><kbd>git clone https://github.com/juffalow/GruntTest.git</kbd>.</p>
+<h4 class="theme-subheading" id="odkazy">Odkazy</h4>
+<p class="text-left"><a href="http://gruntjs.com/">Oficiálna stránka Grunt</a> kde môžeš tiež nájsť úvodný tutoriál, zoznam pluginov a celú dokumentáciu.<br />
+    Pluginy a dokumentácia ku nim je na stránke <a href="https://www.npmjs.com/">NPM správcu balíčkov</a>. Odkazy na použité pluginy :</p>
+<ul>
+    <li><a href="https://www.npmjs.com/package/grunt-contrib-concat">grunt-contrib-concat</a> - spájanie súborov</li>
+    <li><a href="https://www.npmjs.com/package/grunt-contrib-uglify">grunt-contrib-uglify</a> - minimalizovanie súborov</li>
+    <li><a href="https://www.npmjs.com/package/grunt-contrib-clean">grunt-contrib-clean</a> - mazanie súborov a adresárov</li>
+</ul>

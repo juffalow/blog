@@ -1,0 +1,108 @@
+<p class="text-left">Kedysi, keď som s programovaním ešte len začínal, tak po prečítaní pár kníh som už nevedel čo ďalej, akú úlohu / zadanie / projekt by som si vymyslel. Skúšal som riešiť rôzne matematické zadania, vytvárať napodobeniny iných programov, atď. Rád by som preto spomenul aspoň pár stránok, kde sú zadania od jednoduchých až po tie zložité.</p>
+<p class="text-left">Takéto stránky zároveň môzu slúžiť aj pre potencionálneho zamestnávatela alebo sú priamo firmou vytvorené za účelom nájdenia talentu. Existujú aj iné možnosti ako sa zlepšiť a aj zviditelniť. Tu by som rád nadviazal na prednášku od <a href="https://twitter.com/@pjedrzejewski">Paweł Jędrzejewski</a>, ktorú mal v Brne - <i>You should be an Open Source Developer</i>.</p>
+<h2 class="theme-subheading" id="stranky-s-ulohami">Stránky s úlohami</h2>
+<h4 class="theme-subheading" id="www-hacker-org">www.hacker.org</h4>
+<p class="text-left">Jedná sa o hru, kde každé "políčko" je úloha. Úlohy sú rozdelené do 4roch hlavných kategórii : kryptológia, programovanie, web, rôzne. Zo začiatku sú úlohy skôr jednoduché. Potom ale prídu úlohy, ktoré vyžadujú určité znalosti a schopnosti riešitela.</p>
+<p class="text-left">Popri riešení týchto úloh spoznáš veľa nových vecí, budeš nútený hľadať na internete rôzne informácie a pracovať s nimi.</p>
+<p class="text-left">Príklad z kryptológie :</p>
+<pre>
+- .... . .- -. ... .-- . .-. .. ... .... --- .- .-. ... .
+</pre>
+<p class="text-left">Za každú správne vyriešenú úlohu dostáva riešitel body. Kedže je to hra, tak je tam aj tabulka celkového poriadia, plus pri každej úlohe vidieť počet hráčov, ktorí danú úlohu vyrešili.</p>
+<h4 class="theme-subheading" id="www-codehunt-com">www.codehunt.com</h4>
+<p class="text-left">Stránka s úlohami označená ako vzdelávacia programátorská hra. Bola vytvorená skupinou <i>Research in Software Engineering ( RiSE )</i> spolu s <i>Microsoft Research</i>.</p>
+<p class="text-left">Úlohy sa riešia v jazyku <strong>Java</strong> alebo <strong>C#</strong>. Tie sú rozdelené do niekolkých hlavných kategórii, napríklad aritmetické operácie, cykly, vyhladávacie algoritmy. Výsledný kód je potom testovaný na rôznych vstupoch. Výsledok testov je v tabulke, kde zobrazí aj prípadné zle vyhodnotené vstupy.</p>
+<p class="text-left">Príklad zadania :</p>
+<div class="row">
+    <div class="col-md-12">
+        <p class="text-left">Zisti aritmetickú operáciu aplikovanú na 'x'.</p>
+    </div>
+    <div class="col-md-6 col-sm-12">
+<pre class="prettyprint">
+public class Program {
+    public static int Puzzle(int x) {
+        return 0;
+    }
+}
+</pre>
+    </div>
+    <div class="col-md-6 col-sm-12" style="background-color: aliceblue;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>X</td>
+                    <td>Očakavaný výsledok</td>
+                    <td>Tvoj výsledok</td>
+                    <td>Popis</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><i class="fa fa-times" style="color: red;"></i></td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>Nezhoduje sa</td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-check" style="color: #FFD900;"></i></td>
+                    <td>-1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p class="text-left">Stačí navštíviť stránku <a href="http://www.codehunt.com" target="_blank">www.codehunt.com</a>, prihlásiť sa pomocou <i>Google+</i> alebo <i>Facebooku</i> a môžeš riešiť.</p>
+<h4 class="theme-subheading" id="google-code-jam">Google Code Jam</h4>
+<p class="text-left">Google code jam je medzinárodná programátorská súťaž organizovaná spoločnosťou Google. Súťaž pozostáva z niekolkých algoritmických problémov, ktoré musia byť vyriešené v pevne stanovenom čase. Súťažiaci môžu použiť akýkoľvek programovací jazyk. ( <i class="fa fa-wikipedia-w"></i> )</p>
+<p class="text-left">Väčšina týchto úloh ( až do roku 2008 ako som pozeral / našiel ) je stále vyvesená na oficiálnej stránke. Sú verejne pristupné a funguje aj overenie výsledného výstupu. Stále je teda možnosť vyskúšať si staré zadania a overiť si správnosť riešenia.</p>
+<p class="text-left">Príklad jedného zo zadaní pre rok 2015 :</p>
+<pre class="prettyprint">
+Je premiera v opere a tvoja kamarátka je primadona ( hlavná speváčka ). Nebudeš v publiku, ale chceš zaistiť aby sa jej dostali búrlivé ovácie - aby každý v publiku vstal a tlieskal jej.
+
+Na začiatku, celé pulikum sedí. Každý v publiku má svoj "level hanblivosti". Člen publika s levelom hanblivosti S<sub>i</sub> bude čakať, kým sa aspoň S<sub>i</sub> iných členov publika nezdvihne a nezačne tlieskať a ak ano, hneď sa zdvihne a začne tlieskať. Ak S<sub>i</sub> = 0, tak sa šlen publika hneď zdvihne a začne tlieskať, bez ohladu na to, čo urobia iní. Napríklad, člen publika s S<sub>i</sub> = 2, ktorý bude sedieť hneď na začiatku, ale postaví sa a začne tlieskať až potom ako uvidí aspoň dvoch iných ludí stáť a tlieskať.
+
+Level hanblivosti každého z publika poznáš a si pripravený pozvať ďalších kamarátov primadony aby boli v publiku a aby si sa uistil, že každý z davu sa na konci postaví a bude tlieskať. Každý z týchto kamarátov môže mať level hanblivosti aký chceš, nemusí byť nevyhnutne rovnaký. Aký je minimálny počet kamarátov, ktorých musíš pozvať, aby si zaistil búrlivé ovácie?
+
+Vstup
+
+Prvý riadok vstupu je počet testovacích prípadov, T. Nasleduje T testovacích prípadov. Každý pozostáva z jedného riadka s S<sub>max</sub>, maximálny level hanblivosti najhanblivejšej osoby v publiku, nasledovaný reťazcom S<sub>max</sub> + 1 jednotlivých číslic. K-ta číslica v reťazci ( počíta sa od 0 ) reprezentuje kolko ludí v publiku má level hanblivosti K. Napríklad reťazec "409" by znamenal, že sú tam 4 členovia publika s S<sub>i</sub> = 0 a 9 čelnov publika s S<sub>i</sub> = 2 ( a žiadny s S<sub>i</sub> = 1 alebo inou hodnotou ). Všimni si, že vždy bude 0 až 9 ludí s každým levelom.
+
+Reťazec nikdy nebude končiť 0. To znamená, že vždy bude aspoň jedna osoba v publiku.
+
+Výstup
+
+Pre každý testovací prípad, vypíš jeden riadok obsahujúci "Case #x: y", kde x je číslo testovacieho prípadu ( začínajúce od 1 ) a y je minimálny poťet kamarátov, ktorých musíš pozvať.
+</pre>
+<p class="text-left">Všetko je to dostupné na <a href="https://code.google.com/codejam/" target="_blank">oficiálnych stránkach súťaže</a>.</p>
+<h2 class="theme-subheading" id="zname-ulohy-a-algoritmy">Známe úlohy a algoritmy</h2>
+<p class="text-left">Je pravda, že na všetko už teraz existuje nejaká knižnica, komponenta, plugin a podobne, čo to rieši, ale... Všetko sú to zaujímavé veci, ktoré sa sem tam môžu hodiť. Treba mať o nich prehlad a aspoň približne vedieť ako fungujú. Sem tam sa tiež môže takéto zadanie vyskytnúť nejakej súťaži alebo na pohovore. A ked nie, tak už len minimálne ako precvičenie a následné odkontrolovanie s hotovým riešením.</p>
+<h4 class="theme-subheading" id="zoradovanie-triedenie">Zoraďovanie / triedenie</h4>
+<p class="text-left">Tu len v krátkosti by som spomenul sortovacie algoritmy. Je dobré si ich pozriet, poznať ich a poznať ich princíp. Každý takýto algoritmus má svoje výhody a nevýhody.</p>
+<h4 class="theme-subheading" id="osem-dam-na-sachovnici">Osem dám na šachovnici</h4>
+<p class="text-left">Problém osmych dám - teda ako rozmiestniť osem dám na šachovnicu tak, aby sa podla pravidiel šachu navzájom neohrozovali. Všeobecné zadanie je <i>N</i> dám na šachovnici <i>N</i> x <i>N</i>. Je to staré zadanie, ktoré bolo prvý krát zverejnené v Berlínskom šasopise v roku 1848 Maxom Bezzelom. ( <i class="fa fa-wikipedia-w"></i> )</p>
+<p class="text-left">Často sa to rieši pri výučbe programovania, kvôli jednoduchosti ukážky <strong>backtracking</strong>ových algoritmov.</p>
+<p class="text-left">Ďalšími podobnými úlohami môže byť <i>Prechádzka jazdca</i> alebo <i>Sudoku</i>. Pri prechádzke jazdcom ide znova o šachovú figúrku, ktorá sa pohybuje v súlade s pravidlami šachu po šachovnici a jej úlohou je navštíviť každé pole šachovnice iba raz.</p>
+<p class="text-left">Tomuto algoritmu - <i>backtrackingu</i> - by som chcel neskôr venovať celý článok, spolu s riešením problému ôsmych dám a sudoku.</p>
+<h2 class="theme-subheading" id="open-source">Open Source</h2>
+<p class="text-left">Každý sa isto pohrával s myšlienkou, že by prispel niečím do Open Source projektov. Velmi dobrá prednáška ku tejto téme bola na <a href="https://www.brnophp.cz" target="_blank">Brno PHP konferencii</a> - Mal by si byť Open Source vývojár.</p>
+<p class="text-left">Nejde však len o prispievanie do cudzích projektov, kludne môže ísť o zdielanie vlastných projektov, knižníc, alebo častí kódu. Ak zverejniš svoj kód, môžu ti ostatní programátori pomôcť riešiť nejaký problém, prípadne poradiť čo sa dá robiť lepšie. Je to tiež cesta ako sa učit a posúvať dalej. Zároveň tým pomáhaš daľším programátorom.</p>
+<h4 class="theme-subheading" id="dlh">"Dlh"</h4>
+<p class="text-left">Čítaním blogov, rôznych fórumov, využívaním kódov z open source projektov si vytváraš nejaký "dlh". Tento dlh je voči komunite, ktorá to všetko pre teba a ďaľších vytvorila. Prispievaním do open source projektov, písaním vlastného blogu alebo všeobecne pomocou ostatným programátorom tento dlh svojim spôsobom splácaš.</p>
+<p class="text-left">Buduješ si tak aj svoje meno, reputáciu, učíš sa spolupráci s ostatnými.</p>
+<h4 class="theme-subheading" id="github">GitHub</h4>
+<p class="text-left">Velmi oblúbenou službou je GitHub, kde si môžes vytvoriť vlastný priestor pre projekty. Pomôže ti to aj pri správe projektu, kedže sa tu dajú nahlasovať chyby. Čím viac ludí projekt využíva, tým skôr sa odladia nedostatky. Nemusí sa jednať len o nahlásenie chyby. Niekto, kto chybu nájde ju môže hneď aj vyriešiť a ponúknuť ti toto riešenie.</p>
+<p class="text-left">V prípade, že nemáš svoj vlastný projekt, alebo sa chceš podielať na vývoji iného, môžes si otvoriť zoznam problémov ( <i>issues</i> ) a skúsiť jednotlivé chyby riešiť. Alebo ak natrafíš na nejakú chybu v balíčku, ktorý využívaš, nahlás ju. Aj to je pomoc!</p>
+<h4 class="theme-subheading" id="dokumentacia">Dokumentácia</h4>
+<p class="text-left">Vela projektov môže byť zaujímavých a dobrých, ale ak majú slabú dokumentáciu, ludia ich nebudú využívať. Aj tu sa dá prispieť a pomôcť. Použil si niečo, kde si ešte musel riešiť nejaké problémy, alebo sa ti zdala dokumentácia nedostatočná? Kludne ju môžeš napísať / doplniť.</p>
+<h2 class="theme-subheading" id="zaver">Záver</h2>
+<p class="text-left">Viem, že spomenuté veci zaberú nejaký ten čas a toho je málo. Nie je to ale zbytočná práca naviac. Zlepšuješ tým svoje schopnosti, získavaš nových kamarátov a tiež to je spôsob ako sa zviditelniť a ukázať čo je v tebe.</p>
+<p class="text-left">Na <i>WebSupporte</i> sa objavil prednedávnom článok "<a href="http://www.websupport.sk/blog/2015/11/6-uzitocnych-tipov-na-hladanie-it-talentov/" target="_blank">6 užitočných tipov na hladanie IT talentov</a>". Rýd by som spomenul jednu čast z neho :</p>
+<blockquote>
+  <p>Sociálne siete sú novodobé životopisy – o to viac to platí pri špecializovaných sociálnych sieťach, kde môžu ITčkári zdieľať svoje vedomosti a práce.</p>
+</blockquote>
+<p class="text-left">Tým chcem len potvrdiť to, že sú ludia, ktorí si tvoju aktivitu budú všímať.</p>
