@@ -1,0 +1,258 @@
+<!--
+
+Zadanie ulohy + popis ( console application + anagram solution )
+Oboznamenie so symfony console projektom
+pridanie symfony console do composera
+rozsirenie projektu ComposerExample
+
+-->
+<p class="text-left">Sometime you need to create command line interface (CLI) for your application and when you want to have it nicely formated, colorful or you want to have a table there it is not easy to do it. You can look on internet and find out, how to do such a thing, but you would have to write a lot of code.</p>
+<h2 class="theme-subheading" id="enginy">Symfony console</h2>
+<p class="text-left">With <strong>Symfony console</strong> you can do whatever you are used to see when working with console. E. g. tables, progress bars, questions, dialogs, etc. And it will help you with lot of other common things. It is very easy to add required or optional argument, create help or add another command.</p>
+<h4 class="theme-subheading" id="new-problem-anagram">New problem <small>- Anagram</small></h4>
+<p class="text-left">I want to continue on my previous article about <strong><a href="http://en.juffalow.com/what-is-and-how-to-use-composer/">Composer</a></strong>. There was an example project where you have to solve if given string is palindrome or not. Now, we can expand it with new problem.</p>
+<blockquote>
+  <p>An anagram is a type of word play, the result of rearranging the letters of a word or phrase to produce a new word or phrase, using all the original letters exactly once.</p>
+  <footer><cite title="Wikipedia">Wikipedia</cite></footer>
+</blockquote>
+<p class="text-left">For example silent - listen, admirer - married, funeral - real fun. The solution involves a CLI where I can easily test if words are anagrams or palindromes. Of course there has to be help to each command and a hint how to use it.</p>
+<h4 class="theme-subheading" id="step-by-step">Step by step</h4>
+<p class="text-left">You can download the project from <a href="https://github.com/juffalow/ComposerExample/tree/431ec3f4464ff5e966b22e4b543fa6556b4af1bc">GitHub commit</a> or go through mentioned article and create it yourself. You should end up with directory structure like this :</p>
+<ul>
+    <li>src
+        <ul>
+            <li>Palindrome.php</li>
+        </ul>
+    </li>
+    <li>
+        tests
+        <ul>
+            <li>PalindromeTest.php</li>
+        </ul>
+    </li>
+    <li>vendor
+        <ul>
+            <li>...</li>
+        </ul>
+    </li>
+    <li>composer.json</li>
+    <li>composer.lock</li>
+</ul>
+<p class="text-left">Again start with the tests. So create file <i>AnagramTest.php</i> in <i>src</i> directory. The class name will be <code>Anagram</code> and method might be <code>isAnagram</code>. So you have to test an real anagram and some other string which is not an anagram.</p>
+<pre class="prettyprint">
+use src\Anagram;
+
+class AnagramTest extends PHPUnit_Framework_TestCase {
+
+    private $anagram;
+    
+    public function setUp() {
+        $this->anagram = new Anagram();
+    }
+
+    public function testSuitableString() {
+        $this->assertTrue($this->anagram->isAnagram('silent', 'listen'));
+        $this->assertTrue($this->anagram->isAnagram('I am Lord Voldemort', 'Tom Marvolo Riddle'));
+    }
+
+    public function testNotSuitableString() {
+        $this->assertFalse($this->anagram->isAnagram('anagram', 'palindrome'));
+    }
+}
+</pre>
+<h4 class="theme-subheading" id="anagram">Anagram</h4>
+<p class="text-left">There are many ways how to check if strings are anagram. One of them is to sort both strings and compare them. If they are equal they are anagram. To be sure, you can delete spaces and make the strings lowercase.</p>
+<pre class="prettyprint">
+namespace src;
+
+class Anagram {
+    /**
+     * 
+     * @param string $str1
+     * @param string $str2
+     * @return boolean
+     */
+    public function isAnagram( $str1, $str2 ) {
+        return $this->sortString($this->sanitizeString($str1)) === $this->sortString($this->sanitizeString($str2));
+    }
+    
+    /**
+     * Removes all spaces and transorms letters to lowercase.
+     * @param string $str
+     * @return string
+     */
+    private function sanitizeString( $str ) {
+        return \strtolower(\str_replace(' ', '', $str));
+    }
+    
+    /**
+     * Sort characters and return them.
+     * @param string $str
+     * @return string
+     */
+    private function sortString( $str ) {
+        $chars = str_split($str);
+        sort($chars);
+        return implode('', $chars);
+    }
+}
+</pre>
+<p class="text-left">Now run the test <code>phpunit --bootstrap ./vendor/autoload.php ./tests/AnagramTest.php</code>. The result should be <kbd>OK (2 tests, 3 assertions)</kbd> and you may continue to create the CLI.</p>
+<h4 class="theme-subheading" id="creating-command-line-interface">Creating command line interface</h4>
+<p class="text-left">First you need to install Symfony Console package. Open the <i>composer.json</i> file and add new dependency into the <code>require</code> key and run <kbd>composer install</kbd> command.</p>
+<pre class="prettyprint">
+    ...
+    "require": {
+        "phpunit/phpunit": "^4.6.0",
+        "symfony/console": "~2.6"
+    },
+    ...
+</pre>
+<p class="text-left">Now, when you have everything what is needed, create <i>bin</i> folder in the root directory. There will be the whole console application located. In the final, you run only one main script, which takes the command name and arguments and processes it.</p>
+<p class="text-left">The have some order in it, let's create it like this :</p>
+<ul>
+    <li>bin
+        <ul>
+            <li>command
+                <ul>
+                    <li>AnagramCommand.php</li>
+                    <li>PalindromeCommand.php</li>
+                </ul>
+            </li>
+            <li>console.php</li>
+        </ul>
+    </li>
+    <li>src
+        <ul>
+            <li>...</li>
+        </ul>
+    </li>
+    <li>
+        tests
+        <ul>
+            <li>...</li>
+        </ul>
+    </li>
+    <li>vendor
+        <ul>
+            <li>...</li>
+        </ul>
+    </li>
+    <li>composer.json</li>
+    <li>composer.lock</li>
+</ul>
+<p class="text-left">Because there is new folder ( new namespace to be mapped ) you have to add this folder into <code>autoload</code> and rebuild the <i>autoload.php</i> with command <kbd>composer dump-autoload</kbd>.</p>
+<pre class="prettyprint">
+    ...
+    "autoload": {
+        "psr-4": {
+            "src\\" : "src",
+            "bin\\": "bin/"
+        }
+    }
+    ...
+</pre>
+<h4 class="theme-subheading" id="anagram-command-php">AnagramCommand.php</h4>
+<p class="text-left">Now is the time to create the first command and it is done by extending <code>Command</code> class from <code>Symfony\Component\Console\Command</code> namespace. Then you have to set some basic configuration like the name, description, arguments ( if has any ) and so on. There is a method for this which you have to override - <code>protected function configure()</code>.</p>
+<pre class="prettyprint">
+namespace bin\command;
+
+use Symfony\Component\Console\Command\Command;
+class AnagramCommand extends Command {
+    protected function configure() {
+        $this
+            ->setName('anagram')
+            ->setDescription('Checks whether two strings are anagrams.')
+            ->addArgument('word', InputArgument::REQUIRED, 'The main word')
+            ->addArgument('anagram', InputArgument::REQUIRED, 'Word to be checked if it is anagram with the main one')
+            ->setHelp("An anagram is a type of word play, the result of rearranging the letters of a word or phrase to produce a new word or phrase, using all the original letters exactly once.\nLink : https://en.wikipedia.org/wiki/Anagram")
+        ;
+    }
+}
+</pre>
+<p class="text-left">The <code>setName</code> part is clear I think. Description is short text displayed in list of available commands as a hint unlike help which is displayed on demand by typing <code>--help</code> option. The command takes two words / strings as arguments to determine whether they are anagrams or not. I named it <i>word</i> and <i>anagram</i>, make it required with description 'The main word' and 'Word to be checked if it is anagram with the main one'.</p>
+<p class="text-left">Method <code>protected function execute($input, $output)</code> is where everything is done. You get the arguments values from the <code>$input</code> object and write back to console through the <code>$output</code> object. Because the command takes two or more strings, you traverse them and check if they are anagram to each other ( or to the first ).</p>
+<pre class="prettyprint">
+namespace bin\command;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use src\Anagram;
+
+class AnagramCommand extends Command {
+    ...
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $word = $input->getArgument('word');
+        $anagramWord = $input->getArgument('anagram');
+        
+        $anagram = new Anagram();
+        
+        if( $anagram->isAnagram($word, $anagramWord) ) {
+            $output->writeln('These strings are anagrams!');
+        } else {
+            $output->writeln('These strings are not anagrams!');
+        }
+    }
+}
+</pre>
+<h4 class="theme-subheading" id="palindrome-command-php">PalindromeCommand.php</h4>
+<p class="text-left">Here again, you set up the whole command and create the execute part. Here it is a little bit easier, because it takes only one argument and tests it.</p>
+<pre class="prettyprint">
+namespace bin\command;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use src\Palindrome;
+
+class PalindromeCommand extends Command {
+    protected function configure() {
+        $this
+            ->setName('palindrome')
+            ->setDescription('Checks if string is palindrome or not')
+            ->addArgument('string', InputArgument::REQUIRED, 'String to by checked')
+            ->setHelp("A palindrome is a word, phrase, number, or other sequence of characters which reads the same backward or forward.\nLink : https://en.wikipedia.org/wiki/Palindrome")
+        ;
+    }
+    
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $string = $input->getArgument('string');
+        
+        $palindrome = new Palindrome();
+        
+        if( $palindrome->check($string) ) {
+            $output->writeln('This string is palindrome!');
+        } else {
+            $output->writeln('This string is not palindrome!');
+        }
+    }
+}
+</pre>
+<h4 class="theme-subheading" id="console-php">console.php</h4>
+<p class="text-left">Application's main file where you put together all parts along with autoloader. That means create <code>Application</code> object, add commands and run it.</p>
+<pre class="prettyprint">
+namespace bin;
+
+$container = require __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$console = new Application('First Symfony Console Application', '0.1.0');
+
+$console->addCommands(array(
+    new \bin\command\AnagramCommand(),
+    new \bin\command\PalindromeCommand()
+));
+
+$console->run();
+</pre>
+<h4 class="theme-subheading" id="testing-the-application">Testing the application</h4>
+<p class="text-left">Everything is ready and you can try it. Just run the command <kbd>php console.php</kbd> and you should see nice output with information about the app name, usage, options and available commands.</p>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">There are lot of other things it is capable of. Try to run the anagram command ( <kbd>php console.php anagram</kbd> ) without any argument and it alerts red exception with 'Not enough arguments (missing: "word, anagram").' message.</p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="http://symfony.com/doc/current/components/console/introduction.html">The Console Component</a> introduction on official Symfony website.</p>
+
