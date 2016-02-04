@@ -2,14 +2,14 @@
 <h2 class="theme-subheading" id="enginy">Symfony console</h2>
 <p class="text-left">With <strong>Symfony console</strong> you can do whatever you are used to see when working with console. E. g. tables, progress bars, questions, dialogs, etc. And it will help you with lot of other common things. It is very easy to add required or optional argument, create help or add another command.</p>
 <h4 class="theme-subheading" id="new-problem-anagram">New problem <small>- Anagram</small></h4>
-<p class="text-left">I want to continue on my previous article <strong><a href="http://en.juffalow.com/what-is-and-how-to-use-composer/">What is and how to use Composer</a></strong>. There was an example project where you have to solve if given string is palindrome or not. Now, we can expand it with new problem.</p>
+<p class="text-left">I want to continue on my previous article <strong><a href="http://en.juffalow.com/what-is-and-how-to-use-composer/" target="_blank">What is and how to use Composer</a></strong>. There was an example project where you have to solve if given string is palindrome or not. Now, we can expand it with new problem.</p>
 <blockquote>
   <p>An anagram is a type of word play, the result of rearranging the letters of a word or phrase to produce a new word or phrase, using all the original letters exactly once.</p>
   <footer><cite title="Wikipedia">Wikipedia</cite></footer>
 </blockquote>
 <p class="text-left">For example silent - listen, admirer - married, funeral - real fun. The solution involves a CLI where I can easily test if words are anagrams or palindromes. Of course there has to be help to each command and a hint how to use it.</p>
 <h4 class="theme-subheading" id="step-by-step">Step by step</h4>
-<p class="text-left">You can download the project from <a href="https://github.com/juffalow/ComposerExample/tree/431ec3f4464ff5e966b22e4b543fa6556b4af1bc">GitHub commit</a> or go through mentioned article and create it yourself. You should end up with directory structure like this :</p>
+<p class="text-left">You can download the project from <a href="https://github.com/juffalow/ComposerExample/tree/431ec3f4464ff5e966b22e4b543fa6556b4af1bc" target="_blank">GitHub commit</a> or go through mentioned article and create it yourself. You should end up with directory structure like this :</p>
 <ul>
     <li>src
         <ul>
@@ -139,7 +139,7 @@ class Anagram {
     "autoload": {
         "psr-4": {
             "src\\" : "src",
-            "bin\\": "bin/"
+            "bin\\": "bin"
         }
     }
     ...
@@ -243,8 +243,17 @@ $console->run();
 </pre>
 <h4 class="theme-subheading" id="testing-the-application">Testing the application</h4>
 <p class="text-left">Everything is ready and you can try it. Just run the command <kbd>php console.php</kbd> and you should see nice output with information about the app name, usage, options and available commands.</p>
+<p class="text-left">To test palindrome, type <kbd>php console.php palindrome "put it up"</kbd> and it should end with 'This string is palindrome!'. Or if you don't know what is the anagram command from available commands, type <kbd>php console.php anagram --help</kbd> and it gives you all information you need.</p>
+<div class="row">
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png"><img alt="php symfony console" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png"><img alt="php symfony console palindrome" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png"><img alt="php symfony console command help" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png"><img alt="php symfony console exception" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png" width="300" height="255" /></a></div>
+</div>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
-<p class="text-left">There are lot of other things it is capable of. Try to run the anagram command ( <kbd>php console.php anagram</kbd> ) without any argument and it alerts red exception with 'Not enough arguments (missing: "word, anagram").' message.</p>
+<p class="text-left">There are lot of other things it is capable of. Try to run the anagram command ( <kbd>php console.php anagram</kbd> ) without any argument and it alerts red exception with 'Not enough arguments (missing: "word, anagram").' message. If a command does't need an argument, set it to <code>InputArgument::OPTIONAL</code>, or if it should have options ( like -h / --help ) use method <code>addOption(...)</code>.</p>
+<p class="text-left">Maybe next time I write a post about using tables and progress bars if I find appropriate usage.</p>
+<p class="text-left">You can find the whole project on <a href="https://github.com/juffalow/ComposerExample" target="_blank">GitHub</a>.</p>
 <h4 class="theme-subheading" id="references">References</h4>
-<p class="text-left"><a href="http://symfony.com/doc/current/components/console/introduction.html">The Console Component</a> introduction on official Symfony website.</p>
+<p class="text-left"><a href="http://symfony.com/doc/current/components/console/introduction.html" target="_blank">The Console Component</a> introduction on official Symfony website.</p>
 
