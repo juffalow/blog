@@ -1,4 +1,4 @@
-# [juffalow](http://juffalow.com)
+# [www.juffalow.com](https://www.juffalow.com)
 
 My personal blog about programming. Main themes :
 * PHP
@@ -6,6 +6,11 @@ My personal blog about programming. Main themes :
 * Java
 * Programming itself - design patterns, principles, clean code
 * Other stuff
+
+## Website
+
+Slovak version : [www.juffalow.com](https://www.juffalow.com)
+English version : [en.juffalow.com](https://en.juffalow.com)
 
 ## Contact
 

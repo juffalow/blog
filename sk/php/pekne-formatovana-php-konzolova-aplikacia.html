@@ -1,15 +1,18 @@
-<p class="text-left">Sometime you need to create command line interface (CLI) for your application and when you want to have it nicely formated, colorful or you want to have a table there it is not easy to do it. You can look on internet and find out, how to do such a thing, but you would have to write a lot of code.</p>
+<p class="text-left">Nikedy potrebuješ vytvoriť konzolové rozhranie pre tvoju aplikáciiu a keď ho chceš mať pekne naformátované, farebné, prípadne tam má byť nejaká tá tabulka, tak to nie je ľahké spraviť. Môžeš pozrieť na internet a zistiť, ako niečo také spraviť, no buď pripravený, že písania bude dosť a stále to nebude ono.</p>
 <h2 class="theme-subheading" id="enginy">Symfony console</h2>
-<p class="text-left">With <strong>Symfony console</strong> you can do whatever you are used to see when working with console. E. g. tables, progress bars, questions, dialogs, etc. And it will help you with lot of other common things. It is very easy to add required or optional argument, create help or add another command.</p>
-<h4 class="theme-subheading" id="new-problem-anagram">New problem <small>- Anagram</small></h4>
-<p class="text-left">I want to continue on my previous article <strong><a href="https://en.juffalow.com/what-is-and-how-to-use-composer/" target="_blank">What is and how to use Composer</a></strong>. There was an example project where you have to solve if given string is palindrome or not. Now, we can expand it with new problem.</p>
+<p class="text-left">S komponentou <strong>Symfony console</strong> urobíš všetko na čo si zvyknutý pri práci s konzolou. Napríklad tabulky, loader ( progress bar ), otázky, dialógy, atď. A pomôže ti s veľa daľšími bežnými vecami. Je jednoduche pridať povinný alebo nepovinný argument, vytvoriť help alebo pridať ďaľší príkaz.</p>
+<h4 class="theme-subheading" id="novy-problem-anagram">Nový problém <small>- Anagram</small></h4>
+<p class="text-left">Nadviažem na môj predchádzajúci článok <strong><a href="http://en.juffalow.com/what-is-and-how-to-use-composer/" target="_blank">Čo to je Composer</a></strong>. Ako príklad tam je projekt, kde musíš zistiť, či zadaný reťazec je palindróm alebo nie. Teraz to rozšírime o ďaľší problém.</p>
 <blockquote>
-  <p>An anagram is a type of word play, the result of rearranging the letters of a word or phrase to produce a new word or phrase, using all the original letters exactly once.</p>
+  <p>Anagram (z gr. anagrafein - prepísať) alebo prešmyčka je slovo, ktoré vznikne zmenou poradia písmen v inom slove.</p>
   <footer><cite title="Wikipedia">Wikipedia</cite></footer>
 </blockquote>
 <p class="text-left">For example silent - listen, admirer - married, funeral - real fun. The solution involves a CLI where I can easily test if words are anagrams or palindromes. Of course there has to be help to each command and a hint how to use it.</p>
-<h4 class="theme-subheading" id="step-by-step">Step by step</h4>
-<p class="text-left">You can download the project from <a href="https://github.com/juffalow/ComposerExample/tree/431ec3f4464ff5e966b22e4b543fa6556b4af1bc" target="_blank">GitHub commit</a> or go through mentioned article and create it yourself. You should end up with directory structure like this :</p>
+
+<p class="text-left">Napríklad Vetvy slivky - vysvetlivky, .</p>
+
+<h4 class="theme-subheading" id="krok-za-krokom">Krok za krokom</h4>
+<p class="text-left">Projekt si môžeš stiahnut z <a href="https://github.com/juffalow/ComposerExample/tree/431ec3f4464ff5e966b22e4b543fa6556b4af1bc" target="_blank">GitHub commitu</a> alebo si prejsť spomenutý článok a vytvoriť si ho sám. Mal by si skončiť s takouto adresárovou štruktúrou :</p>
 <ul>
     <li>src
         <ul>
@@ -30,7 +33,7 @@
     <li>composer.json</li>
     <li>composer.lock</li>
 </ul>
-<p class="text-left">Again start with the tests. So create file <i>AnagramTest.php</i> in <i>src</i> directory. The class name will be <code>Anagram</code> and method might be <code>isAnagram</code>. So you have to test an real anagram and some other string which is not an anagram.</p>
+<p class="text-left">Opäť začneme testami. Takže vytvor súbor <i>AnagramTest.php</i> v adresári <i>src</i>. Názov triedy bude <code>Anagram</code> a metóda môže byť <code>isAnagram</code>. Testovať treba nejaký anagram a iný reťazec, ktorý nie je anagram.</p>
 <pre class="prettyprint">
 use src\Anagram;
 
@@ -53,7 +56,7 @@ class AnagramTest extends PHPUnit_Framework_TestCase {
 }
 </pre>
 <h4 class="theme-subheading" id="anagram">Anagram</h4>
-<p class="text-left">There are many ways how to check if strings are anagram. One of them is to sort both strings and compare them. If they are equal they are anagram. To be sure, you can delete spaces and make the strings lowercase.</p>
+<p class="text-left">Je veľa spôsobov ako zistiť či sa jedná o anagram. Jeden z nich je zoradiť oba reťazce podla abecedy a porovnať ich. Ak sa rovnajú, tvoria anagram. Pre istotu možeš vymazať medzery a zmeniť pismená na malé.</p>
 <pre class="prettyprint">
 namespace src;
 
@@ -69,7 +72,7 @@ class Anagram {
     }
     
     /**
-     * Removes all spaces and transorms letters to lowercase.
+     * Odstrani vsetky medzery a zmeni pismena na male
      * @param string $str
      * @return string
      */
@@ -78,7 +81,7 @@ class Anagram {
     }
     
     /**
-     * Sort characters and return them.
+     * Zoradi pismena v retazci podla abecedy
      * @param string $str
      * @return string
      */
@@ -89,9 +92,9 @@ class Anagram {
     }
 }
 </pre>
-<p class="text-left">Now run the test <code>phpunit --bootstrap ./vendor/autoload.php ./tests/AnagramTest.php</code>. The result should be <kbd>OK (2 tests, 3 assertions)</kbd> and you may continue to create the CLI.</p>
-<h4 class="theme-subheading" id="creating-command-line-interface">Creating command line interface</h4>
-<p class="text-left">First you need to install Symfony Console package. Open the <i>composer.json</i> file and add new dependency into the <code>require</code> key and run <kbd>composer install</kbd> command.</p>
+<p class="text-left">Spusti testy <code>phpunit --bootstrap ./vendor/autoload.php ./tests/AnagramTest.php</code>. Výsledok by mal byť <kbd>OK (2 tests, 3 assertions)</kbd> a ty smieš pokračovať vo vytváraní rozhrania pre príkazový riadok.</p>
+<h4 class="theme-subheading" id="vytvaranie-rozhrania-pre-prikazovy-riadok">Vytváranie rozhrania pre príkazový riadok</h4>
+<p class="text-left">Najskôr musíš nainštalovať Symfony Console balíček. Otvor si súbor <i>composer.json</i> a pridaj novú závislosť do kľúča <code>require</code> a spusti príkaz <kbd>composer install</kbd>.</p>
 <pre class="prettyprint">
     ...
     "require": {
@@ -101,6 +104,9 @@ class Anagram {
     ...
 </pre>
 <p class="text-left">Now, when you have everything what is needed, create <i>bin</i> folder in the root directory. There will be the whole console application located. In the final, you run only one main script, which takes the command name and arguments and processes it.</p>
+
+<p class="text-left"></p>
+
 <p class="text-left">The have some order in it, let's create it like this :</p>
 <ul>
     <li>bin
@@ -245,10 +251,10 @@ $console->run();
 <p class="text-left">Everything is ready and you can try it. Just run the command <kbd>php console.php</kbd> and you should see nice output with information about the app name, usage, options and available commands.</p>
 <p class="text-left">To test palindrome, type <kbd>php console.php palindrome "put it up"</kbd> and it should end with 'This string is palindrome!'. Or if you don't know what is the anagram command from available commands, type <kbd>php console.php anagram --help</kbd> and it gives you all information you need.</p>
 <div class="row">
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console.png"><img alt="php symfony console" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png"><img alt="php symfony console palindrome" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png"><img alt="php symfony console command help" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png"><img alt="php symfony console exception" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png"><img alt="php symfony console" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png"><img alt="php symfony console palindrome" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png"><img alt="php symfony console command help" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png"><img alt="php symfony console exception" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png" width="300" height="255" /></a></div>
 </div>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
 <p class="text-left">There are lot of other things it is capable of. Try to run the anagram command ( <kbd>php console.php anagram</kbd> ) without any argument and it alerts red exception with 'Not enough arguments (missing: "word, anagram").' message. If a command does't need an argument, set it to <code>InputArgument::OPTIONAL</code>, or if it should have options ( like -h / --help ) use method <code>addOption(...)</code>.</p>
