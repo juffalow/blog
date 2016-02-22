@@ -1,0 +1,114 @@
+<p class="text-left">I am currently working on three computers and it is real pain to get everything synchronized. Of course I am using git repositories and cloud but I still have to take care of apache server, databases, etc. So I decided to create Virtual Machine which I save on USB drive and try to do it this way.</p>
+<p class="text-left">The Linux installation with Apache and MySql is not a problem. But I needed to install Elasticsearch ( which runs on Java ) and make it accessible from my computer ( Linux with Elasticsearch is running in VM ).</p>
+<h2 class="theme-subheading" id="installing-java-8">Installing Java 8</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="add-java-repository">Add Java repository</h4>
+<p class="text-left">Download the required files from Oracle :</p>
+<pre>
+sudo add-apt-repository -y ppa:webupd8team/java
+</pre>
+<p class="text-left">Update :</p>
+<pre>
+sudo apt-get update
+</pre>
+<h4 class="theme-subheading" id="install-java">Install Java</h4>
+<pre>
+sudo apt-get install oracle-java8-installer
+</pre>
+<p class="text-left">Check ( verify ) version after installation :</p>
+<pre>
+java -version
+</pre>
+<p class="text-left">On the output you should see something like this :</p>
+<div class="well">
+java version "1.8.0_72"
+Java(TM) SE Runtime Environment (build 1.8.0_72-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 25.72-b15, mixed mode)
+</div>
+<h2 class="theme-subheading" id="installing-elasticsearch">Installing ElasticSearch</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="add-elastic-repository">Add elastic repository</h4>
+<pre>
+wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+</pre>
+<h4 class="theme-subheading" id="create-repository-list-for-elastic">Create repository list for Elastic</h4>
+<pre>
+echo "deb http://packages.elastic.co/elasticsearch/1.7/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elasticsearch-1.7.list
+</pre>
+<p class="text-left">Update again :</p>
+<pre>
+sudo apt-get update
+</pre>
+<h4 class="theme-subheading" id="install-elastic">Install Elastic</h4>
+<pre>
+sudo apt-get install elasticsearch
+</pre>
+<h4 class="theme-subheading" id="enable-elastic-to-start-automaticaly">Enable Elastic to start automatically</h4>
+<pre>
+sudo update-rc.d elasticsearch defaults 95 10
+</pre>
+<p class="text-left">Sample output :</p>
+<div class="well">
+Adding system startup for /etc/init.d/elasticsearch ...
+  /etc/rc0.d/K10elasticsearch -> ../init.d/elasticsearch
+  /etc/rc1.d/K10elasticsearch -> ../init.d/elasticsearch
+  /etc/rc6.d/K10elasticsearch -> ../init.d/elasticsearch
+  /etc/rc2.d/S95elasticsearch -> ../init.d/elasticsearch
+  /etc/rc3.d/S95elasticsearch -> ../init.d/elasticsearch
+  /etc/rc4.d/S95elasticsearch -> ../init.d/elasticsearch
+  /etc/rc5.d/S95elasticsearch -> ../init.d/elasticsearch
+</div>
+<h2 class="theme-subheading" id="configuration">Configuration</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="change-network-host-and-allow-remote-connection">Change network host and allow remote connection</h4>
+<p class="text-left">Open Elasticsearch configuration file in your favorite editor, allow and change <code>network.host</code> to <code>localhost</code>. And if you want to connect to Elasticsearch from remote machine you need to enable <code>network.bind_host</code> and set it to <code>0</code>.</p>
+<pre>
+sudo vi /etc/elasticsearch/elasticsearch.yml
+</pre>
+<p class="text-left">Part of my Elasticsearch configuration file :</p>
+<div class="well">
+############################## Network And HTTP ###############################
+
+# Elasticsearch, by default, binds itself to the 0.0.0.0 address, and listens
+# on port [9200-9300] for HTTP traffic and on port [9300-9400] for node-to-node
+# communication. (the range means that if the port is busy, it will automatically
+# try the next port).
+
+# Set the bind address specifically (IPv4 or IPv6):
+#
+<b>network.bind_host: 0</b>
+
+# Set the address other nodes will use to communicate with this node. If not
+# set, it is automatically derived. It must point to an actual IP address.
+#
+#network.publish_host: 192.168.0.1
+
+# Set both 'bind_host' and 'publish_host':
+#
+<b>network.host: localhost</b>
+</div>
+<h4 class="theme-subheading" id="restart-elasticsearch-service">Restart Elasticsearch service</h4>
+<pre>
+sudo /etc/init.d/elasticsearch restart
+</pre>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">Now, you should be able to connect and get data from Elasticsearch. Test it with command :</p>
+<pre>
+curl -X GET 'http://localhost:9200'
+</pre>
+<p class="text-left">Response :</p>
+<div class="well">
+{
+&nbsp;&nbsp;"status" : 200,
+&nbsp;&nbsp;"name" : "Diablo",
+&nbsp;&nbsp;"cluster_name" : "elasticsearch",
+&nbsp;&nbsp;"version" : {
+&nbsp;&nbsp;&nbsp;&nbsp;"number" : "1.7.5",
+&nbsp;&nbsp;&nbsp;&nbsp;"build_hash" : "00f95f4ffca6de89d68b7ccaf80d148f1f70e4d4",
+&nbsp;&nbsp;&nbsp;&nbsp;"build_timestamp" : "2016-02-02T09:55:30Z",
+&nbsp;&nbsp;&nbsp;&nbsp;"build_snapshot" : false,
+&nbsp;&nbsp;&nbsp;&nbsp;"lucene_version" : "4.10.4"
+&nbsp;&nbsp;},
+&nbsp;&nbsp;"tagline" : "You Know, for Search"
+}
+</div>
