@@ -103,11 +103,8 @@ class Anagram {
     },
     ...
 </pre>
-<p class="text-left">Now, when you have everything what is needed, create <i>bin</i> folder in the root directory. There will be the whole console application located. In the final, you run only one main script, which takes the command name and arguments and processes it.</p>
-
-<p class="text-left"></p>
-
-<p class="text-left">The have some order in it, let's create it like this :</p>
+<p class="text-left">Teraz, keď máš všetko potrebné, vytvor adresár <i>bin</i> v koreňovom adresári. Tam bude umiestnená celá konzolová aplikácia. Na konci budeš spúšťať iba hlavný skript, ktorý berie ako argumenty názov príkazu a jeho argumenty.</p>
+<p class="text-left">Aby v tom bol poriadok, štruktúra bude nasledovná :</p>
 <ul>
     <li>bin
         <ul>
@@ -139,7 +136,7 @@ class Anagram {
     <li>composer.json</li>
     <li>composer.lock</li>
 </ul>
-<p class="text-left">Because there is new folder ( new namespace to be mapped ) you have to add this folder into <code>autoload</code> and rebuild the <i>autoload.php</i> with command <kbd>composer dump-autoload</kbd>.</p>
+<p class="text-left">Pretože bola vytvorená nová zložka ( nový namespace, ktorý treba namapovať ) musíš túto zložku zapísať do <code>autoload</code> a znovu vygenerovať <i>autoload.php</i> pomocou príkazu <kbd>composer dump-autoload</kbd>.</p>
 <pre class="prettyprint">
     ...
     "autoload": {
@@ -151,7 +148,7 @@ class Anagram {
     ...
 </pre>
 <h4 class="theme-subheading" id="anagram-command-php">AnagramCommand.php</h4>
-<p class="text-left">Now is the time to create the first command and it is done by extending <code>Command</code> class from <code>Symfony\Component\Console\Command</code> namespace. Then you have to set some basic configuration like the name, description, arguments ( if has any ) and so on. There is a method for this which you have to override - <code>protected function configure()</code>.</p>
+<p class="text-left">Je čas vytvoriť prvý príkaz. Ten sa vytvára dedením od triedy <code>Command</code> z <code>Symfony\Component\Console\Command</code>. Potom treba nastaviť základné informácie ako napr. meno, popis, zoznam argumentov, atď. Na to je určená metóda, ktorú je nutné prepísať ( overridnuť ) - <code>protected function configure()</code>.</p>
 <pre class="prettyprint">
 namespace bin\command;
 
@@ -160,16 +157,16 @@ class AnagramCommand extends Command {
     protected function configure() {
         $this
             ->setName('anagram')
-            ->setDescription('Checks whether two strings are anagrams.')
-            ->addArgument('word', InputArgument::REQUIRED, 'The main word')
-            ->addArgument('anagram', InputArgument::REQUIRED, 'Word to be checked if it is anagram with the main one')
-            ->setHelp("An anagram is a type of word play, the result of rearranging the letters of a word or phrase to produce a new word or phrase, using all the original letters exactly once.\nLink : https://en.wikipedia.org/wiki/Anagram")
+            ->setDescription('Skontroluje, či sú dva reťazce anagram.')
+            ->addArgument('word', InputArgument::REQUIRED, 'Hlavné slovo')
+            ->addArgument('anagram', InputArgument::REQUIRED, 'Slovo, ktoré ma byť skontrolované, či tvorí anagram s hlavným slovom')
+            ->setHelp("Anagram alebo prešmyčka je slovo, ktoré vznikne zmenou poradia písmen v inom slove.\nOdkaz : https://sk.wikipedia.org/wiki/Anagram")
         ;
     }
 }
 </pre>
-<p class="text-left">The <code>setName</code> part is clear I think. Description is short text displayed in list of available commands as a hint unlike help which is displayed on demand by typing <code>--help</code> option. The command takes two words / strings as arguments to determine whether they are anagrams or not. I named it <i>word</i> and <i>anagram</i>, make it required with description 'The main word' and 'Word to be checked if it is anagram with the main one'.</p>
-<p class="text-left">Method <code>protected function execute($input, $output)</code> is where everything is done. You get the arguments values from the <code>$input</code> object and write back to console through the <code>$output</code> object. Because the command takes two or more strings, you traverse them and check if they are anagram to each other ( or to the first ).</p>
+<p class="text-left">Časť <code>setName</code> je myslím jasná. Popis ( <i>setDescription</i> ) je krátky text zobrazený v zozname dostupných príkazov ako nápoveda narozdiel od pomocného textu ( <i>setHelp</i> ), ktorý je zobrazený na vyžiadanie zadaním <code>--help</code>. Príkaz berie dve slová / reťazce ako argument aby vyhodnotil, či sa jedná o anagram alebo nie. Nazval som ich <i>word</i> a <i>anagram</i>, nastavil ako povinné s popisom 'Hlavné slovo' a 'Slovo, ktoré ma byť skontrolované, či tvorí anagram s hlavným slovom'.</p>
+<p class="text-left">Metóda <code>protected function execute($input, $output)</code> je miesto diania. Hodnoty argumentov získaš z objektu <code>$input</code> a výstup na konzolu posielaš cez <code>$output</code>.</p>
 <pre class="prettyprint">
 namespace bin\command;
 
@@ -188,15 +185,15 @@ class AnagramCommand extends Command {
         $anagram = new Anagram();
         
         if( $anagram->isAnagram($word, $anagramWord) ) {
-            $output->writeln('These strings are anagrams!');
+            $output->writeln('Tieto dva reťazce tvoria anagram!');
         } else {
-            $output->writeln('These strings are not anagrams!');
+            $output->writeln('Tieto dva reťazce NEtvoria anagram!');
         }
     }
 }
 </pre>
 <h4 class="theme-subheading" id="palindrome-command-php">PalindromeCommand.php</h4>
-<p class="text-left">Here again, you set up the whole command and create the execute part. Here it is a little bit easier, because it takes only one argument and tests it.</p>
+<p class="text-left">Tu znova nastavíš nový príkaz spolu s vykonávanou metódou. V tomto prípade je to mierne ľahšie, pretože berie iba jeden argument a ten testuje.</p>
 <pre class="prettyprint">
 namespace bin\command;
 
@@ -210,9 +207,9 @@ class PalindromeCommand extends Command {
     protected function configure() {
         $this
             ->setName('palindrome')
-            ->setDescription('Checks if string is palindrome or not')
-            ->addArgument('string', InputArgument::REQUIRED, 'String to by checked')
-            ->setHelp("A palindrome is a word, phrase, number, or other sequence of characters which reads the same backward or forward.\nLink : https://en.wikipedia.org/wiki/Palindrome")
+            ->setDescription('Zistí či reťazec je palindróm alebo nie')
+            ->addArgument('string', InputArgument::REQUIRED, 'Reťazec, ktorý ma byť skontrolovaný')
+            ->setHelp("Palindróm je slovo, veta, číslo (všeobecne akákoľvek postupnosť symbolov), ktorá má tú vlastnosť, že ju možno čítať v ľubovoľnom smere (sprava doľava alebo zľava doprava) a má vždy rovnaký význam.\nOdkaz : https://sk.wikipedia.org/wiki/Palindróm")
         ;
     }
     
@@ -222,15 +219,15 @@ class PalindromeCommand extends Command {
         $palindrome = new Palindrome();
         
         if( $palindrome->check($string) ) {
-            $output->writeln('This string is palindrome!');
+            $output->writeln('Tento reťazec je palindróm!');
         } else {
-            $output->writeln('This string is not palindrome!');
+            $output->writeln('Tento reťazec nie je palindróm!');
         }
     }
 }
 </pre>
 <h4 class="theme-subheading" id="console-php">console.php</h4>
-<p class="text-left">Application's main file where you put together all parts along with autoloader. That means create <code>Application</code> object, add commands and run it.</p>
+<p class="text-left">Hlavný súbor aplikácie, kde pospájaš všetky časti spolu s autoloaderom. To znamená vytvoriť objekt <code>Application</code>, pridať príkazy a spustiť aplikáciu.</p>
 <pre class="prettyprint">
 namespace bin;
 
@@ -247,19 +244,17 @@ $console->addCommands(array(
 
 $console->run();
 </pre>
-<h4 class="theme-subheading" id="testing-the-application">Testing the application</h4>
-<p class="text-left">Everything is ready and you can try it. Just run the command <kbd>php console.php</kbd> and you should see nice output with information about the app name, usage, options and available commands.</p>
-<p class="text-left">To test palindrome, type <kbd>php console.php palindrome "put it up"</kbd> and it should end with 'This string is palindrome!'. Or if you don't know what is the anagram command from available commands, type <kbd>php console.php anagram --help</kbd> and it gives you all information you need.</p>
+<h4 class="theme-subheading" id="testovanie-aplikacie">Testovanie aplikácie</h4>
+<p class="text-left">Všetko je pripravené a môžeš to vyskúšať. Stačí spustiť príkaz <kbd>php console.php</kbd> a mal by si vidieť pekne naformátovaný výstup s informáciou o názve aplikácie, využití, možnosťami a dostupnými príkazmi.</p>
+<p class="text-left">Na otestovanie palindrómu napíš <kbd>php console.php "Matej je tam"</kbd> a malo by to skončiť hláškou 'Tento reťazec je palindróm!'. Alebo ak nevieš čo robí príkaz anagram z dostupných príkazov, napíš <kbd>php console.php anagram --help</kbd> a dá ti to všetky potrebné infrormácie, ktoré potrebuješ.</p>
 <div class="row">
 <div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png"><img alt="php symfony console" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png" width="300" height="255" /></a></div>
 <div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png"><img alt="php symfony console palindrome" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png" width="300" height="255" /></a></div>
 <div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png"><img alt="php symfony console command help" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png" width="300" height="255" /></a></div>
 <div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png"><img alt="php symfony console exception" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png" width="300" height="255" /></a></div>
 </div>
-<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
-<p class="text-left">There are lot of other things it is capable of. Try to run the anagram command ( <kbd>php console.php anagram</kbd> ) without any argument and it alerts red exception with 'Not enough arguments (missing: "word, anagram").' message. If a command does't need an argument, set it to <code>InputArgument::OPTIONAL</code>, or if it should have options ( like -h / --help ) use method <code>addOption(...)</code>.</p>
-<p class="text-left">Maybe next time I write a post about using tables and progress bars if I find appropriate usage.</p>
-<p class="text-left">You can find the whole project on <a href="https://github.com/juffalow/ComposerExample" target="_blank">GitHub</a>.</p>
-<h4 class="theme-subheading" id="references">References</h4>
-<p class="text-left"><a href="http://symfony.com/doc/current/components/console/introduction.html" target="_blank">The Console Component</a> introduction on official Symfony website.</p>
-
+<h2 class="theme-subheading" id="zaver">Záver</h2>
+<p class="text-left">Je veľa ďaľších vecí, ktoré to dokáže. Skús spustiť príkaz anagram ( <kbd>php console.php anagram</kbd> ) bez argumentov a hneď vypíše červenú hlášku informujúcu o nedostatku argumentov - 'Not enough arguments (missing: "word, anagram").'. Ak príkaz nepotrebuje niektorý z argumentov na svoj beh, môžeš ho nastavit ako <code>InputArgument::OPTIONAL</code>, alebo ak má mať nejaké dodatočné nastavenia ( prepínače ), ako napríklad <code>-h</code> alebo <code>--help</code> použi metódu <code>addOption(...)</code>.</p>
+<p class="text-left">Celý projekt možeš nájsť na <a href="https://github.com/juffalow/ComposerExample" target="_blank">GitHube</a>.</p>
+<h4 class="theme-subheading" id="odkazy">Odkazy</h4>
+<p class="text-left"><a href="http://symfony.com/doc/current/components/console/introduction.html" target="_blank">Konzolová komponenta</a> od Symfony a úvod k nej ( v angličtine ).</p>

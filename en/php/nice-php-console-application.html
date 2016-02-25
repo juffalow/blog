@@ -101,7 +101,7 @@ class Anagram {
     ...
 </pre>
 <p class="text-left">Now, when you have everything what is needed, create <i>bin</i> folder in the root directory. There will be the whole console application located. In the final, you run only one main script, which takes the command name and arguments and processes it.</p>
-<p class="text-left">The have some order in it, let's create it like this :</p>
+<p class="text-left">To have some order in it, let's create it like this :</p>
 <ul>
     <li>bin
         <ul>
@@ -163,7 +163,7 @@ class AnagramCommand extends Command {
 }
 </pre>
 <p class="text-left">The <code>setName</code> part is clear I think. Description is short text displayed in list of available commands as a hint unlike help which is displayed on demand by typing <code>--help</code> option. The command takes two words / strings as arguments to determine whether they are anagrams or not. I named it <i>word</i> and <i>anagram</i>, make it required with description 'The main word' and 'Word to be checked if it is anagram with the main one'.</p>
-<p class="text-left">Method <code>protected function execute($input, $output)</code> is where everything is done. You get the arguments values from the <code>$input</code> object and write back to console through the <code>$output</code> object. Because the command takes two or more strings, you traverse them and check if they are anagram to each other ( or to the first ).</p>
+<p class="text-left">Method <code>protected function execute($input, $output)</code> is where everything is done. You get the arguments values from the <code>$input</code> object and write back to console through the <code>$output</code> object.</p>
 <pre class="prettyprint">
 namespace bin\command;
 
