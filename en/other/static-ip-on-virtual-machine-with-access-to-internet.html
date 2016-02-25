@@ -1,0 +1,55 @@
+<p class="text-left">As I wrote in my <a href="https://en.juffalow.com/how-to-install-elasticsearch-in-linux-ubuntu-server/">previous post</a> I want to have Virtual Machine with all services I need ( Apache server, MySql, Elasticsearch, etc. ) saved on USB drive. Next thing I have to set is the network.</p>
+<p class="text-left">The server should have static IP address but still have to be able to connect to internet. And this may cause a little troubles. There are a few things to be set in Virtual Box and in Linux server either.</p>
+<p class="text-left">P. S.: why I need static IP? It is because I don't want to check its IP address every time I run the server. So one network interface is used for connecting to internet and the other is for me connecting to the server.</p>
+<h2 class="theme-subheading" id="virtual-box">Virtual Box</h2>
+<p class="text-left">Let's start with the Virtual Box settings...</p>
+<h4 class="theme-subheading" id="host-only-networsk">Host-only Networks</h4>
+<p class="text-left">Go to <i>VirtualBox</i> -> <i>Preferences</i> and click on <i>Network</i> "tab". You should see an empty list and above it there are two buttons - "Nat Networks" and "Host-only networks". Choose the second one and on the right there is a plus button by which you can add new host-only network. Click on it and you should see a form where you can set IPv4 Address, network mask, etc. Default IPv4 address value is <code>192.168.56.1</code> and network mask <code>255.255.255.0</code>. In <i>DHCP Server</i> tab you can disable the server. Then click <i>OK</i> and <i>OK</i> again.</p>
+<div class="row">
+<div class="col-md-4 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/virtualbox-host-only-networks.png"><img alt="virtualbox host only networks" src="https://en.juffalow.com/wp-content/uploads/2016/02/virtualbox-host-only-networks.png" width="300" height="255" /></a></div>
+<div class="col-md-4 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/virtualbox-network-adapter.png"><img alt="virtualbox network adapter" src="https://en.juffalow.com/wp-content/uploads/2016/02/virtualbox-network-adapter.png" width="300" height="255" /></a></div>
+<div class="col-md-4 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/virtualbox-network-dhcp-server.png"><img alt="virtualbox network dhcp server" src="https://en.juffalow.com/wp-content/uploads/2016/02/virtualbox-network-dhcp-server.png" width="300" height="255" /></a></div>
+</div>
+<h4 class="theme-subheading" id="machine-settings">Machine settings</h4>
+<p class="text-left">Open machine settings and click on <i>Network</i> tab. In <i>Adapter 1</i> for <i>Attached to</i> setting choose value <i>Bridged Adapter</i> with <i>Name</i> <i>en0: Ethernet</i> ( I am on Mac, so you may have other names for network interfaces ). Then go to <i>Adapter 2</i> and choose <i>Host-only Adapter</i> with <i>Name</i> <i>vboxnet0</i>. Confirm it with <i>OK</i> and start the machine.</p>
+<div class="row">
+<div class="col-md-3 col-md-offset-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/machine-setting-adapter-1.png"><img alt="machine setting adapter 1" src="https://en.juffalow.com/wp-content/uploads/2016/02/machine-setting-adapter-1.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/machine-setting-adapter-2.png"><img alt="machine setting adapter 2" src="https://en.juffalow.com/wp-content/uploads/2016/02/machine-setting-adapter-2.png" width="300" height="255" /></a></div>
+</div>
+<h2 class="theme-subheading" id="the-server-part">The server part</h2>
+<p class="text-left">When you run the machine for the first time, it should have access to the internet ( if "parent" computer has it of course ). So I assume ever this part is ok.</p>
+<h4 class="theme-subheading" id="install-the-guest-additions">Install the Guest additions</h4>
+<p class="text-left">There are some things needs to be installed like drivers and system applications to your virtual machine system. They help it with performance and better usability. Without this I was unable to set the network interface to work how I wanted. So...on Ubuntu server run these commands :</p>
+<pre>
+sudo apt-get update
+sudo apt-get install dkms
+</pre>
+<p class="text-left">If you are using some other system, please visit VirtualBox official website and read <a href="https://www.virtualbox.org/manual/UserManual.html">User Manual</a>. There is a part focusing on installing these additions on various systems.</p>
+<h4 class="theme-subheading" id="setup-the-network-interfaces">Setup the network interfaces</h4>
+<p class="text-left">On of the last steps is to say the system to use two primary network interfaces. One is used for internet connection and the other is for you to connect. When you run <kbd>ifconfig</kbd> command you should see <i>eth0</i> and <i>lo</i> interfaces. You need to add a new one. This is done by writing it into configuration file. For this you need super user permissions and open it with <kbd>sudo vi /etc/network/interfaces</kbd>.</p>
+<p class="text-left">The loopback network interface <i>lo</i> and <i>eth0</i> interface remains unchanged. You only add <i>eth1</i> which is static and set the IP address it should use. The final file then looks like this :</p>
+<div class="well">
+# This file describes the network interfaces available on your system<br />
+# and how to activate them. For more information, see interfaces(5).<br />
+<br />
+# The loopback network interface<br />
+auto lo<br />
+iface lo inet loopback<br />
+<br />
+# The primary network interface<br />
+auto eth0<br />
+iface eth0 inet dhcp<br />
+<br />
+auto eth1<br />
+iface eth1 inet static<br />
+&nbsp;&nbsp;address 192.168.56.107<br />
+&nbsp;&nbsp;netmask 255.255.255.0<br />
+&nbsp;&nbsp;network 192.168.56.0<br />
+&nbsp;&nbsp;broadcast 192.168.56.255<br />
+&nbsp;&nbsp;gateway 192.168.56.1<br />
+</div>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">This is all, now you can restart your machine and then connect to it with <kbd>ssh &lt;user&gt;@192.168.56.107</kbd>.</p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="https://www.virtualbox.org/manual/ch06.html">Virtual networking</a> documentation where you can find for example differences among networking modes like NAT and Bridged networking.</p>
+<p class="text-left"><a href="https://www.virtualbox.org/manual/ch04.html">Guest additions</a></p>
