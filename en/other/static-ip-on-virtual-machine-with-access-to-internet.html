@@ -46,8 +46,9 @@ iface eth1 inet static<br />
 &nbsp;&nbsp;netmask 255.255.255.0<br />
 &nbsp;&nbsp;network 192.168.56.0<br />
 &nbsp;&nbsp;broadcast 192.168.56.255<br />
-&nbsp;&nbsp;gateway 192.168.56.1<br />
+&nbsp;&nbsp;#gateway 192.168.56.1<br />
 </div>
+<p class="text-left">Note that the last line <code>#gateway 192.168.56.1</code> is commented out. It is because of overriding the <i>eth0</i> settings and the system would connect to internet through this gateway which is not working. So with this you prevent using it and everything should be ok.</p>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
 <p class="text-left">This is all, now you can restart your machine and then connect to it with <kbd>ssh &lt;user&gt;@192.168.56.107</kbd>. If there is any other service running on the server, you can also add it in your <i>hosts</i> file, so you do not need to enter IP address but only the name.</p>
 <h4 class="theme-subheading" id="references">References</h4>
