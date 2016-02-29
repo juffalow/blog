@@ -4,22 +4,32 @@
 
 
 -->
-<p class="text-left">When you are applying for nearly any job in IT, you should know something about databases.
-    It really doesn't matter if it is web development, Android / iOS, or anything else. More or less you will get in
-    touch with databases.</p>
-<p class="text-left">When working with Android or iOS, lot of information is saved in SQLite, like contacts, messages, 
-    music library, etc. Chat apps saves their history in SQLite and they do it on desktop too. The same it is with
-    web developers, but they are not working with SQLite, but with databases like MySQL, MS SQL or NoSQL databases.</p>
+<p class="text-left">When you are applying for nearly any job in IT, you should know something about databases. It really doesn't matter if it is web development, Android / iOS, or anything else. More or less you will get in touch with databases.</p>
+<p class="text-left">When working with Android or iOS, lot of information is saved in SQLite, like contacts, messages, music library, etc. Chat apps saves their history in SQLite and they do it on desktop too. The same it is with web developers, but they are not working with SQLite, but with databases like MySQL, MS SQL or NoSQL databases.</p>
+<p class="text-left">I know there are a lot of ORM systems solving most of the things for us. They create whole database with tables, columns, indexes and relationships. Handle creating new records, retrieving them among with editing and deleting. You really do not have to care about anything most of the time. But still...it is good to know a thing or two about the technology you are using.</p>
 <p class="text-left">Here are some questions you might be asked during job interview.</p>
 <h2 class="theme-subheading" id="basics">Basics</h2>
-<p class="text-left">These things I consider to be basics.</p>
+<p class="text-left">These things I consider to be basics. I am not going to write here about creating a table or dropping it. That is as a matter of course.</p>
+<h4 class="theme-subheading" id="insert-select-update-and-delete">Insert, select, update and delete</h4>
+<p class="text-left">Each tutorial begins with connecting to database and retrieving data from it. So sometime they can give you a paper with database model and ask you to get particular information from the database based on conditions.</p>
+<p class="text-left">Maybe a bit more advanced is question "how to insert a new record, and if it already exists update the information ( or ignore it )?". Yes, you can write a select and check whether the ID exists or not. But there is a better way to do it.</p>
+<pre class="prettyprint">
+INSERT INTO &lt;table&gt;(&lt;id&gt;, &lt;column 1&gt;, &lt;column 2&gt;, ...) VALUES(&lt;new id&gt;, &lt;value 1&gt;, &lt;value 2&gt;, ...) ON DUPLICATE KEY UPDATE &lt;column 1 = value 1&gt, &lt;column 2 = value 2&gt;, ...;
+</pre>
 <h4 class="theme-subheading" id="relationships">Relationships</h4>
 <h4 class="theme-subheading" id="difference-between-joins">Difference between joins</h4>
+
+
+
 <h2 class="theme-subheading" id="intermediate">Intermediate</h2>
 <h4 class="theme-subheading" id="what-is-normalization">What is normalization?</h4>
+<p class="text-left">What is normalization? When and why we are using it?</p>
 <h4 class="theme-subheading" id="union-vs-union-all">Union vs Union all</h4>
 <h4 class="theme-subheading" id="constraints">Constraints</h4>
 <h4 class="theme-subheading" id="views-materialized-views">Views, materialized views</h4>
+<h4 class="theme-subheading" id="indexes">Indexes</h4>
+<p class="text-left">What is index and what is its purpose? Whenever you want to search for some informations the database has to iterate through all the stored data. But if you create an index on a column everything would be faster. It is because the database optimizes itself for searching</p>
+
 <h2 class="theme-subheading" id="advanced">Advanced</h2>
 <h4 class="theme-subheading" id="functions-and-procedures">Functions and procedures</h4>
 <h4 class="theme-subheading" id="triggers">Triggers</h4>
