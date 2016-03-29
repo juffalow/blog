@@ -37,9 +37,14 @@
 <p class="text-left">Another approach is to traverse all the agents and ask if the car is good for him or not. It can look like a good idea now, but later when there will be thousands of agents in the system, the performance became a big problem.</p>
 <p class="text-left">The best way would be to turn it over and search for the query with the result.</p>
 <h2 class="theme-subheading" id="elasticsearch-percolator">Elasticsearch Percolator</h2>
-<p class="text-left"></p>
+<p class="text-left"><a href="https://www.elastic.co/">Elasticsearch</a> has a solution for it - <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html">Percolator</a>.</p>
+<blockquote class="blockquote-reverse">
+  <p>Traditionally you design documents based on your data, store them into an index, and then define queries via the search API in order to retrieve these documents. The percolator works in the opposite direction. First you store queries into an index and then, via the percolate API, you define documents in order to retrieve these queries.</p>
+  <footer><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html">Percolator</a></footer>
+</blockquote>
+<p class="text-left">I don't want to write here what is Elasticsearch, how to install it or use it. They have good documentation and there is lot of stuff about it on internet. So back to the point...</p>
 <h4 class="theme-subheading" id="create-mapping-and-index">Create mapping and index</h4>
-<p class="text-left"></p>
+<p class="text-left">Create basic mapping named <code>sell</code> :</p>
 <div class="well">
     <pre class="prettyprint">
 curl -XPUT 'http://localhost:9200/sell/' -d '
@@ -51,7 +56,7 @@ curl -XPUT 'http://localhost:9200/sell/' -d '
 }'
     </pre>
 </div>
-<p class="text-left"></p>
+<p class="text-left">Then create index <code>car</code> where all data will be stored :</p>
 <div class="well">
     <pre class="prettyprint">
 curl -XPUT 'http://localhost:9200/sell/_mapping/car' -d '
@@ -68,7 +73,7 @@ curl -XPUT 'http://localhost:9200/sell/_mapping/car' -d '
     </pre>
 </div>
 <h4 class="theme-subheading" id="insert-sample-data">Insert sample data</h4>
-<p class="text-left"></p>
+<p class="text-left">With <code>POST</code> method insert the sample data :</p>
 <div class="well">
     <pre class="prettyprint">
 curl -XPOST 'http://localhost:9200/sell/car/?op_type=create' -d '
@@ -90,7 +95,7 @@ curl -XPOST 'http://localhost:9200/sell/car/?op_type=create' -d '
     </pre>
 </div>
 <h4 class="theme-subheading" id="create-agent-ie-percolator">Create agent, i. e. percolator</h4>
-<p class="text-left"></p>
+<p class="text-left">And now, the magic part comes. Create percolator :</p>
 <div class="well">
     <pre class="prettyprint">
 curl -XPOST 'http://localhost:9200/sell/.percolator/' -d '
@@ -103,11 +108,17 @@ curl -XPOST 'http://localhost:9200/sell/.percolator/' -d '
 }'
     </pre>
 </div>
+<p class="text-left">Basically, it is only the same query as you use for search.</p>
 <h4 class="theme-subheading" id="create-new-advertisement-and-find-agent">Create new advertisement and find agent</h4>
 <p class="text-left"></p>
 <div class="well">
     <pre class="prettyprint">
-
+curl -XPOST 'http://localhost:9200/sell/car/?op_type=create' -d '
+{
+    "title":"Audi A3",
+    "brand":"Audi",
+    "fuel":"petrol"
+}'
     </pre>
 </div>
 <p class="text-left"></p>
@@ -123,9 +134,10 @@ curl -XGET 'http://localhost:9200/sell/car/_percolate' -d '
 }'
     </pre>
 </div>
+<p class="text-left">Of course there are lot of other options you can use. You can send there an existing document and percolate over that. Or if there are many documents you can divide them into smaller parts and than percolate only the certain part.</p>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
 <p class="text-left"></p>
 <h4 class="theme-subheading" id="references">References</h4>
-<p class="text-left"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html">Search percolate</a></p>
+<p class="text-left"><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-percolate.html">Search percolate</a> documentation on Elasticsearch official website. You find there everything you need for work with percolators.</p>
 
 
