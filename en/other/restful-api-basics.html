@@ -13,7 +13,7 @@ https://codewords.recurse.com/issues/five/what-restful-actually-means
 <h4 class="theme-subheading" id="get">GET</h4>
 <p class="text-justify">This method is used to read / retrieve resource or a collection of resources from the server. This makes <code>GET</code> safe operation. If the request was successful, status <code>200</code> is returned, or if the specific resource doesn't exist, <code>404</code> is returned.</p>
 <h4 class="theme-subheading" id="post">POST</h4>
-<p class="text-justify"><code>POST</code> is used to create new resources. If there is no ID, the server assigns it an internal ID, otherwise the specified ID is used. It returns status <code>201</code> on successful creation, <code>409</code> if resource already exists.</p>
+<p class="text-justify"><code>POST</code> is used to create new resources. If there is no ID, the server assigns it an internal ID, otherwise the specified ID is used. It returns status <code>201</code> on successful creation, <code>409</code> if resource already exists. Also one additional header should be returned. It is <code>Location header</code> with a link to newly-created resource.</p>
 <h4 class="theme-subheading" id="put">PUT</h4>
 <p class="text-justify"></p>
 <h4 class="theme-subheading" id="delete">DELETE</h4>
