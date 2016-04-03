@@ -1,0 +1,69 @@
+<!--
+
+http://stackoverflow.com/questions/14467673/enable-cors-in-htaccess
+http://stackoverflow.com/questions/25727306/request-header-field-access-control-allow-headers-is-not-allowed-by-access-contr
+http://stackoverflow.com/questions/9310112/why-am-i-seeing-an-origin-is-not-allowed-by-access-control-allow-origin-error
+https://www.w3.org/TR/cors/
+
+
+-->
+<p class="text-left">I am playing a little bit with PHP micro framework Slim and javascript Backbone.js. Therefor I created two separate projects with URLs : <code>mywebapp.dev</code> for front-end ( Backbone.js ) and <code>api.mywebapp.dev</code> for back-end ( Slim ). The problem occurred nearly immediately : Cross-Origin Resource Sharing ( CORS ).</p>
+<h2 class="theme-subheading" id="backbone-js-and-cors">Backbone.js and CORS</h2>
+<p class="text-left">When you create your first model, define the route and try to load it via console, the browser will object and throw exception :<br />
+<code>No 'Access-Control-Allow-Origin' header is present on the requested resource</code> in Chrome.</p>
+<p>When you start to google it out every time you end up reading about CORS problem. So what it is, why is it a problem and how to solve it?</p>
+<h4 class="theme-subheading" id="what-is-cross-site-sharing-and-why-does-it-exist">What is Cross-Site Sharing and why does it exist</h4>
+<p class="text-left">Good example can be found on Wikipedia page <strong>Same-origin policy</strong> :</p>
+<blockquote class="blockquote">
+  <p>The main reason to have this restriction is because without the same-origin policy there would be a security risk. Assume that a user is visiting a banking website and doesn't log out. Then he goes to any random other site and that site has some malicious JavaScript code running in the background that requests data from the banking site. Because the user is still logged in on the banking site, that malicious code could do anything on the banking site. For example get a list of your last transactions, create a new transaction, etc.</p>
+  <footer><a href="https://en.wikipedia.org/wiki/Same-origin_policy">Wikipedia</a></footer>
+</blockquote>
+<h4 class="theme-subheading" id="solution">Solution</h4>
+<p class="text-left">To solve <code>Allow-Origin</code> problem you need to add new header to the response. This can be done in many ways :</p>
+<div class="well">
+<pre class="prettyprint">
+// pure php
+header("Access-Control-Allow-Origin: *");
+
+// slim 3
+$response->withHeader('Access-Control-Allow-Origin', '*');
+
+// .htaccess
+Header add Access-Control-Allow-Origin "*"
+</pre>
+</div>
+<p class="text-left">Now if you try to load any model it should work. The problem is, when you try to modify it, or create a new one. Actions like this invoke HTTP PUT and POST methods calls and the browser will stand against them again. Problem is, these methods are not considered as safe. Here, a new header is required :</p>
+<div class="well">
+<pre class="prettyprint">
+// pure php
+header("Access-Control-Allow-Methods: GET,POST,OPTIONS,DELETE,PUT");
+
+// slim 3
+$response->withHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,PUT');
+
+// .htaccess
+Header add Access-Control-Allow-Methods "GET,POST,OPTIONS,DELETE,PUT"
+</pre>
+</div>
+<h4 class="theme-subheading" id="htaccess">.htaccess</h4>
+<p class="text-left">This is final <code>.htaccess</code> file.</p>
+<div class="well">
+<pre class="prettyprint">
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . index.php [L]
+Header add Access-Control-Allow-Origin "*"
+Header add Access-Control-Allow-Methods "GET,POST,OPTIONS,DELETE,PUT"
+Header add Access-Control-Allow-Headers "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+</pre>
+</div>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="https://www.w3.org/TR/cors/">CORS</a></p>
+<p class="text-left"><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing</a> page on Wikipedia. You find there useful information with an example and I recommend you to read some of the linked pages also.</p>
+<p class="text-left"><a href="https://en.wikipedia.org/wiki/Same-origin_policy">Same-origin policy</a> page on Wikipedia, where you can navigate from CORS page. It is good to at least read the post to get some overview.</p>
+<p class="text-left"><a href="https://en.wikipedia.org/wiki/Content_Security_Policy">Content Security Policy</a>page on Wikipedia</p>
+
+
