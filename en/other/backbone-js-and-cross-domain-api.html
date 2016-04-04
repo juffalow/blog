@@ -32,7 +32,20 @@ $response->withHeader('Access-Control-Allow-Origin', '*');
 Header add Access-Control-Allow-Origin "*"
 </pre>
 </div>
-<p class="text-left">Now if you try to load any model it should work. The problem is, when you try to modify it, or create a new one. Actions like this invoke HTTP PUT and POST methods calls and the browser will stand against them again. Problem is, these methods are not considered as safe. Here, a new header is required :</p>
+<p class="text-left">Now if you try to load any model it should work. The problem is, when you try to modify it, or create a new one. Or, to be more precise, there are two problems. First, Bakcbone send data to server in <code>JSON</code> format and that violates <strong>Content Security Policy</strong>.<br />In Chrome console you see this error : <code>Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response</code>.</p>
+<div class="well">
+<pre class="prettyprint">
+// pure php
+header("Access-Control-Allow-Headers: Content-Type");
+
+// slim 3
+$response->withHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+// .htaccess
+Header add Access-Control-Allow-Headers "Content-Type"
+</pre>
+</div>
+<p class="text-left">And the second problem is that actions like this invoke HTTP PUT methods call and the browser will stand against them again. Problem is, this method is not considered as safe. Therefore, another header is required :</p>
 <div class="well">
 <pre class="prettyprint">
 // pure php
@@ -45,8 +58,10 @@ $response->withHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,P
 Header add Access-Control-Allow-Methods "GET,POST,OPTIONS,DELETE,PUT"
 </pre>
 </div>
+<p class="text-left">Otherwise you get back only error message <code>Method PUT is not allowed by Access-Control-Allow-Methods in preflight response</code>.</p>
+<div class="alert alert-info" role="alert"><i>With this header you allowed all mentioned HTTP methods!</i></div>
 <h4 class="theme-subheading" id="htaccess">.htaccess</h4>
-<p class="text-left">This is final <code>.htaccess</code> file.</p>
+<p class="text-left">This is final <code>.htaccess</code> file for Slim 3 framework and CORS allowed :</p>
 <div class="well">
 <pre class="prettyprint">
 RewriteEngine on
@@ -55,11 +70,15 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule . index.php [L]
 Header add Access-Control-Allow-Origin "*"
 Header add Access-Control-Allow-Methods "GET,POST,OPTIONS,DELETE,PUT"
-Header add Access-Control-Allow-Headers "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+Header add Access-Control-Allow-Headers "Content-Type"
 </pre>
 </div>
-<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<!--
+<h4 class="theme-subheading" id="options-method">OPTIONS method</h4>
 <p class="text-left"></p>
+-->
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">Now you can load and save your models as you wish. If you want to know more, read the links below. And of course when I am done with my little app, I will share the experiences and write another post about it.</p>
 <h4 class="theme-subheading" id="references">References</h4>
 <p class="text-left"><a href="https://www.w3.org/TR/cors/">CORS</a></p>
 <p class="text-left"><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing</a> page on Wikipedia. You find there useful information with an example and I recommend you to read some of the linked pages also.</p>
