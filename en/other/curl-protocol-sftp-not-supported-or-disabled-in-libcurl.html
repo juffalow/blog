@@ -3,26 +3,61 @@
 <h4 class="theme-subheading" id="install-and-download">Install and download</h4>
 <p class="text-left"></p>
 <div class="well">
-    <pre class="prettyprint">
-        
-    </pre>
+<pre class="prettyprint">
+sudo apt-get install build-essential debhelper libssh2-1-dev
+sudo apt-get source libcurl3
+sudo apt-get build-dep libcurl3
+</pre>
 </div>
 <h4 class="theme-subheading" id="edit-rules-file">Edit <small>rules</small> file</h4>
 <p class="text-left"></p>
 <div class="well">
-    <pre class="prettyprint">
-        
-    </pre>
+<pre class="prettyprint">
+cd curl-*/debian
+vi rules
+</pre>
+</div>
+<p class="text-left"></p>
+<div class="well">
+<pre class="prettyprint">
+cd debian/build && dh_auto_configure ${CONFIGURE_ARGS}          \
+        --with-ca-path=/etc/ssl/certs
+cd debian/build-gnutls &&  dh_auto_configure ${CONFIGURE_ARGS}  \
+        --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt     \
+        --without-ssl --with-gnutls
+cd debian/build-nss && dh_auto_configure ${CONFIGURE_ARGS}      \
+        --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt     \
+        --without-ssl --with-nss
+</pre>
+</div>
+<p class="text-left"></p>
+<div class="well">
+<pre class="prettyprint">
+cd debian/build && dh_auto_configure ${CONFIGURE_ARGS}          \
+        --with-ca-path=/etc/ssl/certs --with-libssh2
+cd debian/build-gnutls &&  dh_auto_configure ${CONFIGURE_ARGS}  \
+        --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt     \
+        --without-ssl --with-gnutls --with-libssh2
+cd debian/build-nss && dh_auto_configure ${CONFIGURE_ARGS}      \
+        --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt     \
+        --without-ssl --with-nss --with-libssh2
+</pre>
 </div>
 <h4 class="theme-subheading" id="build-packages">Build packages</h4>
 <p class="text-left"></p>
 <div class="well">
-    <pre class="prettyprint">
-        
-    </pre>
+<pre class="prettyprint">
+cd ..
+sudo dpkg-buildpackage
+cd ..
+
+sudo dpkg -i curl_*.deb
+sudo dpkg -i libcurl3_*.deb
+sudo dpkg -i libcurl3-gnutls_*.deb
+</pre>
 </div>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left"></p>
 <h4 class="theme-subheading" id="references">References</h4>
-<p class="text-left"><a href="http://zeroset.mnim.org/2013/03/14/sftp-support-for-curl-in-ubuntu-12-10-quantal-quetzal-and-later/" target="_blank">sftp support for curl in Ubuntu 12.10 and later</a></p>
-<p class="text-left"><a href="http://askubuntu.com/questions/195545/how-to-enable-sftp-support-in-curl" target="_blank">AskUbuntu.com</a> and answer which solved my problem referencing on <a href=""></a></p>
+<p class="text-left"><a href="http://askubuntu.com/questions/195545/how-to-enable-sftp-support-in-curl/642715#642715" target="_blank">AskUbuntu.com</a> and answer which solved my problem.</p>
 
