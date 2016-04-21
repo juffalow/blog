@@ -1,0 +1,58 @@
+<p class="text-left"></p>
+<blockquote class="blockquote">
+  <p>The eight queens puzzle is the problem of placing eight chess queens on an 8×8 chessboard so that no two queens threaten each other. Thus, a solution requires that no two queens share the same row, column, or diagonal.</p>
+  <footer><a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">Wikipedia</a></footer>
+</blockquote>
+<p class="text-left"></p>
+<h2 class="theme-subheading" id=""></h2>
+<h4 class="theme-subheading" id="bitwise-solution-in-go-lang">Bitwise solution in Go lang</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+package main
+
+import (
+    "fmt"
+    "math"
+)
+
+func main() {
+    fmt.Println(countNQueenSolution(4))
+}
+
+func countNQueenSolution(n int) int {
+    var count int
+    count = 0
+    
+    var done int
+    done = int(math.Pow(2, float64(n))) -1
+    
+    var recursion func(ld int, col int, rd int)
+    
+    recursion = func(ld int, col int, rd int) {
+        if col == done {
+            count++
+            return
+        }
+        
+        poss := ^(ld | col | rd)
+        
+        for poss & done > 0 {
+            bit := poss & -poss
+            poss -= bit
+            recursion((ld|bit)>>1, col|bit, (rd|bit)<<1)
+        }
+    }
+    
+    recursion(0, 0, 0)
+    
+    return count
+}
+</pre>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle"></a></p>
+<p class="text-left"><a href="http://gregtrowbridge.com/a-bitwise-solution-to-the-n-queens-problem-in-javascript/"></a></p>
+<p class="text-left"><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.51.7113&rep=rep1&type=pdf"></a></p>
+
+
