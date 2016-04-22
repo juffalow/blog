@@ -4,9 +4,9 @@
   <footer><a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">Wikipedia</a></footer>
 </blockquote>
 <p class="text-left"></p>
-<h2 class="theme-subheading" id=""></h2>
-<h4 class="theme-subheading" id="bitwise-solution-in-go-lang">Bitwise solution in Go lang</h4>
-<p class="text-left"></p>
+<h2 class="theme-subheading" id="bitwise-solution-in-go-lang">Bitwise solution in Go lang</h2>
+<p class="text-left">I found this solution with very good explanation on internet. It uses only bitwise operations, therefore it is really fast.</p>
+<h4 class="theme-subheading" id="the-code">The code</h4>
 <pre class="prettyprint">
 package main
 
@@ -48,6 +48,18 @@ func countNQueenSolution(n int) int {
     return count
 }
 </pre>
+<h4 class="theme-subheading" id="explanation">Explanation</h4>
+<p class="text-left">When you see it for the first time, it can be a little bit confusing, but later you find it perfect. I suppose you are familiar that computer stores data as sequence of bits ( 5 = 0101 ). Now look on the code and see the variables <code>ld</code>, <code>col</code> and <code>rd</code>.</p>
+<ul>
+    <li>for N = 4, <code>col</code> having value of <code>0010</code> would mean that the 3rd column is already occupied by a queen</li>
+    <li>for N = 8, <code>ld</code> having a value of <code>00011000</code> at row 5 would mean that the top-left-to-bottom-right diagonals that pass through columns 4 and 5 of that row are already occupied by queens</li>
+</ul>
+<pre class="prettyprint">
+    var done int
+    done = int(math.Pow(2, float64(n))) -1
+</pre>
+<p class="text-left">The algorithm will not break the chess rules, that means it doesn't place queen on the same row / column / diagonal with any other queen. So when every place in row is taken, we found one of the solutions. The <code>done</code> variable </p>
+<p class="text-left"></p>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
 <p class="text-left"></p>
 <h4 class="theme-subheading" id="references">References</h4>
