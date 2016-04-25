@@ -58,12 +58,24 @@ func countNQueenSolution(n int) int {
     var done int
     done = int(math.Pow(2, float64(n))) -1
 </pre>
-<p class="text-left">The algorithm will not break the chess rules, that means it doesn't place queen on the same row / column / diagonal with any other queen. So when every place in row is taken, we found one of the solutions. The <code>done</code> variable </p>
+<p class="text-left">The algorithm will not break the chess rules, that means it doesn't place queen on the same 
+    row / column / diagonal with any other queen. So when every place in row is taken - the <code>col</code> variable has each of its bits set to <code>1</code> - we found one of the solutions. 
+    The <code>done</code> variable is used for this. If N = 4, we set its value to <code>2<sup>4</sup> - 1</code> = <code>15</code> = <code>1111</code> in binary.</p>
+<pre class="prettyprint">
+        if col == done {
+            count++
+            return
+        }
+</pre>
+<p class="text-left">Here is the condition to check if we found one of the solutions. If each column is occupied, then <code>col</code> = <code>1111</code> and it corresponds to <code>done</code> value ( for N = 4 ).</p>
+<pre class="prettyprint">
+        poss := ^(ld | col | rd)
+</pre>
 <p class="text-left"></p>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
 <p class="text-left"></p>
 <h4 class="theme-subheading" id="references">References</h4>
-<p class="text-left"><a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle"></a></p>
+<p class="text-left"><a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">Eight queens puzzle</a> on Wikipedia with problem's history, solutions and related problems.</p>
 <p class="text-left"><a href="http://gregtrowbridge.com/a-bitwise-solution-to-the-n-queens-problem-in-javascript/"></a></p>
 <p class="text-left"><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.51.7113&rep=rep1&type=pdf"></a></p>
 

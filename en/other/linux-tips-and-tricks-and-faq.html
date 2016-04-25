@@ -11,16 +11,53 @@ echo "new temporary directory is : $tempdir"
 </div>
 <p class="text-left">Example output : <code>new temporary directory is : /tmp/tmp.gb4ov59vCC</code></p>
 <h4 class="theme-subheading" id="calc-in-terminal">Calc in terminal</h4>
-<p class="text-left"></p>
+<p class="text-left">My former boss, <a href="https://github.com/arzzen">Lukáš Mešťan</a>, created "<a href="https://github.com/arzzen/calc">Simple bash calculator</a>" which adds you new command <kbd>=</kbd>. Now, you no more need to open calculator when you just want to do some easy ( or even more complex ) math.</p>
+<p class="text-left"><strong>Usage</strong></p>
+<pre class="prettyprint">
+# addition
+root@pc:~$ = 5+3                                                
+8
+
+# division
+root@pc:~$ = 4/2
+2.00000000000000000000
+
+# square root 
+root@pc:~$ = "scale=30; sqrt(2)"
+1.414213562373095048801688724209
+
+# power
+root@pc:~$ = "6^6"
+4665
+
+# convert from binary to decimal 
+root@pc:~$ = "ibase=2; obase=A;1100"
+12
+
+# arctangent
+root@pc:~$ = "a(1)"
+.78539816339744830961
+</pre>
 <h4 class="theme-subheading" id="find-the-command">Find the command</h4>
-<p class="text-left">apropos</p>
+<p class="text-left"></p>
+<p class="text-left"><strong>Usage</strong></p>
+<pre class="prettyprint">
+$ apropos download
+git-fetch (1)        - Download objects and refs from another repository
+git-http-fetch (1)   - Download from a remote Git repository via HTTP
+lwp-download (1p)    - Fetch large files from the web
+update-pciids (8)    - download new version of the PCI ID list
+update-usbids (8)    - download new version of the USB ID list
+wget (1)             - The non-interactive network downloader.
+</pre>
 <h4 class="theme-subheading" id="record-terminal-session">Record terminal session</h4>
 <p class="text-left"></p>
 <h2 class="theme-subheading" id="asked-questions">Asked questions</h2>
 <h4 class="theme-subheading" id="what-does-backtick-mean-in-bash">What does ` <small>( backtick )</small> mean in bash?</h4>
 <p class="text-left">This is not a quotation sign, but it has special meaning. </p>
 <h4 class="theme-subheading" id="difference-between-sftp-and-ftps">What is the difference between sftp and ftps?</h4>
-<p class="text-left"></p>
+<p class="text-left"><strong>File Transfer Protocol over SSL (FTPS)</strong></p>
+<p class="text-left"><strong>SSH File Transfer Protocol (SFTP)</strong></p>
 <h4 class="theme-subheading" id="difference-between-operators">What is the difference between > and >>?</h4>
 <p class="text-left"></p>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
