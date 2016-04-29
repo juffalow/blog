@@ -1,31 +1,35 @@
 <h2 class="theme-subheading" id="sql-puzzles">SQL puzzles</h2>
-<p class="text-left">You can find lot of interesting riddles to solve in any programming language : maths, string algorithms, AI and more. But what about database systems and SQL? Ok, maybe it is not about logic that much, but I think there can be lot of sneaky things to solve.</p>
+<p class="text-left">You can find lot of interesting riddles ( maths, string algorithms, AI and more ) to solve in any programming language. But what about database systems and SQL? Ok, maybe it is not about logic that much, but I think there can be lot of sneaky things to solve.</p>
 <h4 class="theme-subheading" id="consecutive-groups-count">Consecutive groups count</h4>
 <p class="text-left">There is a table with two columns. The first is ordinary auto increment ID and the second is kind of a flag with values 0 and 1. Below is table how it may looks like.</p>
-<table>
-    <thead>
-        <tr><td>ID</td><td>Flag</td></tr>
-    </thead>
-    <tbody>
-        <tr><td>1</td><td>0</td></tr>
-        <tr><td>2</td><td>0</td></tr>
-        <tr><td>3</td><td>0</td></tr>
-        <tr><td>4</td><td>1</td></tr>
-        <tr><td>5</td><td>1</td></tr>
-        <tr><td>6</td><td>1</td></tr>
-        <tr><td>7</td><td>1</td></tr>
-        <tr><td>8</td><td>1</td></tr>
-        <tr><td>9</td><td>1</td></tr>
-        <tr><td>10</td><td>0</td></tr>
-        <tr><td>11</td><td>0</td></tr>
-        <tr><td>12</td><td>0</td></tr>
-        <tr><td>13</td><td>0</td></tr>
-        <tr><td>14</td><td>0</td></tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <table class="table">
+            <thead>
+                <tr><td>ID</td><td>Flag</td></tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>0</td></tr>
+                <tr><td>2</td><td>0</td></tr>
+                <tr><td>3</td><td>0</td></tr>
+                <tr><td>4</td><td>1</td></tr>
+                <tr><td>5</td><td>1</td></tr>
+                <tr><td>6</td><td>1</td></tr>
+                <tr><td>7</td><td>1</td></tr>
+                <tr><td>8</td><td>1</td></tr>
+                <tr><td>9</td><td>1</td></tr>
+                <tr><td>10</td><td>0</td></tr>
+                <tr><td>11</td><td>0</td></tr>
+                <tr><td>12</td><td>0</td></tr>
+                <tr><td>13</td><td>0</td></tr>
+                <tr><td>14</td><td>0</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 <p class="text-left">The task is very easy : you have to write the number of the same consecutive flag numbers. So the output from the example should be : 3, 6, 5. And that is not easy, because you cannot use just <code>group by</code>.</p>
 <p class="text-left">Here is SQL to create the table and fill it with example values :</p>
-<pre class="prettyprint">
+<pre class="prettyprint lang-sql">
 CREATE TABLE testtable (
     id INT AUTO_INCREMENT PRIMARY KEY,
     my_value INT NOT NULL
@@ -34,18 +38,26 @@ CREATE TABLE testtable (
 INSERT INTO testtable(my_value) 
 VALUES(0),(0),(0),(1),(1),(1),(1),(1),(1),(0),(0),(0),(0),(0);
 </pre>
-<p class="text-left"></p>
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#groupsExample" aria-controls="groupsExample">Show solution</button>
 <div class="collapse" id="groupsExample">
+<p class="text-left">The solution uses <strong>user variables</strong> in sql query. First, we add row numbers :</p>
 <pre class="prettyprint">
-SELECT *
+SET @riadok=0;
+SET @g_riadok=0;
+SELECT count(*) FROM (
+    SELECT *, cislo_riadka - group_row AS skupina FROM (
+        SELECT *, @g_riadok:=@g_riadok+1 AS group_row FROM (
+            SELECT id,my_value,@riadok:=@riadok+1 AS cislo_riadka FROM testtable ) AS tabulka
+         ORDER BY my_value,id ) AS vysledna_tabulka
+    ORDER BY id ) AS vysledok
+GROUP BY skupina ORDER BY id;
 </pre>
 </div>
 <h4 class="theme-subheading" id="factorial">Factorial</h4>
 <p class="text-left">This is a tricky one. Your mission is to write a <code>SELECT</code> which output is a factorial of given number. When I asked this my colleagues or friends, they were like to write a procedure to solve this. But it has to be just <code>SELECT</code>! If you do not know any other database system then <i>MySQL</i>, you can find this impossible.</p>
-<p class="text-left">The solution lies in <strong>recursive query</strong>. Not every database system has it, but for example in <strong>Oracle</strong> or <strong>Postgre</strong> there is keyword <code>WITH</code>.</p>
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#factorialExample" aria-controls="factorialExample">Show solution</button>
 <div class="collapse" id="factorialExample">
+<p class="text-left">The solution lies in <strong>recursive query</strong>. Not every database system has it, but for example in <strong>Oracle</strong> or <strong>Postgre</strong> there is keyword <code>WITH</code>.</p>
 <pre class="prettyprint">
 WITH factorial AS (
     SELECT 1 AS fac, 1 AS num
@@ -60,6 +72,8 @@ WHERE num=5;
 </div>
 <h4 class="theme-subheading" id="fibonacci">Fibonacci</h4>
 <p class="text-left">This is almost the same as in the previous puzzle. So I write here only the solution.</p>
+<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#fibonacciExample" aria-controls="fibonacciExample">Show solution</button>
+<div class="collapse" id="fibonacciExample">
 <pre class="prettyprint">
 WITH fibonacci AS (
     SELECT 0 AS fibA, 0 AS fibB, 1 AS seed, 1 AS  num
@@ -70,53 +84,13 @@ WITH fibonacci AS (
 SELECT fibA
 FROM fibo
 </pre>
-<h4 class="theme-subheading" id="group-concatenation">Group concatenation</h4>
-<p class="text-left">Once my friend asked me how to concatenate string columns when group by function is used. It is easy : you should write a select that concatenate string column and separate the values with ( for example ) comma.</p>
-<table>
-    <thead>
-        <tr><td>group_by</td><td>value</td></tr>
-    </thead>
-    <tbody>
-        <tr><td>1</td><td>Monday</td></tr>
-        <tr><td>2</td><td>Thursday</td></tr>
-        <tr><td>3</td><td>Friday</td></tr>
-        <tr><td>3</td><td>Sunday</td></tr>
-        <tr><td>1</td><td>Wednesday</td></tr>
-        <tr><td>2</td><td>Friday</td></tr>
-    </tbody>
-</table>
-<p class="text-left">When you write a basic group by select ( <code>SELECT group_by, value FROM test_table GROUP BY group_by, value;</code> ), the result will be something like this :</p>
-<table>
-    <thead>
-        <tr><td>group_by</td><td>value</td></tr>
-    </thead>
-    <tbody>
-        <tr><td>1</td><td>Monday</td></tr>
-        <tr><td>1</td><td>Wednesday</td></tr>
-        <tr><td>2</td><td>Thursday</td></tr>
-        <tr><td>2</td><td>Friday</td></tr>
-        <tr><td>3</td><td>Friday</td></tr>
-        <tr><td>3</td><td>Sunday</td></tr>
-    </tbody>
-</table>
-<p class="text-left">So how to get the values in one row separated with comma? The solution is in <code>group_concat</code> function ( <i>in MySQL!</i> ). Than you are able to write <code>SELECT group_by, group_concat(value) FROM test_table GROUP BY group_by;</code>. This outputs :</p>
-<table>
-    <thead>
-        <tr><td>group_by</td><td>value</td></tr>
-    </thead>
-    <tbody>
-        <tr><td>1</td><td>Monday,Wednesday</td></tr>
-        <tr><td>2</td><td>Thursday,Friday</td></tr>
-        <tr><td>3</td><td>Friday,Sunday</td></tr>
-    </tbody>
-</table>
+</div>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
-<p class="text-left">When I find or meet another interesting SQL problem I will actualize this document. The same applies to you. Whenever you find something you consider it should be in document like this, feel free to contact me.</p>
+<p class="text-left">I have at least one other interesting problem, which I want to mention here. But its solution is little bit longer, so I write a separate post for it and then add here the definition with reference to the solution.</p>
 <h4 class="theme-subheading" id="good-books">Good books</h4>
 <p class="text-left"><a href="http://www.amazon.com/SQL-Antipatterns-Programming-Pragmatic-Programmers/dp/1934356557" target="_blank">Bill Karwin - SQL Antipatterns</a> is very good book I can only recommend. There are N lessons every dedicated to something else which is often used in SQL and mostly the bad way. For example there is lesson about security and user passwords, how to store and reset them, </p>
 <p class="text-left"><a href="http://www.amazon.com/Joe-Celkos-Smarties-Fifth-Edition/dp/0128007613" target="_blank">Joe Celko - SQL for Smarties</a> is another good book which begins with the basics and continues to complex things.</p>
-<p class="text-left"><a href="http://www.amazon.com/Puzzles-Answers-Edition-Kaufmann-Management/dp/0123735963" target="_blank">Joe Celko - SQL Puzzles And Answers</a></p>
+<p class="text-left"><a href="http://www.amazon.com/Puzzles-Answers-Edition-Kaufmann-Management/dp/0123735963" target="_blank">Joe Celko - SQL Puzzles And Answers</a>. I did not read this book, only a few parts of it. There are 75 puzzles each with couple of answers. You can find a preview on Google Books and see, whether it is interesting for you.</p>
 <h4 class="theme-subheading" id="references">References</h4>
 <p class="text-left"><a href="http://dev.mysql.com/doc/refman/5.7/en/user-variables.html" target="_blank">MySQL - User defined variables</a></p>
 <p class="text-left"><a href="http://www.postgresql.org/docs/8.4/static/queries-with.html" target="_blank">PostgreSQL - With queries</a></p>
-<p class="text-left"><a href="http://dev.mysql.com/doc/refman/5.7/en/group-by-functions.html#function_group-concat" target="_blank">MySQL - Group by functions</a></p>
