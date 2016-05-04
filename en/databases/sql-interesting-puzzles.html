@@ -1,4 +1,4 @@
-<h2 class="theme-subheading" id="sql-puzzles">SQL puzzles</h2>
+<h2 class="theme-subheading" id="the-list">The list</h2>
 <p class="text-left">You can find lot of interesting riddles ( maths, string algorithms, AI and more ) to solve in any programming language. But what about database systems and SQL? Ok, maybe it is not about logic that much, but I think there can be lot of sneaky things to solve.</p>
 <h4 class="theme-subheading" id="consecutive-groups-count">Consecutive groups count</h4>
 <p class="text-left">There is a table with two columns. The first is ordinary auto increment ID and the second is kind of a flag with values 0 and 1. Below is table how it may looks like.</p>
@@ -6,7 +6,7 @@
     <div class="col-md-6 col-md-offset-3">
         <table class="table">
             <thead>
-                <tr><td>ID</td><td>Flag</td></tr>
+                <tr><td>id</td><td>flag</td></tr>
             </thead>
             <tbody>
                 <tr><td>1</td><td>0</td></tr>
@@ -32,26 +32,146 @@
 <pre class="prettyprint lang-sql">
 CREATE TABLE testtable (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    my_value INT NOT NULL
+    flag INT NOT NULL
 );
 
-INSERT INTO testtable(my_value) 
+INSERT INTO testtable(flag) 
 VALUES(0),(0),(0),(1),(1),(1),(1),(1),(1),(0),(0),(0),(0),(0);
 </pre>
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#groupsExample" aria-controls="groupsExample">Show solution</button>
 <div class="collapse" id="groupsExample">
-<p class="text-left">The solution uses <strong>user variables</strong> in sql query. First, we add row numbers :</p>
+<p class="text-left">The solution uses <strong>user variables</strong> in sql query and <strong>subselects</strong>. First, add row numbers :</p>
+<div class="row">
+<div class="col-md-6">
 <pre class="prettyprint">
-SET @riadok=0;
-SET @g_riadok=0;
+SET @row=0;
+SELECT id,flag,@row:=@row+1 AS row_number FROM testtable;
+</pre>
+</div>
+<div class="col-md-6">
+<table class="table">
+    <thead>
+        <tr><td>id</td><td>flag</td><td>row_number</td></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>2</td><td>0</td><td>2</td></tr>
+        <tr><td>3</td><td>0</td><td>3</td></tr>
+        <tr><td>4</td><td>1</td><td>4</td></tr>
+        <tr><td>5</td><td>1</td><td>5</td></tr>
+        <tr><td>6</td><td>1</td><td>6</td></tr>
+        <tr><td>7</td><td>1</td><td>7</td></tr>
+        <tr><td>8</td><td>1</td><td>8</td></tr>
+        <tr><td>9</td><td>1</td><td>9</td></tr>
+        <tr><td>10</td><td>0</td><td>10</td></tr>
+        <tr><td>11</td><td>0</td><td>11</td></tr>
+        <tr><td>12</td><td>0</td><td>12</td></tr>
+        <tr><td>13</td><td>0</td><td>13</td></tr>
+        <tr><td>14</td><td>0</td><td>14</td></tr>
+    </tbody>
+</table>
+</div>
+</div>
+<p class="text-left">Then, order it by flag and again add row numbers :</p>
+<div class="row">
+<div class="col-md-6">
+<pre class="prettyprint">
+SET @row=0;
+SET @g_row=0;
+SELECT *, @g_row:=@g_row+1 AS group_row FROM (
+    SELECT id,flag,@row:=@row+1 AS row_number FROM testtable ) AS tmp_table
+ORDER BY flag,id;
+</pre>
+</div>
+<div class="col-md-6">
+<table class="table">
+    <thead>
+        <tr><td>id</td><td>flag</td><td>row_number</td><td>group_row</td></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>2</td><td>0</td><td>2</td><td>2</td></tr>
+        <tr><td>3</td><td>0</td><td>3</td><td>3</td></tr>
+        <tr><td>4</td><td>0</td><td>10</td><td>4</td></tr>
+        <tr><td>5</td><td>0</td><td>11</td><td>5</td></tr>
+        <tr><td>6</td><td>0</td><td>12</td><td>6</td></tr>
+        <tr><td>7</td><td>0</td><td>13</td><td>7</td></tr>
+        <tr><td>8</td><td>0</td><td>14</td><td>8</td></tr>
+        <tr><td>9</td><td>1</td><td>4</td><td>9</td></tr>
+        <tr><td>10</td><td>1</td><td>5</td><td>10</td></tr>
+        <tr><td>11</td><td>1</td><td>6</td><td>11</td></tr>
+        <tr><td>12</td><td>1</td><td>7</td><td>12</td></tr>
+        <tr><td>13</td><td>1</td><td>8</td><td>13</td></tr>
+        <tr><td>14</td><td>1</td><td>9</td><td>14</td></tr>
+    </tbody>
+</table>
+</div>
+</div>
+<p class="text-left">Now, when you look at the result, and subtract <code>group_row</code> from <code>row_number</code> you get the group identifier. So :</p>
+<div class="row">
+<div class="col-md-6">
+<pre class="prettyprint">
+SET @row=0;
+SET @g_row=0;
+SELECT *, row_number - group_row AS skupina FROM (
+    SELECT *, @g_row:=@g_row+1 AS group_row FROM (
+        SELECT id,flag,@row:=@row+1 AS row_number FROM testtable ) AS tmp_table
+    ORDER BY flag,id ) AS vysledna_tabulka
+ORDER BY id;
+</pre>
+</div>
+<div class="col-md-6">
+<table class="table">
+    <thead>
+        <tr><td>id</td><td>flag</td><td>row_number</td><td>group_row</td><td>group</td></tr>
+    </thead>
+    <tbody>
+        <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+        <tr><td>2</td><td>0</td><td>2</td><td>2</td><td>0</td></tr>
+        <tr><td>3</td><td>0</td><td>3</td><td>3</td><td>0</td></tr>
+        <tr><td>4</td><td>1</td><td>4</td><td>9</td><td>-5</td></tr>
+        <tr><td>5</td><td>1</td><td>5</td><td>10</td><td>-5</td></tr>
+        <tr><td>6</td><td>1</td><td>6</td><td>11</td><td>-5</td></tr>
+        <tr><td>7</td><td>1</td><td>7</td><td>12</td><td>-5</td></tr>
+        <tr><td>8</td><td>1</td><td>8</td><td>13</td><td>-5</td></tr>
+        <tr><td>9</td><td>1</td><td>9</td><td>14</td><td>-5</td></tr>
+        <tr><td>10</td><td>0</td><td>10</td><td>4</td><td>6</td></tr>
+        <tr><td>11</td><td>0</td><td>11</td><td>5</td><td>6</td></tr>
+        <tr><td>12</td><td>0</td><td>12</td><td>6</td><td>6</td></tr>
+        <tr><td>13</td><td>0</td><td>13</td><td>7</td><td>6</td></tr>
+        <tr><td>14</td><td>0</td><td>14</td><td>8</td><td>6</td></tr>
+    </tbody>
+</table>
+</div>
+</div>
+<p class="text-left">The last step is then very easy. Write a select where you group by <code>group</code> column and count it :</p>
+<div class="row">
+<div class="col-md-6">
+<pre class="prettyprint">
+SET @row=0;
+SET @g_row=0;
 SELECT count(*) FROM (
-    SELECT *, cislo_riadka - group_row AS skupina FROM (
-        SELECT *, @g_riadok:=@g_riadok+1 AS group_row FROM (
-            SELECT id,my_value,@riadok:=@riadok+1 AS cislo_riadka FROM testtable ) AS tabulka
-         ORDER BY my_value,id ) AS vysledna_tabulka
+    SELECT *, row_number - group_row AS skupina FROM (
+        SELECT *, @g_row:=@g_row+1 AS group_row FROM (
+            SELECT id,flag,@row:=@row+1 AS row_number FROM testtable ) AS tmp_table
+         ORDER BY flag,id ) AS vysledna_tabulka
     ORDER BY id ) AS vysledok
 GROUP BY skupina ORDER BY id;
 </pre>
+</div>
+<div class="col-md-6">
+<table class="table">
+    <thead>
+        <tr><td>count(*)</td></tr>
+    </thead>
+    <tbody>
+        <tr><td>3</td></tr>
+        <tr><td>6</td></tr>
+        <tr><td>5</td></tr>
+    </tbody>
+</table>
+</div>
+</div>
 </div>
 <h4 class="theme-subheading" id="factorial">Factorial</h4>
 <p class="text-left">This is a tricky one. Your mission is to write a <code>SELECT</code> which output is a factorial of given number. When I asked this my colleagues or friends, they were like to write a procedure to solve this. But it has to be just <code>SELECT</code>! If you do not know any other database system then <i>MySQL</i>, you can find this impossible.</p>
@@ -63,7 +183,7 @@ WITH factorial AS (
     SELECT 1 AS fac, 1 AS num
     UNION ALL
     SELECT fac * ( num + 1 ), num + 1
-    FROM fact
+    FROM factorial
     WHERE num < 12 )
 SELECT fac
 FROM factorial
