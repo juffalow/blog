@@ -8,3 +8,28 @@ https://akrabat.com/di-factories-for-slim-controllers/
 
 -->
 
+<p class="text-left">Everywhere in the Slim documentation you read only one syntax for creating new route : <code>$app->any('/', function ($request, $response, $args)</code>. What if you want to use controller? What about testing the routes?</p>
+<h2 class="theme-subheading" id="controllers-in-slim-framework">Controllers in Slim framework</h2>
+<p class="text-left">If you read it carefully, under <i>Routing</i> section there is one heading about it - <a href="http://www.slimframework.com/docs/objects/router.html#container-resolution"><i>Container Resolution</i></a>.</p>
+<p class="text-left">I want to extend it a little bit. Let's create a simple application. It will have one route <code>/city/{id}</code>, so when you call <code>GET</code> it responds with data about specific city, e.g. name, population ( the data here are made-out ).</p>
+<h4 class="theme-subheading" id="controller">Controller</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+class CityController {
+    public function getCity( Request $request, Response $response ) {
+
+    }
+}
+</pre>
+<h4 class="theme-subheading" id="index-php">index.php</h4>
+<p class="text-left"></p>
+<h2 class="theme-subheading" id="route-testing">Route testing</h2>
+<p class="text-left"></p>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="http://www.slimframework.com/docs/objects/router.html"></a></p>
+<p class="text-left"><a href="https://akrabat.com/di-factories-for-slim-controllers/"></a></p>
+<p class="text-left"><a href="https://akrabat.com/testing-slim-framework-actions/"></a></p>
+
+

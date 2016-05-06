@@ -1,0 +1,111 @@
+<!--
+
+http://nvie.com/posts/a-successful-git-branching-model/
+
+https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
+
+-->
+<p class="text-left"></p>
+<h2 class="theme-subheading" id="deploy-script">Deploy script</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="final-script">Final script</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+#!/bin/bash +xe
+
+# creating temporary directory. The whole project will cloned into this
+# directory
+
+tempdir=$(mktemp -d)
+cd $tempdir
+
+echo "Temporary directory created!"
+
+################################################################################
+# Download source files ( clone repo from GitHub ), then download the develop
+# branch, merge it into master with "no fast forward" option
+
+git clone https://github.com/&lt;user&gt;/&lt;project-name&gt;.git || exit 1
+
+cd *
+
+git fetch origin develop
+
+git merge --no-ff origin/develop -m "release" || exit 1
+
+################################################################################
+# Check PHP syntax.
+
+echo "PHP syntax check..."
+
+RES=`find -L ./ \( -name "*.php" \) -print0 | xargs -0 -n 1 -P 4 php -l `
+if [ $? -gt 0 ]; then
+	echo $RES | grep -v "No syntax errors detected"
+    exit 42
+else
+	echo -en "Syntax ok, merging into master..."
+        git push origin master || exit 1
+fi
+
+################################################################################
+# If composer.json file exists in the root directory, it runs composer install
+# command and pulls ( downloads ) dependencies.
+
+echo "Checking if composer.json exists..."
+
+if [ -f composer.json ]
+then
+	echo "Composer install..."
+	composer install
+fi
+
+################################################################################
+# WARNING : this is not supported by older git versions!
+# Sort all tags by version name which starts with "v" and take only the first
+# line. Then it splits the version by "." into array and increment the last
+# number.
+
+echo "Obtaining last version number..."
+
+version=`git tag --sort=-version:refname -l "v*" | head -n 1`
+
+echo "Last version : $version"
+
+IFS='.' read -r -a array <<< "$version"
+
+MAJOR=${array[0]}
+MINOR=${array[1]}
+PATCH=$((array[2]+1))
+
+NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+
+################################################################################
+# Create new tag with new version number annotate and push it onto server.
+
+git tag -a $NEW_VERSION -m "Version $NEW_VERSION"
+
+git push --tags
+
+echo "New version : $MAJOR.$MINOR.$PATCH"
+
+################################################################################
+# Create new directory on the server where the app will run. The directory name
+# is the new version number.
+# Apache document root is set to "www" directory which is symlink to one of
+# the past builds. Script ends by changing this symlink to point to new version
+# build.
+
+echo "Creating directory for new version deploy..."
+
+ssh &lt;user&gt;@&lt;server&gt; "mkdir &lt;document-root&gt;/builds/$NEW_VERSION" || exit 1
+
+echo "Copying files..."
+
+scp -r ./ "&lt;user&gt;@&lt;server&gt;:&lt;document-root&gt;/builds/$NEW_VERSION/" || exit 1
+
+echo "Changing symlink to new version..."
+
+ssh "rm &lt;document-root&gt;/www && ln -s &lt;document-root&gt;/builds/$NEW_VERSION/ &lt;document-root&gt;/www" || exit 1
+
+echo "DONE!"
+</pre>
