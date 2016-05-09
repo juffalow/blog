@@ -6,8 +6,83 @@ https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 
 -->
 <p class="text-left"></p>
+<h2 class="theme-subheading" id="introduction">Introduction</h2>
+<p class="text-left">When I started using git, everything was committing directly to the master branch. Later I discovered branching model of work-flow and my interest in git grows. I wanted to know how companies handle branching and deployment process.</p>
+<h4 class="theme-subheading" id="git-work-flow">Git work-flow</h4>
+<p class="text-left">There is an article <a href="">Gitflow workflow</a> on the internet which extends <a href="">A successful git branching model</a> post from <a href="">nvie</a>. It is really nice idea to split the branches that way.</p>
+<h4 class="theme-subheading" id="jenkins">Jenkins</h4>
+<p class="text-left"></p>
 <h2 class="theme-subheading" id="deploy-script">Deploy script</h2>
 <p class="text-left"></p>
+<h4 class="theme-subheading" id="temporary-directory">Temporary directory</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+tempdir=$(mktemp -d)
+cd $tempdir
+</pre>
+<h4 class="theme-subheading" id="clone-the-repository">Clone the repository</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+git clone https://github.com/&lt;user&gt;/&lt;project-name&gt;.git || exit 1
+
+cd *
+
+git fetch origin develop
+
+git merge --no-ff origin/develop -m "release" || exit 1
+</pre>
+<h4 class="theme-subheading" id="check-php-syntax">Check PHP syntax</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+RES=`find -L ./ \( -name "*.php" \) -print0 | xargs -0 -n 1 -P 4 php -l `
+if [ $? -gt 0 ]; then
+	echo $RES | grep -v "No syntax errors detected"
+    exit 42
+else
+	echo -en "Syntax ok, merging into master..."
+        git push origin master || exit 1
+fi
+</pre>
+<h4 class="theme-subheading" id="download-dependecies">Download dependencies</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+if [ -f composer.json ]
+then
+	echo "Composer install..."
+	composer install
+fi
+</pre>
+<h4 class="theme-subheading" id="increment-version">Increment version</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+version=`git tag --sort=-version:refname -l "v*" | head -n 1`
+
+echo "Last version : $version"
+
+IFS='.' read -r -a array <<< "$version"
+
+MAJOR=${array[0]}
+MINOR=${array[1]}
+PATCH=$((array[2]+1))
+
+NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+</pre>
+<p class="text-left"></p>
+<pre class="prettyprint">
+git tag -a $NEW_VERSION -m "Version $NEW_VERSION"
+
+git push --tags
+</pre>
+<h4 class="theme-subheading" id="copy-everything-on-the-server">Copy everything to the server</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+    
+</pre>
+<h4 class="theme-subheading" id="temporary-directory">Temporary directory</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+    
+</pre>
 <h4 class="theme-subheading" id="final-script">Final script</h4>
 <p class="text-left"></p>
 <pre class="prettyprint">
