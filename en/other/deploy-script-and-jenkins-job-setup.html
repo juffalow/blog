@@ -9,19 +9,25 @@ https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 <h2 class="theme-subheading" id="introduction">Introduction</h2>
 <p class="text-left">When I started using git, everything was committing directly to the master branch. Later I discovered branching model of work-flow and my interest in git grows. I wanted to know how companies handle branching and deployment process.</p>
 <h4 class="theme-subheading" id="git-work-flow">Git work-flow</h4>
-<p class="text-left">There is an article <a href="">Gitflow workflow</a> on the internet which extends <a href="">A successful git branching model</a> post from <a href="">nvie</a>. It is really nice idea to split the branches that way.</p>
-<h4 class="theme-subheading" id="jenkins">Jenkins</h4>
-<p class="text-left"></p>
+<p class="text-left">There is an article <a href="">Gitflow workflow</a> on the internet which extends <a href="">A successful git branching model</a> post from <a href="https://github.com/nvie">nvie</a>. It is really nice idea to split the branches that way.</p>
+<h4 class="theme-subheading" id="server">Server</h4>
+<p class="text-left">Let's say the document root is <code>/var/www/example.com/public/www</code>. The deployment process take some time and if we need it to be "atomic" operation it takes different approach than just copy files. For this, create a tree like this :</p>
+<ul>
+    <li>/var/www/example.com/build/v1.0.0/</li>
+    <li>/var/www/example.com/public/www -> /var/www/example.com/build/v1.0.0/</li>
+</ul>
+<p class="text-left">where <code>www</code> is a symlink pointing to specific build. When a new version is out there, you copy it into <code>./builds/v1.0.1/</code> folder and switch symlink to this new build.</p>
 <h2 class="theme-subheading" id="deploy-script">Deploy script</h2>
 <p class="text-left"></p>
 <h4 class="theme-subheading" id="temporary-directory">Temporary directory</h4>
-<p class="text-left"></p>
+<p class="text-left">First step is to create directory, where the project will be built.</p>
 <pre class="prettyprint">
 tempdir=$(mktemp -d)
 cd $tempdir
 </pre>
+<p class="text-left">Command <code>mktemp -d</code> creates a temporary directory in <code>/tmp</code> folder. The result ( path to this new directory ) is stored in variable <code>tempdir</code>.</p>
 <h4 class="theme-subheading" id="clone-the-repository">Clone the repository</h4>
-<p class="text-left"></p>
+<p class="text-left">As mentioned <a href="#git-work-flow">before</a>, the working branch is <code>develop</code>. We need to merge this branch into master ( with extra commit to be able to view the history ).</p>
 <pre class="prettyprint">
 git clone https://github.com/&lt;user&gt;/&lt;project-name&gt;.git || exit 1
 
@@ -31,20 +37,21 @@ git fetch origin develop
 
 git merge --no-ff origin/develop -m "release" || exit 1
 </pre>
+<p class="text-left">Clone the project ( <code>git clone</code> ) and jump into it ( <code>cd *</code> ). It is git clone, so you are able to call git commands. Fetch the working branch and try to merge it into master.</p>
 <h4 class="theme-subheading" id="check-php-syntax">Check PHP syntax</h4>
-<p class="text-left"></p>
+<p class="text-left">To be sure about the code, run PHP Lint on each <code>.php</code> file. This part is little bit tricky and you have to have some Linux bash skills.</p>
 <pre class="prettyprint">
 RES=`find -L ./ \( -name "*.php" \) -print0 | xargs -0 -n 1 -P 4 php -l `
 if [ $? -gt 0 ]; then
 	echo $RES | grep -v "No syntax errors detected"
-    exit 42
+        exit 42
 else
 	echo -en "Syntax ok, merging into master..."
         git push origin master || exit 1
 fi
 </pre>
 <h4 class="theme-subheading" id="download-dependecies">Download dependencies</h4>
-<p class="text-left"></p>
+<p class="text-left">If the project is using <a href="">composer</a>, you need to call <code>composer install</code> command to download all the dependencies.</p>
 <pre class="prettyprint">
 if [ -f composer.json ]
 then
@@ -53,7 +60,9 @@ then
 fi
 </pre>
 <h4 class="theme-subheading" id="increment-version">Increment version</h4>
-<p class="text-left"></p>
+<p class="text-left">When everything is ok, we can make a new version of our code. Don't forget we are in <code>master</code> branch and all this "magic" is done here. The <code>git tag --sort=-version:refname -l "v*"</code> command lists all tags which starts with letter <i>v</i> sorted by version and <code>head -n 1</code> take only the first line.</p>
+<p class="text-left">Therefore in <code>version</code> variable is something like this : <code>v1.0.0</code>. We need to explode it on three parts : major, minor and patch version numbers.</p>
+<div class="alert alert-info" role="alert">The <i>--sort</i> option is not supported in older versions of git.</div>
 <pre class="prettyprint">
 version=`git tag --sort=-version:refname -l "v*" | head -n 1`
 
@@ -67,7 +76,7 @@ PATCH=$((array[2]+1))
 
 NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 </pre>
-<p class="text-left"></p>
+<p class="text-left">When we have the new version number, create new tag and push it to the repository.</p>
 <pre class="prettyprint">
 git tag -a $NEW_VERSION -m "Version $NEW_VERSION"
 
@@ -76,12 +85,7 @@ git push --tags
 <h4 class="theme-subheading" id="copy-everything-on-the-server">Copy everything to the server</h4>
 <p class="text-left"></p>
 <pre class="prettyprint">
-    
-</pre>
-<h4 class="theme-subheading" id="temporary-directory">Temporary directory</h4>
-<p class="text-left"></p>
-<pre class="prettyprint">
-    
+ssh &lt;user&gt;@&lt;server&gt; "mkdir &lt;document-root&gt;/builds/$NEW_VERSION" || exit 1
 </pre>
 <h4 class="theme-subheading" id="final-script">Final script</h4>
 <p class="text-left"></p>
@@ -184,3 +188,6 @@ ssh "rm &lt;document-root&gt;/www && ln -s &lt;document-root&gt;/builds/$NEW_VER
 
 echo "DONE!"
 </pre>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+
+
