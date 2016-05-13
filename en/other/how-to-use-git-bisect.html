@@ -20,80 +20,96 @@ git add .
 git commit -m "initial commit"
 </pre>
 <h4 class="theme-subheading" id="good-and-working-part">Good and working part</h4>
+<p class="text-left">Open the file <code>script.sh</code> in your favorite editor and add these lines :</p>
 <pre class="prettyprint">
 #!/bin/bash
 echo "1 : ok"
 </pre>
-<p class="text-left">And commit. ( <kbd>git add . && git commit -m "number 1 commit"</kbd> ). Append new line <code>echo "2 : ok"</code> and commit again.</p>
-<h4 class="theme-subheading" id="bad-and-not-working-part">Bad and not working part</h4>
-<p class="text-left">Now, create the error ( buggy ) part. In the script it means exit with an error code number. E.g.:</p>
+<p class="text-left">And commit. ( <kbd>git add . && git commit -m "number 1 commit"</kbd> ). Append new line <code>echo "2 : ok"</code> and commit again. Repeat this 3 times. You end up with this :</p>
 <pre class="prettyprint">
+#!/bin/bash
+echo "1 : ok" # number 1 commit
+echo "2 : ok" # number 2 commit
+echo "3 : ok" # number 3 commit
+echo "4 : ok" # number 4 commit
+echo "5 : ok" # number 5 commit
+</pre>
+<p class="text-left">Run the script and it should write numbers from 1 to 5 on the screen.</p>
+<h4 class="theme-subheading" id="bad-and-not-working-part">Bad and not working part</h4>
+<p class="text-left">Now, create the error ( buggy ) part somewhere in around the middle of the script, lets say between <code>echo "3 : ok"</code> and <code>echo "4 : ok"</code>. In the script it means, exit with an error code number. E.g.:</p>
+<pre class="prettyprint">
+...
+echo "3 : ok"
 exit 1
+echo "4 : ok"
+...
 </pre>
 <p class="text-left">In real world you know this would screw up the whole thing, but now you are happy to commit new line ( <kbd>git add . && git commit -m "error commit"</kbd> ).</p>
 <h4 class="theme-subheading" id="again-some-good-part">Again some good part</h4>
-<p class="text-left"></p>
+<p class="text-left">You added bug and haven't test the whole app. You continue like everything is working properly.</p>
 <pre class="prettyprint">
-echo "3 : ok" # + commit
-echo "4 : ok" # + commit
-echo "5 : ok" # + commit
+echo "6 : ok" # number 6 commit
+echo "7 : ok" # number 7 commit
+echo "8 : ok" # number 8 commit
 </pre>
 <h4 class="theme-subheading" id="now-you-realize-something-is-wrong">Now you realize something is wrong</h4>
-<p class="text-left">You run the script, it should write numbers from 1 to 5 on the output, but stops on the number 2. Why? Where did I ( or whoever ) make a mistake? You can try and search in code or use <kbd>git bisect</kbd>!</p>
+<p class="text-left">You run the script, it should write numbers from 1 to 8 on the output, but stops on the number 3. Why? Where did I ( or whoever ) make a mistake? You can try and search in code or use <kbd>git bisect</kbd>!</p>
 <p class="text-left">You know it was working 5 - 6 commits ago and now it is not ( this is very important ). You run command :</p>
 <pre class="prettyprint">
 git bisect start
 </pre>
-<p class="text-left">Mark current version as bad :</p>
+<p class="text-left">Git switch itself into a "debug mode". Mark current version as bad :</p>
 <pre class="prettyprint">
 git bisect bad
 </pre>
-<p class="text-left">Checkout working commit / tag and mark it as good ( 5 commits ago is <code>number 1 commit</code> ) :</p>
+<p class="text-left">Checkout working commit / tag and mark it as good ( 6 commits ago is <code>number 3 commit</code> ) :</p>
 <pre class="prettyprint">
-git checkout HEAD~5
+git checkout HEAD~6
 
 git bisect good
 </pre>
 <p class="text-left">Now, git knows which version is bad, where in history it was good and begin to search. How? It automatically ( after you enter one bad and one good commit ) checkouts a commit in the middle of that range of history. You run the script and see if it is good or bad.</p>
-<p class="text-left"><i>This is easy, but remember, it can be whatever. If it is a webpage, reload it and check if the bug is still there. If it is an Android app, compile it, install and try it.</i></p>
-<p class="text-left">As I mentioned, it jumps in the middle of the commit history, so you should be on <code>error commit</code>, which is bad.</p>
+<div class="alert alert-info" role="alert">This is easy, but remember, it can be whatever. If it is a webpage, reload it and check if the bug is still there. If it is an Android app, compile it, install and try it.</div>
+<p class="text-left">After you typed that command, git jumped in the middle of this commit and the first good commit. Therefore the position is on <code>error commit</code>. In that commit we introduced the bug which means it is a bad one.</p>
 <pre class="prettyprint">
 git bisect bad
 </pre>
-<p class="text-left">After you typed that command, git jumped in the middle of this commit and the first good commit. Therefore the position is on <code>number 2 commit</code>. In that commit there are only two <code>echo</code> commands which means it is a good one.</p>
+<p class="text-left">There remains only one commit to check - <code>number 5 commit</code> - that is good.</p>
 <pre class="prettyprint">
 git bisect good
 </pre>
 <p class="text-left">Now, it is obvious that the error occurred in <code>error commit</code>. Git shows message like this :</p>
 <pre class="prettyprint">
-75a02e61b9ba3eef2b11fb851d7e27b0629f8210 is the first bad commit
-commit 75a02e61b9ba3eef2b11fb851d7e27b0629f8210
+bf9422a7dcc52bf84773ee4c3e22775750009294 is the first bad commit
+commit bf9422a7dcc52bf84773ee4c3e22775750009294
 Author: Matej Jellus &lt;juffalow@juffalow.com&gt;
 Date:   Thu May 12 23:20:45 2016 +0200
 
     error commit
 
-:100755 100755 ec12ba63a1d344f36b8672c3ea0f05f4888b503d 6e6ed8c4fdd3066dc3e103d78992ca0626a878c6 M	script.sh
+:100755 100755 6477afa22ed745e211df5a9d575f674ed890472f 5588800457f0a7778fc3c4892fec7fba62ef1b46 M	script.sh
 </pre>
 <p class="text-left">..and the search is over. If you are curious what exactly it was type <kbd>git show &lt;commit hash&gt;</kbd></p>
 <pre class="prettyprint">
-commit 75a02e61b9ba3eef2b11fb851d7e27b0629f8210
+commit bf9422a7dcc52bf84773ee4c3e22775750009294
 Author: Matej Jellus &lt;juffalow@juffalow.com&gt;
-Date:   Thu May 12 23:20:45 2016 +0200
+Date:   Fri May 13 09:16:20 2016 +0200
 
     error commit
 
 diff --git a/script.sh b/script.sh
-index ec12ba6..6e6ed8c 100755
+index 6477afa..5588800 100755
 --- a/script.sh
 +++ b/script.sh
-@@ -1,4 +1,5 @@
- #!/bin/bash
+@@ -2,5 +2,7 @@
  echo "1 : ok"
  echo "2 : ok"
+ echo "3 : ok"
 +exit 1
+ echo "4 : ok"
+ echo "5 : ok"
 </pre>
-<p class="text-left">To return back to original HEAD type <kbd>git bisect reset</kbd>.</p>
+<p class="text-left">To return back to original HEAD and end the debug mode type <kbd>git bisect reset</kbd>.</p>
 <h4 class="theme-subheading" id="automatically-test-and-find-bad-commit">Automatically test and find bad commit</h4>
 <p class="text-left">If you are able to write a test for your search you can speed this operations up. This example servers as a test at the same time.</p>
 <pre class="prettyprint">
@@ -101,7 +117,7 @@ git bisect start
 # mark current commit as bad
 git bisect bad
 # go to history and checkout commit that is good
-git checkout HEAD~5
+git checkout HEAD~6
 # mark it as good
 git bisect good
 # and now let the git test it for you...
