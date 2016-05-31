@@ -1,12 +1,3 @@
-<!--
-
-http://stackoverflow.com/questions/14467673/enable-cors-in-htaccess
-http://stackoverflow.com/questions/25727306/request-header-field-access-control-allow-headers-is-not-allowed-by-access-contr
-http://stackoverflow.com/questions/9310112/why-am-i-seeing-an-origin-is-not-allowed-by-access-control-allow-origin-error
-https://www.w3.org/TR/cors/
-
-
--->
 <p class="text-left">I am playing a little bit with PHP micro framework Slim and javascript Backbone.js. Therefor I created two separate projects with URLs : <code>mywebapp.dev</code> for front-end ( Backbone.js ) and <code>api.mywebapp.dev</code> for back-end ( Slim ). The problem occurred nearly immediately : Cross-Origin Resource Sharing ( CORS ).</p>
 <h2 class="theme-subheading" id="backbone-js-and-cors">Backbone.js and CORS</h2>
 <p class="text-left">When you create your first model, define the route and try to load it via console, the browser will object and throw exception :<br />
@@ -32,6 +23,7 @@ $response->withHeader('Access-Control-Allow-Origin', '*');
 Header add Access-Control-Allow-Origin "*"
 </pre>
 </div>
+<div class="alert alert-info" role="alert">If you use <i>.htaccess</i> solution and get <i>Internal Server Error</i> the problem is in Apache. The <code>Header</code> directive is a module and you need to enable it. Open command line and type <code>sudo a2enmod headers</code> and then restart apache <code>sudo service apache2 restart</code>.</div>
 <p class="text-left">Now if you try to load any model it should work. The problem is, when you try to modify it, or create a new one. Or, to be more precise, there are two problems. First, Bakcbone send data to server in <code>JSON</code> format and that violates <strong>Content Security Policy</strong>.<br />In Chrome console you see this error : <code>Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response</code>.</p>
 <div class="well">
 <pre class="prettyprint">
@@ -83,6 +75,6 @@ Header add Access-Control-Allow-Headers "Content-Type"
 <p class="text-left"><a href="https://www.w3.org/TR/cors/">CORS</a></p>
 <p class="text-left"><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing</a> page on Wikipedia. You find there useful information with an example and I recommend you to read some of the linked pages also.</p>
 <p class="text-left"><a href="https://en.wikipedia.org/wiki/Same-origin_policy">Same-origin policy</a> page on Wikipedia, where you can navigate from CORS page. It is good to at least read the post to get some overview.</p>
-<p class="text-left"><a href="https://en.wikipedia.org/wiki/Content_Security_Policy">Content Security Policy</a>page on Wikipedia</p>
+<p class="text-left"><a href="https://en.wikipedia.org/wiki/Content_Security_Policy">Content Security Policy</a> page on Wikipedia</p>
 
 
