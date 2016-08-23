@@ -5,7 +5,7 @@
     &lt;link href="file1.css" rel="stylesheet"&gt;
     &lt;link href="file2.css" rel="stylesheet"&gt;
     &lt;link href="file3.css" rel="stylesheet"&gt;
-    
+
     &lt;script src="file1.js"&gt;&lt;/script&gt;
     &lt;script src="file2.js"&gt;&lt;/script&gt;
     ...
@@ -131,31 +131,31 @@ module.exports = function(grunt) {
 <h4 class="theme-subheading" id="adding-a-new-plugin">Adding a new plugin</h4>
 <p class="text-left">One of the ways to add new plugin is to write it into <i>package.json</i> as a new dependency and run command <kbd>npm install</kbd>. Alternatively, or maybe simpler, way is to run command for installing particular plugin with parameter <code>--save-dev</code>, which downloads the plugin and also write it into <i>package.json</i> itself.</p>
 <pre>
-    npm install &lt;module&gt; --save-dev
+npm install &lt;module&gt; --save-dev
 </pre>
 <p class="text-left">So back to <a href="http://gruntjs.com/plugins" target="_blank">grunt plugins</a> page, where you have to find something what erases files / directories. The <i>contrib-clean</i> with description "clean files and folders" should manage it.</p>
 <pre>
-    npm install grunt-contrib-clean --save-dev
+npm install grunt-contrib-clean --save-dev
 </pre>
 <h4 class="theme-subheading" id="creating-new-task">Creating new task</h4>
 <p class="text-left">Plugin added, inscribed in dependencies, leaves only configuration and creating the task in <i>Gruntfile.js</i>. That is not anything hard, basically three lines in addition :</p>
 <pre>
-  // configuration
-  ...
-  clean: ["src/temp/"]
-  ...
+// configuration
+...
+clean: ["src/temp/"]
+...
 </pre>
 <pre>
-  // load plugins
-  ...
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  ...
+// load plugins
+...
+grunt.loadNpmTasks('grunt-contrib-clean');
+...
 </pre>
 <pre>
-  // new task
-  ...
-  grunt.registerTask('cleanup', ['clean']);
-  ...
+// new task
+...
+grunt.registerTask('cleanup', ['clean']);
+...
 </pre>
 <h4 class="theme-subheading" id="executing-your-own-tasks">Executing your own tasks</h4>
 <p class="text-left">You can try it with running <kbd>grunt cleanup</kbd>. Parameter is the name of the task, which has been created. If Grunt is executed without any parameter, it will perform only the default task.</p>

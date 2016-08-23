@@ -37,7 +37,7 @@ use src\Anagram;
 class AnagramTest extends PHPUnit_Framework_TestCase {
 
     private $anagram;
-    
+
     public function setUp() {
         $this->anagram = new Anagram();
     }
@@ -59,7 +59,7 @@ namespace src;
 
 class Anagram {
     /**
-     * 
+     *
      * @param string $str1
      * @param string $str2
      * @return boolean
@@ -67,7 +67,7 @@ class Anagram {
     public function isAnagram( $str1, $str2 ) {
         return $this->sortString($this->sanitizeString($str1)) === $this->sortString($this->sanitizeString($str2));
     }
-    
+
     /**
      * Removes all spaces and transorms letters to lowercase.
      * @param string $str
@@ -76,7 +76,7 @@ class Anagram {
     private function sanitizeString( $str ) {
         return \strtolower(\str_replace(' ', '', $str));
     }
-    
+
     /**
      * Sort characters and return them.
      * @param string $str
@@ -178,9 +178,9 @@ class AnagramCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $word = $input->getArgument('word');
         $anagramWord = $input->getArgument('anagram');
-        
+
         $anagram = new Anagram();
-        
+
         if( $anagram->isAnagram($word, $anagramWord) ) {
             $output->writeln('These strings are anagrams!');
         } else {
@@ -209,12 +209,12 @@ class PalindromeCommand extends Command {
             ->setHelp("A palindrome is a word, phrase, number, or other sequence of characters which reads the same backward or forward.\nLink : https://en.wikipedia.org/wiki/Palindrome")
         ;
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output) {
         $string = $input->getArgument('string');
-        
+
         $palindrome = new Palindrome();
-        
+
         if( $palindrome->check($string) ) {
             $output->writeln('This string is palindrome!');
         } else {
@@ -245,10 +245,10 @@ $console->run();
 <p class="text-left">Everything is ready and you can try it. Just run the command <kbd>php console.php</kbd> and you should see nice output with information about the app name, usage, options and available commands.</p>
 <p class="text-left">To test palindrome, type <kbd>php console.php palindrome "put it up"</kbd> and it should end with 'This string is palindrome!'. Or if you don't know what is the anagram command from available commands, type <kbd>php console.php anagram --help</kbd> and it gives you all information you need.</p>
 <div class="row">
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console.png"><img alt="php symfony console" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png"><img alt="php symfony console palindrome" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png"><img alt="php symfony console command help" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png"><img alt="php symfony console exception" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console.png"><img class="lazy" alt="php symfony console" src="https://en.juffalow.com/wp-content/uploads/2016/02/php-console.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png"><img class="lazy" alt="php symfony console palindrome" src="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png"><img class="lazy" alt="php symfony console command help" src="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png"><img class="lazy" alt="php symfony console exception" src="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png" width="300" height="255" /></a></div>
 </div>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
 <p class="text-left">There are lot of other things it is capable of. Try to run the anagram command ( <kbd>php console.php anagram</kbd> ) without any argument and it alerts red exception with 'Not enough arguments (missing: "word, anagram").' message. If a command does't need an argument, set it to <code>InputArgument::OPTIONAL</code>, or if it should have options ( like -h / --help ) use method <code>addOption(...)</code>.</p>
@@ -256,4 +256,3 @@ $console->run();
 <p class="text-left">You can find the whole project on <a href="https://github.com/juffalow/ComposerExample" target="_blank">GitHub</a>.</p>
 <h4 class="theme-subheading" id="references">References</h4>
 <p class="text-left"><a href="http://symfony.com/doc/current/components/console/introduction.html" target="_blank">The Console Component</a> introduction on official Symfony website.</p>
-

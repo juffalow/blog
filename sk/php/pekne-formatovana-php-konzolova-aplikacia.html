@@ -2,7 +2,7 @@
 <h2 class="theme-subheading" id="enginy">Symfony console</h2>
 <p class="text-left">S komponentou <strong>Symfony console</strong> urobíš všetko na čo si zvyknutý pri práci s konzolou. Napríklad tabulky, loader ( progress bar ), otázky, dialógy, atď. A pomôže ti s veľa daľšími bežnými vecami. Je jednoduche pridať povinný alebo nepovinný argument, vytvoriť help alebo pridať ďaľší príkaz.</p>
 <h4 class="theme-subheading" id="novy-problem-anagram">Nový problém <small>- Anagram</small></h4>
-<p class="text-left">Nadviažem na môj predchádzajúci článok <strong><a href="http://en.juffalow.com/what-is-and-how-to-use-composer/" target="_blank">Čo to je Composer</a></strong>. Ako príklad tam je projekt, kde musíš zistiť, či zadaný reťazec je palindróm alebo nie. Teraz to rozšírime o ďaľší problém.</p>
+<p class="text-left">Nadviažem na môj predchádzajúci článok <strong><a href="https://en.juffalow.com/what-is-and-how-to-use-composer/" target="_blank">Čo to je Composer</a></strong>. Ako príklad tam je projekt, kde musíš zistiť, či zadaný reťazec je palindróm alebo nie. Teraz to rozšírime o ďaľší problém.</p>
 <blockquote>
   <p>Anagram (z gr. anagrafein - prepísať) alebo prešmyčka je slovo, ktoré vznikne zmenou poradia písmen v inom slove.</p>
   <footer><cite title="Wikipedia">Wikipedia</cite></footer>
@@ -40,7 +40,7 @@ use src\Anagram;
 class AnagramTest extends PHPUnit_Framework_TestCase {
 
     private $anagram;
-    
+
     public function setUp() {
         $this->anagram = new Anagram();
     }
@@ -62,7 +62,7 @@ namespace src;
 
 class Anagram {
     /**
-     * 
+     *
      * @param string $str1
      * @param string $str2
      * @return boolean
@@ -70,7 +70,7 @@ class Anagram {
     public function isAnagram( $str1, $str2 ) {
         return $this->sortString($this->sanitizeString($str1)) === $this->sortString($this->sanitizeString($str2));
     }
-    
+
     /**
      * Odstrani vsetky medzery a zmeni pismena na male
      * @param string $str
@@ -79,7 +79,7 @@ class Anagram {
     private function sanitizeString( $str ) {
         return \strtolower(\str_replace(' ', '', $str));
     }
-    
+
     /**
      * Zoradi pismena v retazci podla abecedy
      * @param string $str
@@ -181,9 +181,9 @@ class AnagramCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $word = $input->getArgument('word');
         $anagramWord = $input->getArgument('anagram');
-        
+
         $anagram = new Anagram();
-        
+
         if( $anagram->isAnagram($word, $anagramWord) ) {
             $output->writeln('Tieto dva reťazce tvoria anagram!');
         } else {
@@ -212,12 +212,12 @@ class PalindromeCommand extends Command {
             ->setHelp("Palindróm je slovo, veta, číslo (všeobecne akákoľvek postupnosť symbolov), ktorá má tú vlastnosť, že ju možno čítať v ľubovoľnom smere (sprava doľava alebo zľava doprava) a má vždy rovnaký význam.\nOdkaz : https://sk.wikipedia.org/wiki/Palindróm")
         ;
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output) {
         $string = $input->getArgument('string');
-        
+
         $palindrome = new Palindrome();
-        
+
         if( $palindrome->check($string) ) {
             $output->writeln('Tento reťazec je palindróm!');
         } else {
@@ -248,10 +248,10 @@ $console->run();
 <p class="text-left">Všetko je pripravené a môžeš to vyskúšať. Stačí spustiť príkaz <kbd>php console.php</kbd> a mal by si vidieť pekne naformátovaný výstup s informáciou o názve aplikácie, využití, možnosťami a dostupnými príkazmi.</p>
 <p class="text-left">Na otestovanie palindrómu napíš <kbd>php console.php "Matej je tam"</kbd> a malo by to skončiť hláškou 'Tento reťazec je palindróm!'. Alebo ak nevieš čo robí príkaz anagram z dostupných príkazov, napíš <kbd>php console.php anagram --help</kbd> a dá ti to všetky potrebné infrormácie, ktoré potrebuješ.</p>
 <div class="row">
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png"><img alt="php symfony console" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png"><img alt="php symfony console palindrome" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png"><img alt="php symfony console command help" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png" width="300" height="255" /></a></div>
-<div class="col-md-3 col-xs-12"><a class="thumbnail" href="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png"><img alt="php symfony console exception" src="http://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console.png"><img class="lazy" alt="php symfony console" src="https://en.juffalow.com/wp-content/uploads/2016/02/php-console.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png"><img class="lazy" alt="php symfony console palindrome" src="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-palindrome.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png"><img class="lazy" alt="php symfony console command help" src="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-anagram-help.png" width="300" height="255" /></a></div>
+<div class="col-md-3 col-xs-12"><a class="thumbnail" href="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png"><img class="lazy" alt="php symfony console exception" src="https://en.juffalow.com/wp-content/uploads/2016/02/php-console-exception.png" width="300" height="255" /></a></div>
 </div>
 <h2 class="theme-subheading" id="zaver">Záver</h2>
 <p class="text-left">Je veľa ďaľších vecí, ktoré to dokáže. Skús spustiť príkaz anagram ( <kbd>php console.php anagram</kbd> ) bez argumentov a hneď vypíše červenú hlášku informujúcu o nedostatku argumentov - 'Not enough arguments (missing: "word, anagram").'. Ak príkaz nepotrebuje niektorý z argumentov na svoj beh, môžeš ho nastavit ako <code>InputArgument::OPTIONAL</code>, alebo ak má mať nejaké dodatočné nastavenia ( prepínače ), ako napríklad <code>-h</code> alebo <code>--help</code> použi metódu <code>addOption(...)</code>.</p>

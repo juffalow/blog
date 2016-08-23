@@ -1,0 +1,109 @@
+<p class="text-justify"><a title="Linux" href="http://en.wikipedia.org/wiki/Linux" target="_blank">Linux</a> je Unix-like operačný systém, ktorého základom je linuxové jadro.  Je voľne dostupný s veľkým množstvom aplikácii. Využíva sa na osobných počítačoch, servroch, superpočítačoch a tiež tvorí základ pre operačný systém Android. Pri inštalácii serverov sa často používa obľúbená sada nástrojov <a title="LAMP" href="http://en.wikipedia.org/wiki/LAMP_(software_bundle)" target="_blank">LAMP</a> ( Linux Apache MySql PHP ) a postup takejto inštalácie je popísaný nižšie.</p>
+<p class="text-justify">Nie každý má doma ďaľší počítač, na ktorom by mohol skúšať rôzne operačné systémy. Na takýto účel môže poslúžiť virtualizačný nástroj <a title="Virtual Box" href="http://en.wikipedia.org/wiki/VirtualBox" target="_blank">Virtual Box</a>. Stiahnúť sa dá z <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">oficiálnej stránky</a> a je dostupný na všetky hlavné operačné systémy.</p>
+<p class="text-justify">Inštalovať sa bude <a href="http://www.ubuntu.com/download/server" target="_blank">Linux Server 14.04 LTS</a> ( <a href="http://en.wikipedia.org/wiki/Long-term_support" target="_blank">Long Term Support</a> ). Je dobré mať aspoň 10GB voľného miesta na disku a 1GB ramky.</p>
+&nbsp;
+<h2 class="theme-subheading" id="konfiguracia-noveho-virtualneho-stroja">Konfigurácia nového virtuálneho stroja</h2>
+Úvodná obrazovka
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6 col-xs-12"><a class="thumbnail" href="http://www.juffalow.com/wp-content/uploads/2015/03/Screen-Shot-2015-03-15-at-16.46.17.png"><img class="lazy" alt="Virtual Box uvodna obrazovka" data-original="http://www.juffalow.com/wp-content/uploads/2015/03/Screen-Shot-2015-03-15-at-16.46.17-300x255.png" width="300" height="255" /></a></div>
+<div class="col-md-3"></div>
+</div>
+<div class="row">
+<div class="col-md-12">
+<h4 class="theme-subheading" id="vytvorenie-noveho-virtualneho-stroja">Vytvorenie nového virtuálneho stroja</h4>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">Kliknutím na tlačítko "New" sa vytvorí nový virtuálny stroj. Treba doplniť nejaké vhodné meno, typ stroja je Linux a verzia je Ubuntu (64).</div>
+<div class="col-md-3"></div>
+<div class="col-md-6 col-sm-12 col-xs-12"><a class="thumbnail" href="http://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-name-and-type.png"><img class="lazy" alt="virtual-box-name-and-type" data-original="http://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-name-and-type-300x255.png" width="300" height="255" /></a></div>
+<div class="col-md-3"></div>
+</div>
+&nbsp;
+<h4 class="theme-subheading" id="velkost-pamate-ram">Veľkosť pamäte RAM</h4>
+V ďaľšom pokračovaí je možné určiť veľkost operačnej pamate, ktorá bude alokovaná pri spustení tohoto virtuálneho stroja. Ja som si zvolil 1024MB.
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6 col-xs-12"><a class="thumbnail" href="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-memory-size.png"><img class="lazy" alt="virtual-box-memory-size" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-memory-size-300x255.png" width="300" height="255" /></a></div>
+<div class="col-md-3"></div>
+</div>
+&nbsp;
+<h4 class="theme-subheading" id="diskovy-priestor">Diskový priestor</h4>
+<p class="text-justify">Nalseduje séria krokov, kde je nutné vytvoriť diskový priestor pre tento stroj. Je to akýsi "virtuálny pevný disk", na ktorý sa nainštaluje operačný systém a do ktorého si bude tento systém ukladať svoje dáta. Na disku je to len jeden súbor. Tento súbor  je možné skopírovať na USB, preniesť na iný počítač a bez nutnosti opätovnej inštalácie spustiť ( ako keby sa preniesol celý pevný disk do nového stroja ). V prvom kroku je treba zvoliť vytvorenie nového virtuálneho disku. V druhom kroku vybrať možnosť VDI (VirtualBox Disk Image). Nasleduje voľba veľkosti disku, kde som si zvolil fixnú veľkosť a v poslednom kroku som nastavil veľkosť disku na 10.05GB.</p>
+
+<div class="row">
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a class="thumbnail" href="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-harddrive-1.png"><img class="lazy" alt="virtual-box-harddrive-1" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-harddrive-1-300x255.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a class="thumbnail" href="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-harddrive-2.png"><img class="lazy" alt="virtual-box-harddrive-2" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-harddrive-2-300x255.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a class="thumbnail" href="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-harddrive-3.png"><img class="lazy" alt="virtual-box-harddrive-3" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-harddrive-3-300x255.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a class="thumbnail" href="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-harddrive-4.png"><img class="lazy" alt="virtual-box-harddrive-4" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-harddrive-4-300x255.png" /></a></div>
+</div>
+<h2 class="theme-subheading" id="instalacia">Inštalácia</h2>
+<h4 class="theme-subheading" id="vyber-operacneho-systemu">Výber operačného systému</h4>
+<p class="text-justify">
+V ľavo, v zozname virtuálnych strojov, označím môj novovytvorený stroj a spustím ho. Vyskočí tabulka, kde je treba vybrať image operačného systému, ktorý sa má nainštalovať (t.j. image systému Linux Server 14.04 LTS spomenutý v úvode).</p>
+
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6 col-sx-12">
+<a href="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-os-image.png" class="thumbnail"><img class="lazy" alt="virtual-box-os-image" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/virtual-box-os-image-300x253.png" /></a>
+</div>
+<div class="col-md-3"></div>
+</div>
+
+<h4 id="uvodna-obrazovka" class="theme-subheading">Úvodná obrazovka</h4>
+<p class="text-justify">
+Po zvolení imagu sa systém hneď spustí. Na úvod je treba vybrať jazyk inštalácie. Po výbere jazyka nasleduje úvítacie okno s možnosťami testu pamäte, záchrany poškodeného systému a aj možnosť inštalácie Ubuntu Servra. Po zvolení možnoti inštalovať, je ako prvé výber jazyka inštalácie a defaultného jazyka systému. Slovenský alebo Český jazyk by mal byť dostupný.</p>
+
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6 col-sx-12">
+<a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-default-language.png" class="thumbnail"><img class="lazy" alt="linux-default-language" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-default-language-300x242.png" /></a>
+</div>
+<div class="col-md-3"></div>
+</div>
+
+<h4 id="vyber-lokality-a-klavesnice" class="theme-subheading">Výber lokality a klávesnice</h4>
+<p class="text-justify">
+Nasledujú kroky týkajuce sa lokality, aby mohol byť nastavený správny čas systému, výber klávesnice a nastavenie názvu počítača v sieti.</p>
+
+<div class="row">
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-location.png" class="thumbnail"><img class="lazy" alt="linux-location"data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-location-300x242.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-keyboard.png" class="thumbnail"><img class="lazy" alt="linux-keyboard" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-keyboard-300x242.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-name.png" class="thumbnail"><img class="lazy" alt="linux-name" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-name-300x242.png" /></a></div>
+</div>
+
+<h4 id="meno-nazov-konta-a-heslo" class="theme-subheading">Meno, názov konta a heslo</h4>
+<p class="text-justify">
+Ako ďaľšie je treba nastaviť celé meno užívateľa, názov konta a heslo, ktoré je pre overenie treba zadať ešte raz. Za tým nasleduje nastavenie šifrovania domovského adresára a potvrdenie časového pásma.</p>
+
+<div class="row">
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-user-fullname.png" class="thumbnail"><img class="lazy" alt="linux-user-fullname" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-user-fullname-300x242.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-user-username.png" class="thumbnail"><img class="lazy" alt="linux-user-username" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-user-username-300x242.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-user-password.png" class="thumbnail"><img class="lazy" alt="linux-user-password" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-user-password-300x242.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-user-encryption.png" class="thumbnail"><img class="lazy" alt="linux-user-encryption" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-user-encryption-300x242.png" /></a></div></div>
+
+<h4 id="particia-a-diskovy-priestor" class="theme-subheading">Partícia a diskový priestor</h4>
+<p class="text-justify">
+Systém je inštalovaný do virtuálneho stroja, ktorému som v mojom prípade priradil 10 giga priestoru, takže nie je treba venovať žiadnu extra pozornosť týmto nastaveniam. Pri výbere partícii je zvolená prvá možnosť, využiť celý disk. Po odkliknutí sa hneď opýta, ktorý disk a na výber bude len ten jeden, ktorý bol vytvorený na začiatku pri konfigurácii virtuálneho stroja. Na záver treba tieto nastavenia potvrdiť a zmeny zapísať na disk. ( <em>na prvom obrázku je chyba - vysvietená je druhá možnosť, viem o tom, opravím neskôr</em> )</p>
+
+<div class="row">
+<div class="col-lg-3 hidden-md"></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-sx-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-partition.png" class="thumbnail"><img class="lazy" alt="linux-partition" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-partition-300x242.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-sx-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-disk.png" class="thumbnail"><img class="lazy" alt="linux-disk" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-disk-300x242.png" /></a></div><div class="col-lg-3 hidden-md"></div></div>
+
+<h4 id="proxy-updaty-a-software" class="theme-subheading">Proxy, updaty a software</h4>
+<p class="text-justify">
+Blíži sa koniec inštalačného procesu, zostáva pár systémových nastavení. Nastavenie HTTP Proxy servera, ktorý pokial nie je využívaný zostáva prázdny a nakoniec nastavenia automatických updatov, ktoré v tomto prípade zostanú vypnuté. V tomto momente je to čo sa týka nastavenia systému všetko. Linux ešte zobrazí informáciu, že je nainštalovaný len čistý systém bez nejakého softwaru a umožní vybrať a následne nainštalovať základné balíčky ako napríklad DNS server, mail server, LAMP, PostgreSQL a iné.</p>
+
+<div class="row">
+<div class="col-lg-3 hidden-md"></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-sx-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-proxy.png" class="thumbnail"><img class="lazy" alt="linux-proxy" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-proxy-300x242.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-sx-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-updates.png" class="thumbnail"><img class="lazy" alt="linux-updates" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-updates-300x242.png" /></a></div><div class="col-lg-3 hidden-md"></div></div>
+
+<h4 id="koniec-instalacie" class="theme-subheading">Koniec inštalácie</h4>
+<p class="text-justify">
+Po dokončení inšalácie treba zaviesť boot loader, aby virtuálny stroj vedel tento systém rozoznať a spustiť. Ostáva potvrdiť koniec inštalácie, čím sa systém reštartuje a po opätovnom spustení je možné sa do neho prihlásiť.</p>
+
+<div class="row">
+<div class="col-lg-3 hidden-md"></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-sx-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-bootloader.png" class="thumbnail"><img class="lazy" alt="linux-bootloader" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-bootloader-300x242.png" /></a></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-sx-12"><a href="https://www.juffalow.com/wp-content/uploads/2015/03/linux-end.png" class="thumbnail"><img class="lazy" alt="linux-end" data-original="https://www.juffalow.com/wp-content/uploads/2015/03/linux-end-300x242.png" /></a></div><div class="col-lg-3 hidden-md"></div></div>
