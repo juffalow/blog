@@ -1,0 +1,29 @@
+<p class="text-left">When you have two different domains, two different wordpress sites and you want to have only one database you will have problem to access the second one.</p>
+<p class="text-left">Let's say we have these two domains ( each with its own wordpress ) <i>site-one.dev</i> and <i>site-two.dev</i> and they share the same database. If you open wordpress general settings, there is <i>WordPress Address (URL)</i><p>
+<h2 class="theme-subheading" id="solution">Solution</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="duplicate-wp-options-table">Duplicate <small>wp_options</small> table</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+CREATE TABLE wp_second_options LIKE wp_options;
+
+INSERT INTO wp_second_options SELECT * FROM wp_options;
+</pre>
+<p class="text-left"></p>
+<pre class="prettyprint">
+UPDATE wp_second_options SET option_value='&lt;second domain&gt;' WHERE option_name='siteurl';
+</pre>
+<h4 class="theme-subheading" id="change-table-name-in-settings">Change table name in settings</h4>
+<p class="text-left">Open file <i>/wp-includes/load.php</i> and find <code>wp_set_wpdb_vars()</code> function. In this function, wordpress sets table names and prefixes. Here, you can "force" it to use the table clone, by adding one line :</p>
+<pre class="prettyprint">
+function wp_set_wpdb_vars() {
+    ...
+    $prefix = $wpdb->set_prefix( $table_prefix );
+
+    $wpdb->options = 'wp_second_options'; // add this line
+    ...
+}
+</pre>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="https://wordpress.org/support/topic/two-sites-two-themes-one-database-same-content#post-398505">This comment</a> suggests solution, but it is <i>N</i> years old.</p>
