@@ -11,7 +11,6 @@
 </blockquote>
 <h4 class="theme-subheading" id="solution">Solution</h4>
 <p class="text-left">To solve <code>Allow-Origin</code> problem you need to add new header to the response. This can be done in many ways :</p>
-<div class="well">
 <pre class="prettyprint">
 // pure php
 header("Access-Control-Allow-Origin: *");
@@ -22,10 +21,8 @@ $response->withHeader('Access-Control-Allow-Origin', '*');
 // .htaccess
 Header add Access-Control-Allow-Origin "*"
 </pre>
-</div>
 <div class="alert alert-info" role="alert">If you use <i>.htaccess</i> solution and get <i>Internal Server Error</i> the problem is in Apache. The <code>Header</code> directive is a module and you need to enable it. Open command line and type <code>sudo a2enmod headers</code> and then restart apache <code>sudo service apache2 restart</code>.</div>
 <p class="text-left">Now if you try to load any model it should work. The problem is, when you try to modify it, or create a new one. Or, to be more precise, there are two problems. First, Bakcbone send data to server in <code>JSON</code> format and that violates <strong>Content Security Policy</strong>.<br />In Chrome console you see this error : <code>Request header field Content-Type is not allowed by Access-Control-Allow-Headers in preflight response</code>.</p>
-<div class="well">
 <pre class="prettyprint">
 // pure php
 header("Access-Control-Allow-Headers: Content-Type");
@@ -36,9 +33,7 @@ $response->withHeader('Access-Control-Allow-Headers', 'Content-Type');
 // .htaccess
 Header add Access-Control-Allow-Headers "Content-Type"
 </pre>
-</div>
 <p class="text-left">And the second problem is that actions like this invoke HTTP PUT methods call and the browser will stand against them again. Problem is, this method is not considered as safe. Therefore, another header is required :</p>
-<div class="well">
 <pre class="prettyprint">
 // pure php
 header("Access-Control-Allow-Methods: GET,POST,OPTIONS,DELETE,PUT");
@@ -49,12 +44,10 @@ $response->withHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS,DELETE,P
 // .htaccess
 Header add Access-Control-Allow-Methods "GET,POST,OPTIONS,DELETE,PUT"
 </pre>
-</div>
 <p class="text-left">Otherwise you get back only error message <code>Method PUT is not allowed by Access-Control-Allow-Methods in preflight response</code>.</p>
 <div class="alert alert-info" role="alert"><i>With this header you allowed all mentioned HTTP methods!</i></div>
 <h4 class="theme-subheading" id="htaccess">.htaccess</h4>
 <p class="text-left">This is final <code>.htaccess</code> file for Slim 3 framework and CORS allowed :</p>
-<div class="well">
 <pre class="prettyprint">
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -64,7 +57,6 @@ Header add Access-Control-Allow-Origin "*"
 Header add Access-Control-Allow-Methods "GET,POST,OPTIONS,DELETE,PUT"
 Header add Access-Control-Allow-Headers "Content-Type"
 </pre>
-</div>
 <!--
 <h4 class="theme-subheading" id="options-method">OPTIONS method</h4>
 <p class="text-left"></p>
@@ -76,5 +68,3 @@ Header add Access-Control-Allow-Headers "Content-Type"
 <p class="text-left"><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing</a> page on Wikipedia. You find there useful information with an example and I recommend you to read some of the linked pages also.</p>
 <p class="text-left"><a href="https://en.wikipedia.org/wiki/Same-origin_policy">Same-origin policy</a> page on Wikipedia, where you can navigate from CORS page. It is good to at least read the post to get some overview.</p>
 <p class="text-left"><a href="https://en.wikipedia.org/wiki/Content_Security_Policy">Content Security Policy</a> page on Wikipedia</p>
-
-
