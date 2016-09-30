@@ -1,17 +1,17 @@
 <p class="text-left">When you have two different domains, two different wordpress sites and you want to have only one database you will have problem to access the second one.</p>
-<p class="text-left">Let's say we have these two domains ( each with its own wordpress ) <i>site-one.dev</i> and <i>site-two.dev</i> and they share the same database. If you open wordpress general settings, there is <i>WordPress Address (URL)</i><p>
+<p class="text-left">Let's say we have these two domains ( each with its own wordpress ) <i>site-one.dev</i> and <i>site-two.dev</i> and they share the same database. If you log into the first site - <i>site-one.dev</i> - and display general settings, there is <i>WordPress Address (URL)</i>. This should point on curernt site, i. e. <i>http://site-one.dev</i>. Now, when you try to access admin interface on the second page, it redirects you back on the first page.<p>
 <h2 class="theme-subheading" id="solution">Solution</h2>
-<p class="text-left"></p>
+<p class="text-left">For the second wordpress site, you have to override that setting. It is saved in <code>wp_options</code> table under <code>siteurl</code> key. So you gonna need to duplicate this table and tell wordpress to use it.</p>
 <h4 class="theme-subheading" id="duplicate-wp-options-table">Duplicate <small>wp_options</small> table</h4>
-<p class="text-left"></p>
+<p class="text-left">Create a copy of original table :</p>
 <pre class="prettyprint">
 CREATE TABLE wp_second_options LIKE wp_options;
 
 INSERT INTO wp_second_options SELECT * FROM wp_options;
 </pre>
-<p class="text-left"></p>
+<p class="text-left">Then change <code>siteurl</code> to point on the second wordpress site :</p>
 <pre class="prettyprint">
-UPDATE wp_second_options SET option_value='&lt;second domain&gt;' WHERE option_name='siteurl';
+UPDATE wp_second_options SET option_value='&lt;http://second-site.dev&gt;' WHERE option_name='siteurl';
 </pre>
 <h4 class="theme-subheading" id="change-table-name-in-settings">Change table name in settings</h4>
 <p class="text-left">Open file <i>/wp-includes/load.php</i> and find <code>wp_set_wpdb_vars()</code> function. In this function, wordpress sets table names and prefixes. Here, you can "force" it to use the table clone, by adding one line :</p>
@@ -25,5 +25,6 @@ function wp_set_wpdb_vars() {
 }
 </pre>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">Now, you can try to access admin again and it should work. This is realy fast "fix" and I don't know how it will behave in case of update, so be careful. If you know some other way, please let me know.</p>
 <h4 class="theme-subheading" id="references">References</h4>
 <p class="text-left"><a href="https://wordpress.org/support/topic/two-sites-two-themes-one-database-same-content#post-398505">This comment</a> suggests solution, but it is <i>N</i> years old.</p>
