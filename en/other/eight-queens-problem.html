@@ -1,11 +1,10 @@
-<p class="text-left"></p>
 <blockquote class="blockquote">
   <p>The eight queens puzzle is the problem of placing eight chess queens on an 8×8 chessboard so that no two queens threaten each other. Thus, a solution requires that no two queens share the same row, column, or diagonal.</p>
   <footer><a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">Wikipedia</a></footer>
 </blockquote>
-<p class="text-left"></p>
+<p class="text-left">The common solution for this is to use backtracking. It is a good practice and you understand the algorithm realy fast. But it still can be improved a little bit...</p>
 <h2 class="theme-subheading" id="bitwise-solution-in-go-lang">Bitwise solution in Go lang</h2>
-<p class="text-left">I found this solution with very good explanation on internet. It uses only bitwise operations, therefore it is really fast.</p>
+<p class="text-left">I found this solution with very good explanation on internet. It uses only bitwise operations, therefore it is really fast. Originally, it was written in JavaScript, but I rewrote it in Go.</p>
 <h4 class="theme-subheading" id="the-code">The code</h4>
 <pre class="prettyprint">
 package main
@@ -22,29 +21,29 @@ func main() {
 func countNQueenSolution(n int) int {
     var count int
     count = 0
-    
+
     var done int
     done = int(math.Pow(2, float64(n))) -1
-    
+
     var recursion func(ld int, col int, rd int)
-    
+
     recursion = func(ld int, col int, rd int) {
         if col == done {
             count++
             return
         }
-        
+
         poss := ^(ld | col | rd)
-        
+
         for poss & done > 0 {
             bit := poss & -poss
             poss -= bit
             recursion((ld|bit)>>1, col|bit, (rd|bit)<<1)
         }
     }
-    
+
     recursion(0, 0, 0)
-    
+
     return count
 }
 </pre>
@@ -55,28 +54,33 @@ func countNQueenSolution(n int) int {
     <li>for N = 8, <code>ld</code> having a value of <code>00011000</code> at row 5 would mean that the top-left-to-bottom-right diagonals that pass through columns 4 and 5 of that row are already occupied by queens</li>
 </ul>
 <pre class="prettyprint">
-    var done int
-    done = int(math.Pow(2, float64(n))) -1
+var done int
+done = int(math.Pow(2, float64(n))) -1
 </pre>
-<p class="text-left">The algorithm will not break the chess rules, that means it doesn't place queen on the same 
-    row / column / diagonal with any other queen. So when every place in row is taken - the <code>col</code> variable has each of its bits set to <code>1</code> - we found one of the solutions. 
-    The <code>done</code> variable is used for this. If N = 4, we set its value to <code>2<sup>4</sup> - 1</code> = <code>15</code> = <code>1111</code> in binary.</p>
+<p class="text-left">The algorithm will not break the chess rules, that means it doesn't place queen on the same row / column / diagonal with any other queen. So when every place in row is taken - the <code>col</code> variable has each of its bits set to <code>1</code> - we found one of the solutions. The <code>done</code> variable is used for this. If N = 4, we set its value to <code>2<sup>4</sup> - 1</code> = <code>15</code> = <code>1111</code> in binary.</p>
 <pre class="prettyprint">
-        if col == done {
-            count++
-            return
-        }
+if col == done {
+    count++
+    return
+}
 </pre>
 <p class="text-left">Here is the condition to check if we found one of the solutions. If each column is occupied, then <code>col</code> = <code>1111</code> and it corresponds to <code>done</code> value ( for N = 4 ).</p>
 <pre class="prettyprint">
-        poss := ^(ld | col | rd)
+poss := ^(ld | col | rd)
 </pre>
-<p class="text-left"></p>
+<p class="text-left">In <code>ld</code>, <code>col</code> and <code>rd</code> are the queens positions for current row. When doing OR, we get all under attack positions in that row. Then negate (<code>^</code>) it to get free positions.</p>
+<pre class="prettyprint">
+bit := poss & -poss
+poss -= bit
+</pre>
+<p class="text-left">Get the first available position and mark that position as taken in the current row.</p>
+<pre class="prettyprint">
+recursion((ld|bit)>>1, col|bit, (rd|bit)<<1)
+</pre>
+<p class="text-left">Move to next row. So you shift diagonals and mark new position in <code>col</code> variable.</p>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
-<p class="text-left"></p>
+<p class="text-left">When you have some problem to solve, it is good to try and solve it your way ( if you have time of course ) and then look for another solution(s) so you can compare it and learn something.</p>
 <h4 class="theme-subheading" id="references">References</h4>
 <p class="text-left"><a href="https://en.wikipedia.org/wiki/Eight_queens_puzzle">Eight queens puzzle</a> on Wikipedia with problem's history, solutions and related problems.</p>
-<p class="text-left"><a href="http://gregtrowbridge.com/a-bitwise-solution-to-the-n-queens-problem-in-javascript/"></a></p>
-<p class="text-left"><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.51.7113&rep=rep1&type=pdf"></a></p>
-
-
+<p class="text-left">Original post, <a href="http://gregtrowbridge.com/a-bitwise-solution-to-the-n-queens-problem-in-javascript/">A bitwise solution to the N queens problem in JavaScript</a>, which I found and rewrote.</p>
+<p class="text-left">PDF <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.51.7113&rep=rep1&type=pdf">Backtracking Algorithms in MCPL using Bit Patterns and Recursion</a> by Martin Richards, where you can find more informations.</p>
