@@ -1,0 +1,77 @@
+<p class="text-left">Maybe you know the situation when you deploy some page, check it fastly and go away from the office feeling good about your job done. Then a colleague calls you and you hear "What did you do? It is not working!".</p>
+<h2 class="theme-subheading" id="regression-test-with-screen-difference">Regression test with screen difference</h2>
+<p class="text-left">The same thing happend to me. I depolyed a project, look at it and everything seems to be ok. But a few minutes ( maybe hour+ ) later a colleague called me, that some images are missing on the page. So I went back to the office and fixed it. Fortunatelly, it wasn't any critical error or page with lot of traffic.</p>
+<p class="text-left">Later I was thinking how to prevent from such situations. I remembered I saw a video where somebody make a mistake and added a pony on a page and deployed it.</p>
+<h4 class="theme-subheading" id="the-secret-to-safe-continuous-deployment">The Secret to Safe Continuous Deployment</h4>
+<p class="text-left">Here is the video, where they suggest to take a screenshot before deploy and after deploy. Then a visual diff is created and calculated and you can see what changed.</p>
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-6 col-xs-12">
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/UMnZiTL0tUc"></iframe>
+        </div>
+    </div>
+</div>
+<h4 class="theme-subheading" id="install-tools">Install tools</h4>
+<p class="text-left">You need to install a few tools which are used later. First is <strong>PhantomJS</strong>, which is <i>headless WebKit with a JavaScript API</i>. You can download it <a href="http://phantomjs.org/download.html">here</a> but it is available as <a href="https://www.npmjs.com/package/phantomjs">npm package</a> too.</p>
+<div class="alert alert-info" role="alert">I assume you know about <a herf="https://nodejs.org/en/">Node.js</a> and <a href="https://www.npmjs.com/">NPM</a> and how to use it.</div>
+<pre>
+$ sudo npm install -g phantomjs
+</pre>
+<p class="text-left">Now, you should have the <kbd>$ phantomjs</kbd> command available in your terminal. Then you need two other tools, <strong>image-diff</strong> which depends on <strong>ImageMagick</strong>.</p>
+<pre>
+$ sudo apt-get install imagemagick
+
+$ sudo npm install -g image-diff
+</pre>
+<h4 class="theme-subheading" id="take-a-screenshot-of-a-website">Take a screenshot of a website</h4>
+<p class="text-left">And here is the magic part. Create a JavaScript file, for example <i>screen1.js</i> and paste there the code below :</p>
+<pre class="prettyprint">
+var page = require('webpage').create();
+page.viewportSize = { width: 1024, height: 768 };
+page.open('https://www.juffalow.com/', function() {
+  page.render('juffalow.png');
+  phantom.exit();
+});
+</pre>
+<p class="text-left">Run this code with command <kbd>$ phantomjs screen1.js</kbd> and a new <i>juffalow.png</i> file will be created in your current directory. Then write another JavaScript, <i>screen2.js</i> :</p>
+<pre class="prettyprint">
+var page = require('webpage').create();
+page.viewportSize = { width: 1024, height: 768 };
+page.open('https://en.juffalow.com/', function() {
+  page.render('en-juffalow.png');
+  phantom.exit();
+});
+</pre>
+<p class="text-left">Thisone will load english part of this site and saves it to <i>en-juffalow.png</i>. Here are the screenshots at time I was writing this :</p>
+<div class="row">
+    <div class="col-lg-3 col-lg-offset-3 col-md-6 col-sm-6 col-sx-12"><a href="https://en.juffalow.com/wp-content/uploads/2016/10/juffalow.png" class="thumbnail" data-gallery><img class="lazy" alt="juffalow website screenshot" data-original="https://en.juffalow.com/wp-content/uploads/2016/10/juffalow.png" /></a></div>
+    <div class="col-lg-3 col-md-6 col-sm-6 col-sx-12"><a href="https://en.juffalow.com/wp-content/uploads/2016/10/en-juffalow.png" class="thumbnail" data-gallery><img class="lazy" alt="en juffalow website screenshot" data-original="https://en.juffalow.com/wp-content/uploads/2016/10/en-juffalow.png" /></a></div><div class="col-lg-3 hidden-md"></div>
+</div>
+<h4 class="theme-subheading" id="calculate-the-diff">Calculate the diff</h4>
+<p class="text-left">When you have both screenshots ready, you can go to the last step. Run the following command where the first two arguments are the names of the screenshots and the third is name of diff image which it creates :</p>
+<pre>
+$ image-diff juffalow.png en-juffalow.png diff.png
+
+$ echo $? // prints 1
+</pre>
+<p class="text-left">The images doesn't match, so it prints <i>1</i> and you can see new image, where the different pixels are highlighted with red color.</p>
+<div class="row">
+    <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-sx-12"><a href="https://en.juffalow.com/wp-content/uploads/2016/10/diff.png" class="thumbnail" data-gallery><img class="lazy" alt="diff between juffalow and en juffalow" data-original="https://en.juffalow.com/wp-content/uploads/2016/10/diff.png" /></a></div>
+</div>
+<p class="text-left">The same can be achieved with JavaScript. The advantage is it prints percentage difference between the images. If you want to try it, you have to install image-diff locally as node module. ( Little "hack" : link the global package with <kbd>$ npm link image-diff</kbd> ). And here is <i>diff.js</i> file :</p>
+<pre class="prettyprint">
+var imageDiff = require('image-diff');
+imageDiff.getFullResult({
+    actualImage: 'en-juffalow.png',
+    expectedImage: 'juffalow.png',
+    diffImage: 'diff.png',
+}, function (err, result) {
+    console.log(result); // prints { total: 19885.8, percentage: 0.303438 }
+});
+</pre>
+<p class="text-left">This can be run with just node : <kbd>$ node diff.js</kbd>.</p>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">You can do a lot more with these tools. For example include jQuery and fire some button click function and test it if does what it should, etc. Now, when I add it before and after deploy process, I can olny look what changed and see if it is what I wanted to change. Or, in the worse case, see what's got broken.</p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p>PhantomJS on <a href="https://github.com/ariya/phantomjs">GitHub</a> and its official <a href="http://phantomjs.org/">page</a>.</p>
+<p>The <a href="https://github.com/uber/image-diff">image-diff</a> module.</p>

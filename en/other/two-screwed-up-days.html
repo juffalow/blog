@@ -1,0 +1,23 @@
+<p class="text-left">Maybe 2 months ago I inherited one "pure HTML" project. To be clear, it is many HTML parts and one big Grunt task, that builds everythings together. Cool, but...</p>
+<h2 class="theme-subheading" id="npm-package-manager">NPM package manager</h2>
+<p class="text-left">I edited a few things, add something and then it came. I called <code>grunt build</code>. ( Of course I installed everything with <code>npm install</code> before. ) Local Npm module *** not found. So somehow, the previous developer has it there whithout having it in <i>package.json</i>. I installed couple modules, no problem.</p>
+<h4 class="theme-subheading" id="jenkins-job">Jenkins job</h4>
+<p class="text-left">Build on my machine was successful. I moved everything on the server. Done. I decided to create a Jenkins job for this ( need to copy several directories to various directories ). This should go fast, I created a few jobs before, therefore this is only "copy & paste".</p>
+<p class="text-left">Job is running...and few moments later, <i>Error</i>. NPM cannot istall on sub-module. I checked Node and NPM version on my local machine with server where Jenkins job is running. Everything is ok and versions are the same.</p>
+<h4 class="theme-subheading" id="not-working-solution">Not working solution</h4>
+<p class="text-left">Let's try to remove everything, <code>rm -Rf ./node_modules</code> and <code>rm -Rf $HOME/.npm</code>. Run <code>npm install</code> directly from terminal. And voila, it's working. At least, I thought so. I run the job again and it failed. Wtf? I was getting angry.</p>
+<p class="text-left">The day continued and I was trying nearly everything. Changed the module version, remove everything, installed it back, and so on. Nothnig helped. I went back and read the output of the working attemmpt.</p>
+<h4 class="theme-subheading" id="postinstall-script">Postinstall script</h4>
+<p class="text-left">The only difference was, that in that case, NPM run postinstall script. It did the same on my computer. I gave it another chance. During one experiment it run it again. Unfortunately I realy don't know why and hen it is running that command / script and how to force it to do that.</p>
+<p class="text-left">Realy angry I wanted some break. Badminton should be ok.</p>
+<h2 class="theme-subheading" id="yarn">Yarn</h2>
+<p class="text-left">Next day, full o will, I came to work. I remembered, Facebook published its own package manager - <a href="https://yarnpkg.com/">Yarn</a>. Back to the beginning.</p>
+<p class="text-left">Executing <code>yarn</code> and waiting for the response. The output is different to NPM, but it was doing something in the end, probably the "post script". So I run it again to see if it does it always or it was coincidence. Coincidence.</p>
+<h4 class="theme-subheading" id="solution">Solution</h4>
+<p class="text-left">I had to gave up. That module is corrupted and I don't know how to fix it. Next step : open <i>Gruntfile.js</i> and see what is going on. Guess what? The main option for that module was missing. So practically it was doing nothing. Yes!</p>
+<h2 class="theme-subheading" id="conclusioh">Conclusion</h2>
+<p class="text-left">You may think this is pointless and the whole post is just rubbish. But read on...</p>
+<p class="text-left">When it was the lucky time and the build was successful with NPM, it tooks 28 seconds. With Yarn, it fell down to 18 seconds. It is obvious, because Yarn has golbal cache directory. It doesn't have to download anything more than once. For this reason, you can use it offline either. And I like the idea of lockfile it generates after install, to ensure that every install results in the exact same file structure in <i>node_modules</i>.</p>
+<p class="text-left">This is the end of the sadly happy story. Thanks for the reading.</p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p><a href="https://code.facebook.com/posts/1840075619545360">Yarn: A new package manager for JavaScript</a> post, which was on Hacker News, where I originally read it.</p>
