@@ -1,7 +1,7 @@
 <p class="text-left">Maybe you know the situation when you deploy some page, check it fastly and go away from the office feeling good about your job done. Then a colleague calls you and you hear "What did you do? It is not working!".</p>
 <h2 class="theme-subheading" id="regression-test-with-screen-difference">Regression test with screen difference</h2>
-<p class="text-left">The same thing happend to me. I depolyed a project, look at it and everything seems to be ok. But a few minutes ( maybe hour+ ) later a colleague called me, that some images are missing on the page. So I went back to the office and fixed it. Fortunatelly, it wasn't any critical error or page with lot of traffic.</p>
-<p class="text-left">Later I was thinking how to prevent from such situations. I remembered I saw a video where somebody make a mistake and added a pony on a page and deployed it.</p>
+<p class="text-left">The same thing happend to me. I deployed a project, looked at it and everything seemed to be ok. But a few minutes ( maybe hour+ ) later a colleague called me, that some images are missing on the page. So I went back to the office and fixed it. Fortunatelly, it wasn't any critical error or a page with lot of traffic.</p>
+<p class="text-left">Later I was thinking how to prevent from such situations. I remembered I saw a video where somebody made a mistake and added a pony on a page and deployed it.</p>
 <h4 class="theme-subheading" id="the-secret-to-safe-continuous-deployment">The Secret to Safe Continuous Deployment</h4>
 <p class="text-left">Here is the video, where they suggest to take a screenshot before deploy and after deploy. Then a visual diff is created and calculated and you can see what changed.</p>
 <div class="row">
@@ -42,7 +42,7 @@ page.open('https://en.juffalow.com/', function() {
   phantom.exit();
 });
 </pre>
-<p class="text-left">Thisone will load english part of this site and saves it to <i>en-juffalow.png</i>. Here are the screenshots at time I was writing this :</p>
+<p class="text-left">Thisone will load english part of this site and saves it to <i>en-juffalow.png</i>. Here are the screenshots at the time I was writing this :</p>
 <div class="row">
     <div class="col-lg-3 col-lg-offset-3 col-md-6 col-sm-6 col-sx-12"><a href="https://en.juffalow.com/wp-content/uploads/2016/10/juffalow.png" class="thumbnail" data-gallery><img class="lazy" alt="juffalow website screenshot" data-original="https://en.juffalow.com/wp-content/uploads/2016/10/juffalow.png" /></a></div>
     <div class="col-lg-3 col-md-6 col-sm-6 col-sx-12"><a href="https://en.juffalow.com/wp-content/uploads/2016/10/en-juffalow.png" class="thumbnail" data-gallery><img class="lazy" alt="en juffalow website screenshot" data-original="https://en.juffalow.com/wp-content/uploads/2016/10/en-juffalow.png" /></a></div><div class="col-lg-3 hidden-md"></div>
@@ -54,7 +54,7 @@ $ image-diff juffalow.png en-juffalow.png diff.png
 
 $ echo $? // prints 1
 </pre>
-<p class="text-left">The images doesn't match, so it prints <i>1</i> and you can see new image, where the different pixels are highlighted with red color.</p>
+<p class="text-left">The images don't match, so it prints <i>1</i> and you can see new image, where the different pixels are highlighted with red color.</p>
 <div class="row">
     <div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-sx-12"><a href="https://en.juffalow.com/wp-content/uploads/2016/10/diff.png" class="thumbnail" data-gallery><img class="lazy" alt="diff between juffalow and en juffalow" data-original="https://en.juffalow.com/wp-content/uploads/2016/10/diff.png" /></a></div>
 </div>
@@ -71,7 +71,7 @@ imageDiff.getFullResult({
 </pre>
 <p class="text-left">This can be run with just node : <kbd>$ node diff.js</kbd>.</p>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
-<p class="text-left">You can do a lot more with these tools. For example include jQuery and fire some button click function and test it if does what it should, etc. Now, when I add it before and after deploy process, I can olny look what changed and see if it is what I wanted to change. Or, in the worse case, see what's got broken.</p>
+<p class="text-left">You can do a lot more with these tools. For example include jQuery and fire some button click function and test if it does what it should, etc. Now, when I add it before and after deploy process, I can only look what changed and see if it is what I wanted to change. Or, in the worse case, see what's got broken.</p>
 <h4 class="theme-subheading" id="references">References</h4>
 <p>PhantomJS on <a href="https://github.com/ariya/phantomjs">GitHub</a> and its official <a href="http://phantomjs.org/">page</a>.</p>
 <p>The <a href="https://github.com/uber/image-diff">image-diff</a> module.</p>
