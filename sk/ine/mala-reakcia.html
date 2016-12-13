@@ -1,0 +1,32 @@
+<p class="text-left">Vcera bola jedna z prednasok skupiny <a href="https://www.facebook.com/groups/webup/">Web Up</a>, ktoru som, bohuzial, nestihol. Jeden z prednasajucich zverejnil svoju prednasku a ku nej aj priklady.</p>
+<h2 class="theme-subheading" id="co-sa-mi-nepaci">Co sa mi (ne)paci</h2>
+<p class="text-left">Je super, ze sa rozbiehaju taketo prednasky a "talky", kde sa sharuju skusenosti programatorov. Treba si navzajom pomahat a tahat sa dopredu + ak sa zucastnia nejaki studenit, o to lepsie. Uvidia na com a s cim sa pracuje v roznych firmach, pripadne sa uz mozu dopredu rozhodovat, kam by asi tak chceli ist.</p>
+<h4 class="theme-subheading" id="to-horsie">To horsie</h4>
+<p class="text-left">Castokrat, ked aj na nete nieco hladam, najdem postup, ktory sice vyriesi moj problem, ale uz na pohlad zlym sposobom. Samozrejme, kazdy sa uci a zdokonaluje. Jedna z moznosti je, pisat si blog alebo zdielat svoj kod ci uz na GitHub-e alebo na StackOverflow a citat reakcie ludi. Ale pokial ignorujeme "feedback", neposuvame sa dalej a stale opakujeme tie iste chyby, nieco je zle. A zdielanim tychto zlych postupov neposuvame nasich buducich kolegov vpred ani o kusok.</p>
+<p class="text-left">Ak idem o niecom pisat, precitam k danej teme viacero clankov, vyskusam si to a po dopisani urobim "alfa test" -> text odoslem par znamym, ktori by mi k tomu mohli dat nejake kratke "review". Ci im text dava zmysel, ci v postupe alebo priamo v kode nevidia nejaky zadrhel a podobne.</p>
+<h4 class="theme-subheading" id="k-veci">K veci</h4>
+<p class="text-left">Otvoril som si teda <a href="https://github.com/rostacik/webUP4tsdemo">materialy</a> k teme <i>TypeScript</i>. Presiel som do nahodneho subora <a href="https://github.com/rostacik/webUP4tsdemo/blob/master/src/mathHelper.ts">mathHelper.ts</a> a pozeram na to.</p>
+<p class="text-left">Nasledujuca podmienka je v danej triede 3x, co znamena, ze autor nepozna jeden z hlavnych principov - <a href="https://en.wikipedia.org/wiki/Don't_repeat_yourself">DRY ( Don't Repeat Yourself )</a> :</p>
+<pre class="prettyprint">
+if ((param1) && (is.number(param1) && (param2) && (is.number(param2)))) {
+</pre>
+<p class="text-left">Nevadi, kod ma sluzit ako ukazka a vsetko je ok. Vyuzitie kniznice <a href="http://is.js.org/">is.js</a> mi ale tiez nepride ako najlepsi napad. Preco? Nie je to tak davno, co sa rozhodol jeden z open source programatorov <a href="https://medium.com/@azerbike/i-ve-just-liberated-my-modules-9045c06be67c#.koxs0fbwb">stiahnut svoje moduly</a> z NPM. Kvoli jednemu z nich, ktory nerobil nic zlozite a mal 11 riadkov padlo hodne vela projektov. Oplatilo sa pre 11 riadkov pridavat takuto zavislost? <a href="http://www.haneycodes.net/npm-left-pad-have-we-forgotten-how-to-program/">Tu</a> je jedna z kratkych reakcii ku tejto teme.</p>
+<p class="text-left"><a href="https://en.wikipedia.org/wiki/KISS_principle">V jednoduchosti je krasa</a> a tu mi hned udrie do oci vsadepritomna podmienka :</p>
+<pre class="prettyprint">
+if ((param1) && (is.number(param1) && (param2) && (is.number(param2)))) {
+    return param1 + param2;
+} else {
+    throw new Error("mathHelper - add - empty or non numbers specified");
+}
+</pre>
+<p class="text-left">Ak sa mi nieco nepaci, vyhodim chybu, ak je to ok, tak len spravim co mam. Preferoval by som teda maly "code refactoring" :</p>
+<pre class="prettyprint">
+if (!((param1) && (is.number(param1) && (param2) && (is.number(param2))))) {
+    throw new Error("mathHelper - add - empty or non numbers specified");
+}
+return param1 + param2;
+</pre>
+<p class="text-left">Najlepsie by bolo vyhodit podmienku do vlastnej metody. Dovod? Metoda by mala robit jednu vec, tato robi dve ( zistuje ci je vstup cislo a scituje ).</p>
+<p class="text-left">A posledna vec, co sa uz netyka kodu ale temy ako takej. Ked je uz ten TypeScript taky dobry, preco po urceni typu, musim aj tak tento typ overovat? Hmm...</p>
+<h2 class="theme-subheading" id="zaver">Záver</h2>
+<p class="text-left">Tymto nechcem na autora prezentacie ziadno utocit - samotna prezentacia mohla byt dobra. Jedna sa mi len o to, ze vsade podhadzujeme <i>priklady</i>, ktore sice mozu byt k veci, ale zaroven ucia posluchacov / citatelov prehliadat tieto "nedostatky".</p>
