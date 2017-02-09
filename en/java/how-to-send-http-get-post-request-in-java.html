@@ -1,0 +1,164 @@
+<p class="text-left">This post describes how to make HTTP GET and POST request on server. I will use <a href="https://github.com/Runscope/httpbin">httpbin</a> server for testing. It returns you everything you send there : query params, post data, headers, etc.</p>
+<h2 class="theme-subheading" id="http-get-request">HTTP GET request</h2>
+<p class="text-left"></p>
+<pre class="prettyprint">
+package httpclientexample;
+
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+//import javax.net.ssl.HttpsURLConnection;
+
+public class HttpClientExample {
+
+    public static void main(String[] args) {
+        try {
+            HttpClientExample hce = new HttpClientExample();
+            String body = hce.get("http://httpbin.org/get");
+            System.out.println(body);
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public String get(String getUrl) throws IOException {
+        URL url = new URL(getUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+
+        return this.read(con.getInputStream());
+    }
+
+    private String read(InputStream is) throws IOException {
+        BufferedReader in = null;
+        String inputLine;
+        StringBuilder body;
+        try {
+            in = new BufferedReader(new InputStreamReader(is));
+
+            body = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                body.append(inputLine);
+            }
+            in.close();
+
+            return body.toString();
+        } catch(IOException ioe) {
+            throw ioe;
+        } finally {
+            this.closeQuietly(in);
+        }
+    }
+
+    protected void closeQuietly(Closeable closeable) {
+        try {
+            if( closeable != null ) {
+                closeable.close();
+            }
+        } catch(IOException ex) {
+
+        }
+    }
+}
+
+</pre>
+<h2 class="theme-subheading" id="http-post-request">HTTP POST request</h2>
+<p class="text-left"></p>
+<pre class="prettyprint">
+package httpclientexample;
+
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+//import javax.net.ssl.HttpsURLConnection;
+
+public class HttpClientExample {
+
+    public static void main(String[] args) {
+        try {
+            HttpClientExample hce = new HttpClientExample();
+            String body = hce.post("http://httpbin.org/post", "data=test data");
+            System.out.println(body);
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public String post(String postUrl, String data) throws IOException {
+        URL url = new URL(postUrl);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("POST");
+
+        con.setDoOutput(true);
+
+        this.sendData(con, data);
+
+        return this.read(con.getInputStream());
+    }
+
+    protected void sendData(HttpURLConnection con, String data) throws IOException {
+        DataOutputStream wr = null;
+        try {
+            wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(data);
+            wr.flush();
+            wr.close();
+        } catch(IOException exception) {
+            throw exception;
+        } finally {
+            this.closeQuietly(wr);
+        }
+    }
+
+    private String read(InputStream is) throws IOException {
+        BufferedReader in = null;
+        String inputLine;
+        StringBuilder body;
+        try {
+            in = new BufferedReader(new InputStreamReader(is));
+
+            body = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                body.append(inputLine);
+            }
+            in.close();
+
+            return body.toString();
+        } catch(IOException ioe) {
+            throw ioe;
+        } finally {
+            this.closeQuietly(in);
+        }
+    }
+
+    protected void closeQuietly(Closeable closeable) {
+        try {
+            if( closeable != null ) {
+                closeable.close();
+            }
+        } catch(IOException ex) {
+
+        }
+    }
+}
+</pre>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">If you need to send additional headers, for example when you want to upload JSON data, just use <code>setRequestProperty</code>. It takes header field name and it's value as parameters.</p>
+<pre class="prettyprint">
+    ...
+    con.setRequestProperty("Content-Type", "application/json");
+    ...
+</pre>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="http://httpbin.org/">httpbin : HTTPS Request &amp; Response</a> page for testing HTTP client</p>
