@@ -1,0 +1,39 @@
+<p class="text-left">I needed to create a simple server, that would have one "public" route <code>/login</login> and other routes are available only for users with valid <a href="https://jwt.io/">JWT</a> token.</p>
+<h2 class="theme-subheading" id="example-project-step-by-step">Example project step by step</h2>
+<p class="text-left">I count that you are familiar with Node.js and JavaScript.</p>
+<h4 class="theme-subheading" id="create-new-project">Create new project</h4>
+<p class="text-left">Let's create a directory for our project :</p>
+<pre class="prettyprint">
+$ mkdir express-jwt-example
+</pre>
+<p class="text-left">We are going to work with Node, so we have to create <i>package.json</i> file, or better, initialize new project :</p>
+<pre class="prettyprint">
+# jump into project directory
+$ cd experss-jwt-example
+
+# initialize project ( you may use npm init )
+$ yarn init
+</pre>
+<p class="text-left">This will ask you a bunch of questions and than it creates <i>package.json</i> file.</p>
+<h4 class="theme-subheading" id="add-dependencies">Add dependencies</h4>
+<p class="text-left">We are going to work with exress and jwt, so you have to install two packages, <code>exress</code> and <code>jsonwebtoken</code> :</p>
+<pre class="prettyprint">
+yarn add express jsonwebtoken
+
+# or if you use npm
+npm install express jsonwebtoken
+</pre>
+<h4 class="theme-subheading" id="directory-structure">Directory structure</h4>
+<pre>
+express-jwt-example/
+    controllers/
+
+    middlewares/
+        auth.js
+    index.js
+    package.json
+</pre>
+<h4 class="theme-subheading" id="directory-structure">Directory structure</h4>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<h4 class="theme-subheading" id="references">References</h4>
+<p><a href=""></a></p>

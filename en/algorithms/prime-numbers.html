@@ -60,7 +60,41 @@ func isPrime(n int) bool {
 <div class="alert alert-info" role="alert">There are many numbers, for which all values of a &lt; n satisfies the condition. These numbers are known as <a href="https://en.wikipedia.org/wiki/Carmichael_number">Carmichael numbers</a> and they are substantially rarer than prime numbers.</div>
 <h4 class="theme-subheading" id="fermat-method-java">Java</h4>
 <pre class="prettyprint">
+boolean isPrime(int n){
+    int x;
 
+    if (n <= 1 || n == 4)  return false;
+    if (n <= 3) return true;
+
+    for( int i = 0; i < 10; i++ ) {
+        x = 1 + (int)(Math.random() * (n - 1));
+
+        if ( moduloPower(x, n - 1, n) != 1 ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+/**
+ * Calculate (base ^ exponent) % modulus
+ * Uses Modular Exponentation, or better exponentation by squaring
+ * ( also known as binary exponentation )
+ */
+int moduloPower(int base, int exponent, int modulus) {
+    int result = 1;
+    base = base % modulus;
+
+    while( exponent > 0 ) {
+        if((exponent & 1) == 1) {
+            result = (result * base) % modulus;
+        }
+
+        exponent = exponent >> 1;
+        base = (base * base) % modulus;
+    }
+    return result;
+}
 </pre>
 <h4 class="theme-subheading" id="fermat-method-go">Go</h4>
 <pre class="prettyprint">
@@ -126,6 +160,7 @@ func sieveOfEratosthenes(n int) []int {
 <p><a href="http://www.geeksforgeeks.org/primality-test-set-2-fermet-method/">GeeksforGeeks - Primality Test | Set 2 (Fermat Method)</a></p>
 <p><a href="https://en.wikipedia.org/wiki/Fermat_primality_test">Wikipedia - Fermat primality test</a></p>
 <p><a href="https://en.wikipedia.org/wiki/Fermat's_little_theorem">Wikipedia - Fermat's little theorem</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Modular_exponentiation">Wikipedia - Modular exponentiation</a></p>
 <p><a href="http://www.geeksforgeeks.org/primality-test-set-3-miller-rabin/">GeeksforGeeks - Primality Test | Set 3 (Miller–Rabin)</a></p>
 <p><a href="https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test">Wikipedia - Miller-Rabin primality test</a></p>
 <p><a href="http://www.geeksforgeeks.org/sieve-of-eratosthenes/">GeeksforGeeks - Sieve of Eratosthenes</a></p>

@@ -1,0 +1,172 @@
+<p class="text-left">No doubt that you worked on some project where you spread CSS and JavaScript things into several files to have order and overview. But than a problem occurs. You have to add individual scripts one by one into html header. Then it looks like this :</p>
+<pre class="prettyprint">
+&lt;head&gt;
+    ...
+    &lt;link href="file1.css" rel="stylesheet"&gt;
+    &lt;link href="file2.css" rel="stylesheet"&gt;
+    &lt;link href="file3.css" rel="stylesheet"&gt;
+
+    &lt;script src="file1.js"&gt;&lt;/script&gt;
+    &lt;script src="file2.js"&gt;&lt;/script&gt;
+    ...
+&lt;/head&gt;
+</pre>
+<p class="text-left">A simple solution can be manually and laboriously merging files, what is boring and you have to do it after any change. Or you can use a <strong>task manager</strong>, which would take care of everything. Of course there are many task managers. The most known among all are <strong>Grunt</strong> and <strong>Gulp</strong>.</p>
+<h4 class="theme-subheading" id="what-is-it-capable-to-do">What is it capable to do?</h4>
+<p class="text-left">One can say whatever is necessary. From merging files, minifying, moving to testing functions and tracking file changes. There are lot of available modules like this and in case there is none for what is needed, it is not hard to create your own.</p>
+<h4 class="theme-subheading" id="installation">Installation</h4>
+<p class="text-left">Grunt and its plugins are installed via <strong><a href="https://www.npmjs.com/">NPM</a></strong> package manager for  <strong><a href="https://nodejs.org/" target="_blank">Node.js</a></strong></p>
+<pre>
+npm install -g grunt-cli
+</pre>
+<p class="text-left">Parameter <code>-g</code> installs package <code>grunt-cli</code> globally and you may need to use <kbd>sudo</kbd> to successfully run the installation, or in Windows run command shell as Administrator. </p>
+<p class="text-left"><b>Beware!</b> This is some kind of launcher for Grunt. It, itself, is located in project folder next to the configuration file <i>Gruntfile</i> along with other dependencies.</p>
+<h2 class="theme-subheading" id="project-grunttest-as-example">Project <small>GruntTest</small> as example</h2>
+<p class="text-left">The easiest and most appropriate way is to show it on example. No need to start anything complicated and big for beginning. Let's have a project which will have two main JavaScript files. One is <code>maths.js</code>, where are functions <code>sum</code>, <code>subtract</code> and second is <code>text.js</code> with functions <code>convertToUpperCase</code> and <code>convertToLowerCase</code>. On the page, everything should be in one file, without any unnecessary characters or comments. To see, which files are intended for development and which for production, the directory tree will look like this :</p>
+<div class="well">
+<ul>
+    <li>src ( <i>source code</i> )
+        <ul>
+            <li>maths.js</li>
+            <li>text.js</li>
+        </ul>
+    </li>
+    <li>www ( <i>clean code for production</i> )
+        <ul>
+            <li>index.html</li>
+            <li>js
+                <ul>
+                    <li>grunttest.min.js ( <i>final javascript</i> )</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+<h4 class="theme-subheading" id="subor-pakcage-json">File <small>package.json</small>, informations about the project and dependencies</h4>
+<p class="text-left">File <i>package.json</i> belongs in the project root directory and it holds project metadata and dependencies. You can create it using NPM - with command <kbd>npm init</kbd>. It asks for project name, version, author, etc. and accordingly generates basic <i>package.json</i> file.</p>
+<pre class="prettyprint">
+{
+  "name": "GruntTest",
+  "version": "1.0.0",
+  "description": "Test project",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matej 'juffalow' Jellus",
+  "license": "ISC"
+}
+</pre>
+<p class="text-left">This would be a basic file without any dependencies. But the task description says there should be only one, minimized file. I.e. you need to find such a plugin that will merge files into one and another that will erase everything superfluous. List of these plugins could be found on official webpage <a href="http://gruntjs.com/plugins" target="_blank">Grunt Plugins</a>.</p>
+<p class="text-left">After a short look at the basic plugin offer, it is clear that <i>contrib-concat</i> with definition "concatenate files" and <i>contrib-uglify</i> with definition "minify files" are meeting the requirements. Thus these two plugins add as dependency into <i>package.json</i>. Now it looks like this :</p>
+<pre class="prettyprint">
+{
+  "name": "GruntTest",
+  "version": "1.0.0",
+  "description": "Test project",
+  "author": "Matej 'juffalow' Jellus",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-concat": "~0.5.1",
+    "grunt-contrib-uglify": "~0.5.0"
+  }
+}
+</pre>
+<h4 class="theme-subheading" id="installing-grunt-and-plugins">Installing Grunt and plugins</h4>
+<p class="text-left">Each project can use different version of Grunt and different plugins. If you want to install all dependencies at once, just run command :</p>
+<pre>
+npm install
+</pre>
+<p class="text-left">It will download all needed packages and saves them in subdirectory <i>node_modules</i> in project directory. Among them is also Grunt itself, which is executed from the console with the command <kbd>grunt</kbd>.</p>
+<h4 class="theme-subheading" id="file-gruntfile-js-and-task-creating">File <small>Gruntfile.js</small> and task creating</h4>
+<p class="text-left">This file belongs to the project root directory either. There are defined and configured tasks to be executed by Grunt. It consist of 4 main parts</p>
+<ul>
+    <li>main function - wraps whole functionality, i.e. whole Grunt code must be defined inside it</li>
+    <li>configuration - all plugins require at least basic settings, for example if they are to merge files, there has to be defined a directory where the files are and path to the output file</li>
+    <li>load plugins - plugins, which are used must be loaded first ( something like <i>include</i> )</li>
+    <li>tasks - task names and plugins to them, which have to be run</li>
+</ul>
+<p class="text-left"><i>Gruntfile.js</i>, which will solve the problem could be written as follows :</p>
+<pre class="prettyprint">
+// main function
+module.exports = function(grunt) {
+
+  // configuration
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    concat: { // plugin, which is concatenating files
+      options: {
+        separator: ';'
+      },
+      dist: {
+        src: ['src/*.js'], // the input are all .js files in src directory
+        dest: 'src/temp/<%= pkg.name %>.js' // output is one file named like the project ( defined in file package.json -> name )
+      }
+    },
+    uglify: { // plugin, which minify files
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
+      build: {
+        src: '<%= concat.dist.dest %>', // the input is the output file from concat plugin
+        dest: 'www/js/<%= pkg.name %>.min.js' // output is minify file in production directory
+      }
+    }
+  });
+
+  // load plugins
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+
+  // default task
+  // plugins are executed in the order they are defined here
+  grunt.registerTask('default', ['concat', 'uglify']);
+
+};
+</pre>
+<p class="text-left">When everything is prepared and ready, you only have to run the command <kbd>grunt</kbd>, which if is typed without parameter it does only default task - in this case the first step is to concatenate all <i>.js</i> files from directory <i>src</i> into one file <i>GruntTest.js</i> in directory <i>/src/temp</i>. After that the minify plugin is run. It will get the output file from concatenation as input ( <b>caution!</b> because it is defined this way, the concat plugin must be executed before minimization! ). It deletes all redundant white characters + comments and creates ugly / hard to read single line code. This output is then saved into <i>www/js/</i> directory.</p>
+<h2 class="theme-subheading" id="cleaning-up-the-project">Cleaning up the project</h2>
+<p class="text-left">An extra file was created when concatenating javascripts. As the project grows, there can occur more such files, or simply files to be deleted from time to time. You can create another task for this and its job would be removing these files.</p>
+<h4 class="theme-subheading" id="adding-a-new-plugin">Adding a new plugin</h4>
+<p class="text-left">One of the ways to add new plugin is to write it into <i>package.json</i> as a new dependency and run command <kbd>npm install</kbd>. Alternatively, or maybe simpler, way is to run command for installing particular plugin with parameter <code>--save-dev</code>, which downloads the plugin and also write it into <i>package.json</i> itself.</p>
+<pre>
+npm install &lt;module&gt; --save-dev
+</pre>
+<p class="text-left">So back to <a href="http://gruntjs.com/plugins" target="_blank">grunt plugins</a> page, where you have to find something what erases files / directories. The <i>contrib-clean</i> with description "clean files and folders" should manage it.</p>
+<pre>
+npm install grunt-contrib-clean --save-dev
+</pre>
+<h4 class="theme-subheading" id="creating-new-task">Creating new task</h4>
+<p class="text-left">Plugin added, inscribed in dependencies, leaves only configuration and creating the task in <i>Gruntfile.js</i>. That is not anything hard, basically three lines in addition :</p>
+<pre>
+// configuration
+...
+clean: ["src/temp/"]
+...
+</pre>
+<pre>
+// load plugins
+...
+grunt.loadNpmTasks('grunt-contrib-clean');
+...
+</pre>
+<pre>
+// new task
+...
+grunt.registerTask('cleanup', ['clean']);
+...
+</pre>
+<h4 class="theme-subheading" id="executing-your-own-tasks">Executing your own tasks</h4>
+<p class="text-left">You can try it with running <kbd>grunt cleanup</kbd>. Parameter is the name of the task, which has been created. If Grunt is executed without any parameter, it will perform only the default task.</p>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">This should be all. I can surely recommend to see the list of another plugins. Actually I am using <i>grunt-remove-logging</i>, which removes every <code>console.log()</code>, <i>grunt-contrib-jshint</i> for validating JavaScripts ( see <a href="http://jshint.com/">jshint.com</a> ). You can use Grunt for CSS files, compiling SASS and a lot of other things.</p>
+<p class="text-left">The whole project is available to see or download on <a href="https://github.com/juffalow/GruntTest">GitHub</a> or clone with<br /><kbd>git clone https://github.com/juffalow/GruntTest.git</kbd>.</p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="http://gruntjs.com/">Official Grunt web page</a> where you can find introduction tutorial, list of plugins and whole documentation.<br />
+    Plugins and their documentation is on <a href="https://www.npmjs.com/">NPM package manager</a> website. Links on used plugins :</p>
+<ul>
+    <li><a href="https://www.npmjs.com/package/grunt-contrib-concat">grunt-contrib-concat</a> - merging files</li>
+    <li><a href="https://www.npmjs.com/package/grunt-contrib-uglify">grunt-contrib-uglify</a> - minifying files</li>
+    <li><a href="https://www.npmjs.com/package/grunt-contrib-clean">grunt-contrib-clean</a> - deleting files and directories</li>
+</ul>
