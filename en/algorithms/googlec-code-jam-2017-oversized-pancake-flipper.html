@@ -5,15 +5,15 @@
 <p class="text-left">You cannot flip fewer than K pancakes at a time with the flipper, even at the ends of the row (since there are raised borders on both sides of the cooking surface). For example, you can flip the first K pancakes, but not the first K - 1 pancakes.</p>
 <p class="text-left">Your apprentice cook, who is still learning the job, just used the old-fashioned single-pancake flipper to flip some individual pancakes and then ran to the restroom with it, right before the time when customers come to visit the kitchen. You only have the oversized pancake flipper left, and you need to use it quickly to leave all the cooking pancakes happy side up, so that the customers leave feeling happy with their visit.</p>
 <p class="text-left">Given the current state of the pancakes, calculate the minimum number of uses of the oversized pancake flipper needed to leave all pancakes happy side up, or state that there is no way to do it.</p>
-<p class="text-left">Input</p>
+<h4 class="theme-subheading" id="input">Input</h4>
 <p class="text-left">The first line of the input gives the number of test cases, T. T test cases follow. Each consists of one line with a string S and an integer K. S represents the row of pancakes: each of its characters is either + (which represents a pancake that is initially happy side up) or - (which represents a pancake that is initially blank side up).</p>
-<p class="text-left">Output</p>
+<h4 class="theme-subheading" id="output">Output</h4>
 <p class="text-left">For each test case, output one line containing Case #x: y, where x is the test case number (starting from 1) and y is either IMPOSSIBLE if there is no way to get all the pancakes happy side up, or an integer representing the the minimum number of times you will need to use the oversized pancake flipper to do it.</p>
-<p class="text-left">Limits</p>
+<h4 class="theme-subheading" id="limits">Limits</h4>
 <p class="text-left">1 ≤ T ≤ 100.<br />Every character in S is either + or -.<br />2 ≤ K ≤ length of S.</p>
 <p class="text-left">Small dataset : 2 ≤ length of S ≤ 10.</p>
 <p class="text-left">Large dataset : 2 ≤ length of S ≤ 1000.</p>
-<p class="text-left">Sample</p>
+<h4 class="theme-subheading" id="sample">Sample</h4>
 <pre>
 Input
 
@@ -28,11 +28,24 @@ Case #1: 3
 Case #2: 0
 Case #3: IMPOSSIBLE
 </pre>
-<h4 class="theme-subheading" id="solution-in-javascript">Solution in JavaScript</h4>
-<p class="text-left">When I saw it of the first time I thought it is pretty hard problem. Leter, unfortunately too late, I realized it is not that hard.</p>
-<p class="text-left"></p>
-<p class="text-left"></p>
-<p class="text-left"></p>
-<p class="text-left"></p>
-<p class="text-left"></p>
+<h2 class="theme-subheading" id="solution-in-javascript">Solution in JavaScript</h2>
+<p class="text-left">When I saw it for the first time I thought it is pretty hard problem. Leter, unfortunately too late, I realized it is not that hard. You have to find first blank side pancake and flip <i>K</i> pancakes. And again, find the next blank side pancake and flip. If you find blank side pancake less than <i>K</i> pancakes before end, it is impossible to flip all of them. Otherwise print the number of flipps.</p>
+<h4 class="theme-subheading" id="source-code">Source code</h4>
+<p class="text-left">I am not saying that JavaScript is the best language for this purpose. Few days before this competition begins I was doing something in JavaScript so I used it.</p>
+<pre class="prettyprint">
+
+</pre>
+<h4 class="theme-subheading" id="run-the-code">Run the code</h4>
+<p class="text-left">Download the small ( <i>small-input.txt</i> ) and large ( <i>large-input.txt</i> ) input and run the code with command :</p>
+<pre>
+node solution.js < small-input.txt > small-output.txt
+
+# or
+
+node solution.js < large-input.txt > large-output.txt
+</pre>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">The source code is not nice, it is a contest and the programs are written quickly and there is no need to maintain them after the contest.</p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="https://code.google.com/codejam/">Google Code Jam</a> official page</p>
+<p class="text-left"><a href="https://code.google.com/codejam/contest/3264486/dashboard">Problem A. Oversized Pancake Flipper</a></p>
