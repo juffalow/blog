@@ -1,0 +1,34 @@
+<p class="text-left">From time to time I am solving "challenges" in my free time on <a href="https://projecteuler.net/">Project Euler</a> or <a href="https://www.hackerrank.com/">HackerRank</a>. This time it was the challenge <a href="https://www.hackerrank.com/challenges/bigger-is-greater">Bigger is Greater</a> on HackerRank. It's about finding next lexicographically greater string than the given string.</p>
+<h2 class="theme-subheading" id="problem">Problem</h2>
+<p class="text-left">Given a word <i>w</i>, rearrange the letters of <i>w</i> to construct another word <i>s</i> in such a way that <i>s</i> is lexicographically greater than <i>w</i>. In case of multiple possible answers, find the lexicographically smallest one among them.</p>
+<h4 class="theme-subheading" id="input">Input</h4>
+<p class="text-left">The first line of input contains <i>t</i>, the number of test cases. Each of the next <i>t</i> lines contains <i>w</i>.</p>
+<pre>
+5
+ab
+bb
+hefg
+dhck
+dkhc
+</pre>
+<h4 class="theme-subheading" id="output">Output</h4>
+<p class="text-left">For each testcase, output a string lexicographically bigger than <i>w</i> in a separate line. In case of multiple possible answers, print the lexicographically smallest one, and if no answer exists, print <i>no answer</i>.</p>
+<pre>
+ba
+no answer
+hegf
+dhkc
+hcdk
+</pre>
+<h2 class="theme-subheading" id="solution-in-cpp">Solution in C++</h2>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="steps">Steps</h4>
+<p class="text-left">1. take the string and find highest index <code>i</code> that <code>string[i] < string[i + 1]</code></p>
+<p class="text-left">2. find the highest index <code>j</code> > <code>i</code> such that <code>string[j] > string[i]</code></p>
+<p class="text-left">3. swap <code>string[i]</code> with <code>string[j]</code></p>
+<p class="text-left">4. reverse the order of all elements after index <code>i</code></p>
+<p class="text-left"></p>
+<ol>
+    <li>take the string and find highest index <i>i</> that <code>string[i] < string[i + 1]</code></li>
+    <li>find the highest index <i>j</i> > <i>i</i> such that <code>string[j] > string[i]</code><li>
+</ol>
