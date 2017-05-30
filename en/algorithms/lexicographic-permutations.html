@@ -23,12 +23,117 @@ hcdk
 <h2 class="theme-subheading" id="solution-in-cpp">Solution in C++</h2>
 <p class="text-left"></p>
 <h4 class="theme-subheading" id="steps">Steps</h4>
-<p class="text-left">1. take the string and find highest index <code>i</code> that <code>string[i] < string[i + 1]</code></p>
-<p class="text-left">2. find the highest index <code>j</code> > <code>i</code> such that <code>string[j] > string[i]</code></p>
-<p class="text-left">3. swap <code>string[i]</code> with <code>string[j]</code></p>
-<p class="text-left">4. reverse the order of all elements after index <code>i</code></p>
-<p class="text-left"></p>
+<p class="text-left">Here are the steps / algorithm to generate the next higher permutation :</p>
 <ol>
-    <li>take the string and find highest index <i>i</> that <code>string[i] < string[i + 1]</code></li>
-    <li>find the highest index <i>j</i> > <i>i</i> such that <code>string[j] > string[i]</code><li>
+    <li>take the string and find highest index <code>i</code> that <code>string[i] < string[i + 1]</code></li>
+    <li>find the highest index <code>j</code> > <code>i</code> such that <code>string[j] > string[i]</code></li>
+    <li>swap <code>string[i]</code> with <code>string[j]</code></li>
+    <li>reverse the order of all elements after index <code>i</code></li>
 </ol>
+<h4 class="theme-subheading" id="source-code">Source code</h4>
+<p class="text-left"></p>
+<pre class="prettyprint">
+#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+using namespace std;
+
+int compare (const void *a, const void * b) {
+    return ( *(char *)a - *(char *)b );
+}
+
+void swap (char* a, char* b) {
+    char t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int findCeil (char str[], char first, int l, int h) {
+    int ceilIndex = l;
+
+    for( int i = l+1; i <= h; i++ ) {
+        if( str[i] > first &amp;&amp; str[i] < str[ceilIndex] ) {
+            ceilIndex = i;
+        }
+    }
+
+    return ceilIndex;
+}
+
+bool nextPermutation(char* str) {
+    int size = strlen(str);
+
+    int i;
+    for ( i = size - 2; i >= 0; --i ) {
+        if( str[i] < str[i + 1] ) {
+            break;
+        }
+    }
+
+    if( i == -1 ) {
+        return false;
+    } else {
+        int ceilIndex = findCeil( str, str[i], i + 1, size - 1 );
+
+        swap( &amp;str[i], &amp;str[ceilIndex] );
+
+        qsort( str + i + 1, size - i - 1, sizeof(str[0]), compare );
+    }
+    return true;
+}
+
+int main() {
+    int tests;
+    cin >> tests;
+
+    string str;
+    for( int i = 0; i < tests; i++ ) {
+        cin >> str;
+        char *cstr = new char[str.length() + 1];
+        strcpy(cstr, str.c_str());
+        if( nextPermutation(cstr) ) {
+            cout << cstr << "\n";
+        } else {
+            cout << "no answer\n";
+        }
+    }
+
+    return 0;
+}
+</pre>
+<h4 class="theme-subheading" id="source-code-2">Source code #2</h4>
+<p class="text-left">There is a <i>Need help?</i> section on the right side of the HackerRank challenge and it recommends <i>Next permutation</i> topic. You can read that in most languages there is the <i>next permutation</i> function already implemented. In C++ it is <code>next_permutation</code>.</p>
+<pre class="prettyprint">
+#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string.h&gt;
+using namespace std;
+
+int main() {
+    int tests;
+    cin >> tests;
+
+    string str;
+    for( int i = 0; i < tests; i++ ) {
+        cin >> str;
+        if( next_permutation(str.begin(), str.end()) != 0 ) {
+            cout << str << "\n";
+        } else {
+            cout << "no answer" << "\n";
+        }
+    }
+
+    return 0;
+}
+</pre>
+<h2 class="theme-subheading" id="conclusion">Conclusion</h2>
+<p class="text-left">These are two working examples how you can solve the problem above. You can read more about lexicographic permutations on pages below in References section.</p>
+<h4 class="theme-subheading" id="references">References</h4>
+<p class="text-left"><a href="http://www.geeksforgeeks.org/lexicographic-permutations-of-string/">GeeksforGeeks - Print all permutations in sorted ( lexicographic ) order</a></p>
+<p class="text-left"><a href="https://en.wikipedia.org/wiki/Lexicographical_order">Wikipedia - Leicographical order</a></p>
