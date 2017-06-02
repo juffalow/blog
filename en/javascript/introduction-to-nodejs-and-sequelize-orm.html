@@ -1,0 +1,67 @@
+<p class="text-left">I am not going to write here about what is ORM or when to use it.</p>
+<h2 class="theme-subheading" id="example-project">Example project</h2>
+<p class="text-left">Let's create a simple application that connects to a database and get some informations from it. To make it really simple we create a table with two columns. The first is numeric primary key ( auto increment  ) and the second is some string - quote for example.</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>id</td>
+            <td>quote</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+<h4 class="theme-subheading" id="create-new-project">Create new project</h4>
+<p class="text-left"></p>
+<pre>
+$ mkdir sequelize-example
+</pre>
+<p class="text-left"></p>
+<pre>
+# jump into project directory
+$ cd sequelize-example
+
+# initialize project ( you may use npm init )
+$ yarn init
+</pre>
+<h4 class="theme-subheading" id="add-dependencies">Add dependencies</h4>
+<p class="text-left"></p>
+<pre>
+yarn add sequelize sequelize-cli
+</pre>
+<h4 class="theme-subheading" id="directory-structure">Directory structure</h4>
+<pre>
+sequelize-example/
+    index.js
+    package.json
+</pre>
+<h4 class="theme-subheading" id="database-creation">Database creation</h4>
+<p class="text-left">You can design your database on paper or in some tool and generate <i>sql</i> file ( or write it yourself ), run it and create tables this way. In this case :</p>
+<pre class="prettyprint">
+CREATE TABLE quotes (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    quote TEXT NOT NULL,
+    PRIMARY KEY ( id )
+);
+</pre>
+<p class="text-left"></p>
+<h4 class="theme-subheading" id="migrations">Migrations</h4>
+<p class="text-left"></p>
+<p class="text-left"></p>
+<p class="text-left"></p>
+<p class="text-left"></p>
+<p class="text-left"></p>
+<p class="text-left"></p>
+<p class="text-left"></p>
