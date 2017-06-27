@@ -57,10 +57,22 @@ Header add Access-Control-Allow-Origin "*"
 Header add Access-Control-Allow-Methods "GET,POST,OPTIONS,DELETE,PUT"
 Header add Access-Control-Allow-Headers "Content-Type"
 </pre>
-<!--
-<h4 class="theme-subheading" id="options-method">OPTIONS method</h4>
-<p class="text-left"></p>
--->
+<h4 class="theme-subheading" id="still-a-problem">Still a problem <small>( 405 method not allowed )</small></h4>
+<p class="text-left">If you are still getting some error, for example 405 method not allowed, this can be caused by calling the <i>OPTIONS</i> method first. The browser cannot know if it can call <i>POST</i> ( or <i>GET</i> / other methods ), so it does a preflight request that checks if it is allowed to make that type of request. But you do not have this method implemented, so the framework returns an error and therefore the browser will not make the call - even if the headers are set correctly!</p>
+<pre class="prettyprint">
+var express = require('express');
+var app = express();
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    if ( req.method == 'OPTIONS' ) {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+});
+</pre>
 <h2 class="theme-subheading" id="conclusion">Conclusion</h2>
 <p class="text-left">Now you can load and save your models as you wish. If you want to know more, read the links below. And of course when I am done with my little app, I will share the experiences and write another post about it.</p>
 <h4 class="theme-subheading" id="references">References</h4>
